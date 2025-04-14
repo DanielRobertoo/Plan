@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.example.createpost.usecase.CreatePublicationState
 
 class CreatePublicationViewModel : ViewModel() {
     var state by mutableStateOf(CreatePublicationState())
@@ -17,15 +18,15 @@ class CreatePublicationViewModel : ViewModel() {
     }
 
     fun onMeetPoingChange(texto:String){
-        state = state.copy(meetpoint = texto)
+        state = state.copy(meetPoint = texto)
     }
 
     fun onDateChange(texto:String){
-        state = state.copy(fecha = texto)
+        state = state.copy(date = texto)
     }
 
     fun onTimeSetChange(texto:String){
-        state = state.copy(horaComienzo = texto)
+        state = state.copy(hourBegin = texto)
     }
 
     fun onSportChange(texto: String){

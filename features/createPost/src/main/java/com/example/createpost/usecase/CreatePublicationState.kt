@@ -7,6 +7,7 @@ data class CreatePublicationState(
     val hourBegin: String = "",
     val minutesBegin:String = "",
     val sport: String = "",
+    val meetPoint: String = "",
 
     val errorFields: Boolean = false,
     val success:Boolean = false,

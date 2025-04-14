@@ -1,9 +1,9 @@
 package com.example.chat.usecase
 
-import com.example.domain.Mensaje
+import com.example.domain.model._Mensaje
 
 data class ChatState(
-    val mensajes: List<Mensaje> = listOf(),
+    val mensajes: List<_Mensaje> = listOf(),
     val messageToSend:String = "",
     val idChat: String = "",
 
