@@ -64,9 +64,6 @@ fun CreatePulicationContent(state: CreatePublicationState, events: CreationPubli
             value = state.title,
             onValueChange = {events.onTitleChange(it)},
             shape = RoundedCornerShape(10.dp),
-            /*colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = Color(0xFFd2fff5)
-            ),*/
             modifier = Modifier.width(300.dp)
         )
         Spacer(modifier = Modifier.padding(5.dp))
@@ -116,9 +113,6 @@ fun CreatePulicationContentPreview(){
             value = "Título",
             onValueChange = {},
             shape = RoundedCornerShape(10.dp),
-            /*colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = Color(0xFFd2fff5)
-            ),*/
             modifier = Modifier.width(300.dp)
         )
         Spacer(modifier = Modifier.padding(5.dp))
