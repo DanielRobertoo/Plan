@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardElevation
 import androidx.compose.material3.ElevatedCard
@@ -20,38 +22,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.base.PostGym.PostItemBasicFit
+import com.example.base.PostGym.PostItemDefault
+import com.example.base.PostGym.PostItemForus
+import com.example.base.PostGym.PostItemGofit
 import com.example.postlist.R
+import com.example.postlist.usecase.PostListState
 
 @Composable
-fun PostListContent(){
-
-}
-
-/**
- * Post item
- * Ejemplo de como se veria alguien que publica una actividad en un basic fit
- */
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun PostItem(){
-    ElevatedCard(Modifier.fillMaxWidth().height(230.dp).padding(10.dp)) {
-        Box(contentAlignment = Alignment.Center){
-            Column(Modifier.fillMaxSize()) {
-                Row {
-                    Image(
-                        painter = painterResource(R.drawable.basicfit),
-                        contentDescription = "",
-                    )
-                }
-                Row {
-                    Column(Modifier.padding(10.dp)) {
-                        Text("TITULO")
-                        Text("HORA")
-                        Text("USER")
-                    }
-                }
+fun PostListContent(state: PostListState){
+    LazyColumn {
+        items(state.posts) {
+            when{
+                it.gym == "basicFit" -> PostItemBasicFit()
+                it.gym == "forus" -> PostItemForus()
+                it.gym == "gofit" -> PostItemGofit()
+                else -> PostItemDefault()
             }
         }
     }
-
 }
+
