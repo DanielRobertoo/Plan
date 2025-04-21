@@ -28,8 +28,8 @@ import com.example.base.R
  */
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun PostItemBasicFit(){
-    ElevatedCard(Modifier.fillMaxWidth().height(250.dp).padding(10.dp)) {
+fun PostItemBasicFitPreview(){
+    ElevatedCard(Modifier.fillMaxWidth().height(260.dp).padding(10.dp)) {
         Box(contentAlignment = Alignment.Center){
             Column(Modifier.fillMaxSize()) {
                 Row {
@@ -42,6 +42,7 @@ fun PostItemBasicFit(){
                     Column(Modifier.padding(10.dp)) {
                         Text("Rutina full body")
                         Text("15:00")
+                        Text("La isla")
                         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(5.dp)) {
                             Icon(
                                 imageVector = Icons.Filled.AccountCircle,
@@ -55,4 +56,34 @@ fun PostItemBasicFit(){
         }
     }
 
+}
+
+@Composable
+fun PostItemBasicFit(title: String, date: String, user:String, place:String) {
+    ElevatedCard(Modifier.fillMaxWidth().height(260.dp).padding(10.dp)) {
+        Box(contentAlignment = Alignment.Center) {
+            Column(Modifier.fillMaxSize()) {
+                Row {
+                    Image(
+                        painter = painterResource(R.drawable.basicfit),
+                        contentDescription = "",
+                    )
+                }
+                Row {
+                    Column(Modifier.padding(10.dp)) {
+                        Text(title)
+                        Text(date)
+                        Text(place)
+                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(5.dp)) {
+                            Icon(
+                                imageVector = Icons.Filled.AccountCircle,
+                                contentDescription = ""
+                            )
+                            Text(user)
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

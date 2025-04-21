@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 data class BaseTopAppBarState(
     val title: String,
-    val iconUpAction: ImageVector,
+    val iconUpAction: ImageVector?,
     val upAction: () -> Unit,
     val actions: List<Action>
 

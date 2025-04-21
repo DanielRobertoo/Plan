@@ -18,10 +18,10 @@ fun prueba(){
         enabled = true, orientation = Orientation.Vertical, state = rememberScrollState()
     )
     ) {
-        PostItemGofit()
-        PostItemBasicFit()
-        PostItemForus()
-        PostItemDefault()
+        PostItemGofitPreview()
+        PostItemBasicFitPreview()
+        PostItemForusPreview()
+        PostItemDefaultPreview()
     }
 
 }

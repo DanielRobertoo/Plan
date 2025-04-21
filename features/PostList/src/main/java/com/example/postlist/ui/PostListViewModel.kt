@@ -7,6 +7,20 @@ import androidx.lifecycle.ViewModel
 import com.example.postlist.usecase.PostListState
 
 class PostListViewModel : ViewModel(){
+    fun getPosts() {
+        TODO("Not yet implemented")
+    }
+
+    fun SendRequest() {
+        TODO("Not yet implemented")
+    }
+
+    fun reset() {
+        TODO("Not yet implemented")
+    }
+fun findUserById(id:String):String{
+    return ""
+}
     var state by mutableStateOf(PostListState())
 
 }

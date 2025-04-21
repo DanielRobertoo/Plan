@@ -23,14 +23,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.base.R
 
-@Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun PostItemForus() {
-    ElevatedCard(
-        Modifier
-            .fillMaxWidth()
-            .height(250.dp)
-            .padding(10.dp)) {
+fun PostItemForus(title: String, date: String, user:String, place:String) {
+    ElevatedCard(Modifier.fillMaxWidth().height(260.dp).padding(10.dp)) {
         Box(contentAlignment = Alignment.Center) {
             Column(Modifier.fillMaxSize()) {
                 Row {
@@ -41,10 +36,40 @@ fun PostItemForus() {
                 }
                 Row {
                     Column(Modifier.padding(10.dp)) {
-                        Text("rutina full body")
+                        Text(title)
+                        Text(date)
+                        Text(place)
+                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(5.dp)) {
+                            Icon(
+                                imageVector = Icons.Filled.AccountCircle,
+                                contentDescription = ""
+                            )
+                            Text(user)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
+@Preview(showSystemUi = true, showBackground = true)
+@Composable
+fun PostItemForusPreview() {
+    ElevatedCard(Modifier.fillMaxWidth().height(260.dp).padding(10.dp)) {
+        Box(contentAlignment = Alignment.Center) {
+            Column(Modifier.fillMaxSize()) {
+                Row {
+                    Image(
+                        painter = painterResource(R.drawable.forus),
+                        contentDescription = "",
+                    )
+                }
+                Row {
+                    Column(Modifier.padding(10.dp)) {
+                        Text("Rutina full body")
                         Text("15:00")
-
+                        Text("Parque calistenia paseo meritimo")
                         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(5.dp)) {
                             Icon(
                                 imageVector = Icons.Filled.AccountCircle,
@@ -52,11 +77,9 @@ fun PostItemForus() {
                             )
                             Text("Usuario")
                         }
-
                     }
                 }
             }
         }
     }
-
 }
