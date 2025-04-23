@@ -5,8 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.chat.usecase.ChatState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ChatViewModel : ViewModel() {
+@HiltViewModel
+class ChatViewModel @Inject constructor(): ViewModel() {
     var chatState by mutableStateOf(ChatState())
 
     fun onMessageTextChange(mensaje:String){

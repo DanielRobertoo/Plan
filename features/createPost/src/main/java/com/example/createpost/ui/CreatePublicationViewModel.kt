@@ -5,8 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.createpost.usecase.CreatePublicationState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class CreatePublicationViewModel : ViewModel() {
+@HiltViewModel
+class CreatePublicationViewModel @Inject constructor() : ViewModel() {
     var state by mutableStateOf(CreatePublicationState())
 
     fun onTiTleChange(texto:String){

@@ -5,8 +5,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.postlist.usecase.PostListState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class PostListViewModel : ViewModel(){
+@HiltViewModel
+class PostListViewModel @Inject constructor(): ViewModel(){
     fun getPosts() {
         TODO("Not yet implemented")
     }

@@ -62,7 +62,7 @@ fun BaseTopAppBar(appBarState: BaseTopAppBarState) {
         navigationIcon = {
             IconButton(onClick = { appBarState.upAction() }) {
                 Icon(
-                    imageVector = appBarState.iconUpAction,
+                    imageVector = appBarState.iconUpAction!!,
                     contentDescription = null,
                     tint = colors.onPrimary // Color de los íconos de acción
                 )
