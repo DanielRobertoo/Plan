@@ -27,7 +27,7 @@ import com.example.chat.usecase.ChatState
 
 
 @Composable
-fun ChatScreen(viewModel: ChatViewModel) {
+fun ChatScreen(viewModel: ChatViewModel, goBack: () -> Unit) {
     when {
         viewModel.chatState.onActiveBlock -> AlertDialogYesNo(
             title = "BLOQUEAR USUARIO",
