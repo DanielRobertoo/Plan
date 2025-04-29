@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import com.example.domain.model.post
 
 
 @Preview(showBackground = true)
@@ -85,11 +86,90 @@ fun AlertDialogOK(
 }
 
 @Composable
+fun AlertDialogYesNoPost(
+    title: String = "",
+    message: String,
+    onDismiss: () -> Unit,
+    onAccept: (post: post) -> Unit,
+    post: post
+) {
+    // Estado del diálogo
+    val dialogState = remember { mutableStateOf(true) }
+
+    if (dialogState.value) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            properties = DialogProperties(
+                dismissOnBackPress = false,
+                dismissOnClickOutside = false
+            ),
+            title = {
+                if (title.isNotEmpty()) {
+                    Text(
+                        text = title,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
+            },
+            text = {
+                Text(
+                    text = message,
+                    fontSize = 18.sp,
+                    color = Color.Gray,
+                    lineHeight = 22.sp
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        dialogState.value = false
+                        onAccept(post)
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = Color.White
+                    ),
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    Text(
+                        text = "Yes",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = {
+                        dialogState.value = false
+                        onDismiss()
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = Color.White
+                    ),
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    Text(
+                        text = "No",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                }
+            },
+            shape = RoundedCornerShape(16.dp), // Bordes redondeados del diálogo
+            containerColor = Color.White, // Color de fondo del diálogo
+        )
+    }
+}
+@Composable
 fun AlertDialogYesNo(
     title: String = "",
     message: String,
     onDismiss: () -> Unit,
-    onAccept: () -> Unit
+    onAccept: () -> Unit,
 ) {
     // Estado del diálogo
     val dialogState = remember { mutableStateOf(true) }

@@ -27,7 +27,7 @@ import com.example.createpost.usecase.CreatePublicationState
 
 
 @Composable
-fun CreatePublicationScreen(goBack: ()->Unit, viewModel: CreatePublicationViewModel){
+fun CreatePublicationScreen(goBack: ()->Unit, viewModel: CreatePublicationViewModel,modifier: Modifier){
     when{
         viewModel.state.errorFields -> AlertDialogOK(title = "ERROR", message = "Campos inválidos", onDismiss = {viewModel.resetError()})
         viewModel.state.success -> {

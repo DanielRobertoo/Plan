@@ -37,14 +37,14 @@ import com.example.base.PostGym.PostItemForus
 import com.example.base.PostGym.PostItemGofit
 import com.example.base.composables.LoadingUi
 import com.example.base.composables.NoDataScreen
-import com.example.chat.ui.base.AlertDialogYesNo
+import com.example.chat.ui.base.AlertDialogYesNoPost
 import com.example.domain.model.post
 import com.example.postlist.R
 import com.example.postlist.usecase.PostListState
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAdd: () -> Unit){
+fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAdd: () -> Unit, modifier: Modifier){
     LaunchedEffect(Unit) {
         viewModel.getPosts()
     }
@@ -72,11 +72,12 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
         when{
             viewModel.state.loading -> LoadingUi()
             viewModel.state.noData -> NoDataScreen()
-            viewModel.state.postToJoin != null -> AlertDialogYesNo(
+            viewModel.state.postToJoin != null -> AlertDialogYesNoPost(
                 title = "ALERTA",
                 message = "Seguro quieres borrar el aeropuerto?",
-                onAccept = { viewModel.SendRequest() },
-                onDismiss = { viewModel.reset() }
+                onAccept = {_post: post -> viewModel.SendRequest(_post) },
+                onDismiss = { viewModel.reset() },
+                post = viewModel.state.postToJoin!!
             )
             viewModel.state.posts.isNotEmpty() -> PostListContent(
                 state = viewModel.state,
