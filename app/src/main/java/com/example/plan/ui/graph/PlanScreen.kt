@@ -10,6 +10,8 @@ import com.example.chat.ui.ChatView.ChatScreen
 import com.example.chat.ui.ChatView.ChatViewModel
 import com.example.chat.ui.CreatePublicacion.CreatePublicationScreen
 import com.example.chat.ui.CreatePublicacion.CreatePublicationViewModel
+import com.example.login.ui.login.LoginScreen
+import com.example.login.ui.login.LoginViewModel
 import com.example.postlist.ui.PostListScreen
 import com.example.postlist.ui.PostListViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,6 +41,14 @@ fun PlanScreen(modifier: Modifier){
                 viewModel = hiltViewModel<ChatViewModel>(),
                 goBack = {navController.popBackStack()},
                 modifier = modifier
+            )
+        }
+        composable(route = "login") {
+            LoginScreen(
+                viewModel = hiltViewModel<LoginViewModel>(),
+                email = "",
+                password = "",
+
             )
         }
 

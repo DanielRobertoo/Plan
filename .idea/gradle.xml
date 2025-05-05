@@ -16,7 +16,9 @@
             <option value="$PROJECT_DIR$/features/PostList" />
             <option value="$PROJECT_DIR$/features/chat" />
             <option value="$PROJECT_DIR$/features/createPost" />
+            <option value="$PROJECT_DIR$/features/login" />
             <option value="$PROJECT_DIR$/features/profile" />
+            <option value="$PROJECT_DIR$/features/signUp" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

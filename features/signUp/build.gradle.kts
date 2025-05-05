@@ -7,9 +7,8 @@ plugins {
 }
 
 android {
-    namespace = "com.example.profile"
+    namespace = "com.example.signup"
     compileSdk = 35
-
     defaultConfig {
         minSdk = 26
 
@@ -44,7 +43,6 @@ dependencies {
     implementation(libs.androidx.foundation.android)
     implementation(libs.androidx.material.icons.core.android)
     implementation(libs.androidx.material3.android)
-    implementation(libs.ui.tooling.preview.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

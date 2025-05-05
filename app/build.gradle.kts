@@ -10,9 +10,11 @@ android {
     namespace = "com.example.plan"
     compileSdk = 35
 
+
+
     defaultConfig {
         applicationId = "com.example.plan"
-        minSdk = 23
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -21,8 +23,13 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildConfigField("String","supabaseKey","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvd3lod3ZubXJqbmZiZ3NweGZhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NjIyNTc5MiwiZXhwIjoyMDYxODAxNzkyfQ.gmf2ZbrWVg_UTH7xmdpmt2dsCowSkNGwmBgpWd7lCfw")
+        buildConfigField("String","supabaseUrl","https://rowyhwvnmrjnfbgspxfa.supabase.co")
     }
-
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -66,6 +73,7 @@ dependencies {
     implementation(project(":features:PostList"))
     implementation(project(":features:createPost"))
     implementation(project(":features:chat"))
+    implementation(project(":features:login"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -77,4 +85,10 @@ dependencies {
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+
+    implementation(platform("io.github.jan-tennert.supabase:bom:VERSION"))
+    implementation("io.github.jan-tennert.supabase:postgrest-kt")
+    implementation("io.github.jan-tennert.supabase:auth-kt")
+    implementation("io.github.jan-tennert.supabase:realtime-kt")
+    implementation("io.ktor:ktor-client-[engine]:KTOR_VERSION")
 }

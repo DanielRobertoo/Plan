@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.profile"
+    namespace = "com.example.login"
     compileSdk = 35
 
     defaultConfig {
