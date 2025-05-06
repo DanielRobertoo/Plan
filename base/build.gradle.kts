@@ -17,8 +17,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
-        buildConfigField("String","supabaseKey","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvd3lod3ZubXJqbmZiZ3NweGZhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NjIyNTc5MiwiZXhwIjoyMDYxODAxNzkyfQ.gmf2ZbrWVg_UTH7xmdpmt2dsCowSkNGwmBgpWd7lCfw")
-        buildConfigField("String","supabaseUrl","https://rowyhwvnmrjnfbgspxfa.supabase.co")
+        buildConfigField("String","supabaseKey","\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvd3lod3ZubXJqbmZiZ3NweGZhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NjIyNTc5MiwiZXhwIjoyMDYxODAxNzkyfQ.gmf2ZbrWVg_UTH7xmdpmt2dsCowSkNGwmBgpWd7lCfw\"")
+        buildConfigField("String","supabaseUrl","\"https://rowyhwvnmrjnfbgspxfa.supabase.co\"")
     }
 
     buildTypes {
@@ -47,6 +47,10 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+    buildFeatures {
+        compose = true
+        buildConfig = true
     }
 }
 

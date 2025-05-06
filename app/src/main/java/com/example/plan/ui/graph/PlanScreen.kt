@@ -20,7 +20,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 fun PlanScreen(modifier: Modifier){
     val navController = rememberNavController()
 
-    NavHost(startDestination = "list", navController = navController){
+    NavHost(startDestination = "login", navController = navController){
         composable(route = "list") {
             PostListScreen(
                 viewModel = hiltViewModel<PostListViewModel>(),
@@ -48,7 +48,8 @@ fun PlanScreen(modifier: Modifier){
                 viewModel = hiltViewModel<LoginViewModel>(),
                 email = "",
                 password = "",
-
+                goToRegister = {},
+                goToListAccount = { navController.navigate("list") }
             )
         }
 

@@ -1,4 +1,4 @@
-package com.example.login.ui.register
+/*package com.example.login.ui.register
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -98,4 +98,4 @@ fun RegisterContent(modifier: Modifier, state: AccountRegisterState, events: Reg
     }
 }
 
-
+*/

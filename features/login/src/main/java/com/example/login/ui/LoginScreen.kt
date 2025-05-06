@@ -52,27 +52,22 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel,
     goToRegister: () -> Unit,
-    goToLogin: () -> Unit,
     goToListAccount: () -> Unit
 ) {
-
-    //Solo se ejecuta la primera vez, se pone con KEY el tipo Unit. Se tiene que poner como key eñ email y el password
-
-    LaunchedEffect(email, password) { viewModel.validateCredentials(email, password) }
 
     val eventos = LoginEvents(
         onEmailChange = viewModel::onEmailChange,
         onPasswordChange = viewModel::onPasswordChange,
         onClickLogin = viewModel::onLoginClick,
         onSignupClick = { goToRegister() })
-    LoginScreenLourdes(modifier, viewModel.state, eventos, goToLogin, goToListAccount)
+    LoginScreenLourdes(modifier, viewModel.state, eventos, goToListAccount)
 }
 
 @Composable
 fun LoginScreenLourdes(
     modifier: Modifier = Modifier,
     state: AccountLoginState,
-    events: LoginEvents, goToLogin: () -> Unit,
+    events: LoginEvents,
     goToListAccount: () -> Unit
 ) {
     when {
@@ -81,9 +76,9 @@ fun LoginScreenLourdes(
         state.isErrorAccount -> AlertDialogOK(
             title = "Error",
             message = "Error al iniciar sesión",
-            onDismiss = { state.isErrorAccount = false;goToLogin() })
+            onDismiss = { state.isErrorAccount = false })
 
-        state.success -> LaunchedEffect(state) { goToListAccount() }
+        state.success -> { goToListAccount() }
         else -> {
             LoginFormContent(
                 modifier = modifier,

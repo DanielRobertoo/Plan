@@ -23,8 +23,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        buildConfigField("String","supabaseKey","eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvd3lod3ZubXJqbmZiZ3NweGZhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NjIyNTc5MiwiZXhwIjoyMDYxODAxNzkyfQ.gmf2ZbrWVg_UTH7xmdpmt2dsCowSkNGwmBgpWd7lCfw")
-        buildConfigField("String","supabaseUrl","https://rowyhwvnmrjnfbgspxfa.supabase.co")
+        buildConfigField("String","supabaseKey","\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvd3lod3ZubXJqbmZiZ3NweGZhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NjIyNTc5MiwiZXhwIjoyMDYxODAxNzkyfQ.gmf2ZbrWVg_UTH7xmdpmt2dsCowSkNGwmBgpWd7lCfw\"")
+        buildConfigField("String","supabaseUrl","\"https://rowyhwvnmrjnfbgspxfa.supabase.co\"")
     }
     buildFeatures {
         compose = true
@@ -86,9 +86,6 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
-    implementation(platform("io.github.jan-tennert.supabase:bom:VERSION"))
-    implementation("io.github.jan-tennert.supabase:postgrest-kt")
-    implementation("io.github.jan-tennert.supabase:auth-kt")
-    implementation("io.github.jan-tennert.supabase:realtime-kt")
-    implementation("io.ktor:ktor-client-[engine]:KTOR_VERSION")
+    implementation("io.github.jan-tennert.supabase:gotrue-kt:1.3.2")
+    implementation("io.ktor:ktor-client-cio:2.3.4")
 }
