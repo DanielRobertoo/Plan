@@ -1,5 +1,6 @@
 package com.example.login.ui.login
 
+import android.content.Context
 import android.content.res.Resources
 import android.util.Log
 import androidx.compose.runtime.State
@@ -12,8 +13,9 @@ import com.example.base.utils.SupabaseClient.client
 import com.example.base.utils.validateEmail
 import com.example.base.utils.validatePassword
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.jan.supabase.gotrue.gotrue
-import io.github.jan.supabase.gotrue.providers.builtin.Email
+import io.github.jan.supabase.auth.auth
+import io.github.jan.supabase.auth.providers.builtin.Email
+import io.github.jan.supabase.supabaseJson
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -35,12 +37,11 @@ class LoginViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch {
             Log.d("LOGIN", "${state.email} ${state.password}")
             try {
-                state.isLoading = true
-                client.gotrue.loginWith(Email) {
+                state = state.copy(isLoading = true)
+                client.auth.signInWith(Email){
                     email = state.email
                     password = state.password
                 }
-
                 state = state.copy(success = true, isLoading = false)
                 Log.d("LOGIN", "${state}")
             } catch (e: Exception) {

@@ -49,16 +49,6 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
         viewModel.getPosts()
     }
     Scaffold(
-        topBar = {
-            BaseTopAppBar(
-                appBarState = BaseTopAppBarState(
-                    title = "Aeropuertos",
-                    upAction = { },
-                    iconUpAction = null,
-                    actions = listOf()
-                )
-            )
-        },
         floatingActionButton = {
             FloatingActionButton(onClick = {goAdd() }) {
                 Icon(

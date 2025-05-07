@@ -1,7 +1,7 @@
 package com.example.base.utils
 import com.example.base.BuildConfig
+import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient
-import io.github.jan.supabase.gotrue.GoTrue
 
 
 object SupabaseClient{
@@ -9,6 +9,6 @@ object SupabaseClient{
         supabaseKey = BuildConfig.supabaseKey,
         supabaseUrl = BuildConfig.supabaseUrl
     ){
-        install(GoTrue)
+        install(Auth)
     }
 }

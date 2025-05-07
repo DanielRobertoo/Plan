@@ -13,7 +13,7 @@ import javax.inject.Inject
 class PostListViewModel @Inject constructor() : ViewModel() {
     var state by mutableStateOf(PostListState())
     fun getPosts() {
-        TODO("Not yet implemented")
+
     }
 
     fun SendRequest(post: post) {
