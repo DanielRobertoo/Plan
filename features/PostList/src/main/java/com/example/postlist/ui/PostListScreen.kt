@@ -1,6 +1,7 @@
 package com.example.postlist.ui
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Button
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -24,13 +25,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.airport.ui.base.composables.BaseTopAppBar
-import com.example.airport.ui.base.composables.BaseTopAppBarState
 import com.example.base.PostGym.PostItemBasicFit
 import com.example.base.PostGym.PostItemDefault
 import com.example.base.PostGym.PostItemForus
@@ -42,13 +38,16 @@ import com.example.domain.model.post
 import com.example.postlist.R
 import com.example.postlist.usecase.PostListState
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAdd: () -> Unit, modifier: Modifier){
+fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAdd: () -> Unit){
     LaunchedEffect(Unit) {
         viewModel.getPosts()
     }
+
     Scaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(10.dp),
         floatingActionButton = {
             FloatingActionButton(onClick = {goAdd() }) {
                 Icon(
@@ -60,29 +59,43 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
         }
     ) { padding ->
         when{
-            viewModel.state.loading -> LoadingUi()
-            viewModel.state.noData -> NoDataScreen()
-            viewModel.state.postToJoin != null -> AlertDialogYesNoPost(
-                title = "ALERTA",
-                message = "Seguro quieres borrar el aeropuerto?",
-                onAccept = {_post: post -> viewModel.SendRequest(_post) },
-                onDismiss = { viewModel.reset() },
-                post = viewModel.state.postToJoin!!
-            )
-            viewModel.state.posts.isNotEmpty() -> PostListContent(
-                state = viewModel.state,
-                findUser = { id:String -> viewModel.findUserById(id) }
-            )
+            viewModel.state.loading -> {
+                LoadingUi()
+                Log.d("Loading", "creado")
+            }
+            viewModel.state.noData -> {
+                NoDataScreen()
+                Log.d("no data", "creado")
+            }
+            viewModel.state.postToJoin != null -> {
+                AlertDialogYesNoPost(
+                    title = "ALERTA",
+                    message = "Seguro quieres borrar el aeropuerto?",
+                    onAccept = {/*_post: post -> viewModel.SendRequest(_post)*/ },
+                    onDismiss = { viewModel.reset() },
+                    post = viewModel.state.postToJoin!!
+                )
+                Log.d("join", "creado")
+            }
+            viewModel.state.posts.isNotEmpty() -> {
+                PostListContent(
+                    listPost = viewModel.state.posts,
+                    findUser = { id: String -> viewModel.findUserById(id) },
+                    modifier = Modifier.padding(padding)
+                )
+                Log.d("list", "creado")
+            }
         }
 
     }
+
 }
 
 
 @Composable
-fun PostListContent(state: PostListState, findUser: (String) -> String){
-    LazyColumn {
-        items(state.posts) {
+fun PostListContent(listPost: List<post>, findUser: (String) -> String, modifier: Modifier){
+    LazyColumn(modifier = modifier) {
+        items(listPost) {
             when{
                 it.gym == "basicFit" -> PostItemBasicFit(user = findUser(it.post_creator_id), date = it.date, title = it.title, place = it.gym)
                 it.gym == "forus" -> PostItemForus(user = findUser(it.post_creator_id), date = it.date, title = it.title, place = it.gym)

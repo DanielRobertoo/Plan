@@ -52,7 +52,8 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel,
     goToRegister: () -> Unit,
-    goToListAccount: () -> Unit
+    goToListAccount: () -> Unit,
+    goback: () -> Unit
 ) {
 
     val eventos = LoginEvents(
@@ -60,7 +61,7 @@ fun LoginScreen(
         onPasswordChange = viewModel::onPasswordChange,
         onClickLogin = viewModel::onLoginClick,
         onSignupClick = { goToRegister() })
-    LoginScreenLourdes(modifier, viewModel.state, eventos, goToListAccount)
+    LoginScreenLourdes(modifier, viewModel.state, eventos, goToListAccount, goback)
 }
 
 @Composable
@@ -68,7 +69,8 @@ fun LoginScreenLourdes(
     modifier: Modifier = Modifier,
     state: AccountLoginState,
     events: LoginEvents,
-    goToListAccount: () -> Unit
+    goToListAccount: () -> Unit,
+    goback: () -> Unit
 ) {
     when {
         state.isLoading -> LoadingUi()
@@ -76,7 +78,11 @@ fun LoginScreenLourdes(
         state.isErrorAccount -> AlertDialogOK(
             title = "Error",
             message = "Error al iniciar sesión",
-            onDismiss = { state.isErrorAccount = false })
+            onDismiss = {
+                state.isErrorAccount = false
+                goback()
+            }
+        )
 
         state.success -> { goToListAccount() }
         else -> {

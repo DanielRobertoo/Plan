@@ -21,25 +21,27 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.chat.ui.base.AlertDialogYesNo
 import com.example.chat.usecase.ChatState
 
 
 @Composable
-fun ChatScreen(viewModel: ChatViewModel, goBack: () -> Unit,modifier: Modifier) {
+fun ChatScreen(viewModel: ChatViewModel, goBack: () -> Unit, modifier: Modifier) {
     when {
         viewModel.chatState.onActiveBlock -> AlertDialogYesNo(
             title = "BLOQUEAR USUARIO",
             message = "Seguro quieres bloquear a este usuario?",
-            onAccept = {viewModel.blockUser()},
-            onDismiss = {viewModel.dismissBlock()}
-            )
+            onAccept = { viewModel.blockUser() },
+            onDismiss = { viewModel.dismissBlock() }
+        )
 
-        else -> ChatContent(chatEvents = ChatEvents(
-            onTextChange = viewModel::onMessageTextChange,
-            onMessageSent = viewModel::onMessageTextSent
-        ),
+        else -> ChatContent(
+            chatEvents = ChatEvents(
+                onTextChange = viewModel::onMessageTextChange,
+                onMessageSent = viewModel::onMessageTextSent
+            ),
             state = viewModel.chatState
         )
     }
@@ -82,10 +84,10 @@ fun ChatContent(chatEvents: ChatEvents, state: ChatState) {
         Row {
             TextField(
                 value = state.messageToSend,
-                onValueChange = {chatEvents.onTextChange(it)}
+                onValueChange = { chatEvents.onTextChange(it) }
             )
             Spacer(Modifier.padding(5.dp))
-            FloatingActionButton(onClick = {chatEvents.onMessageSent()}) {
+            FloatingActionButton(onClick = { chatEvents.onMessageSent() }) {
                 Icon(Icons.AutoMirrored.Filled.Send, "")
             }
         }
@@ -101,7 +103,8 @@ fun mensajeEnviado(mensaje: String) {
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(5.dp), horizontalArrangement = Arrangement.End) {
+            .padding(5.dp), horizontalArrangement = Arrangement.End
+    ) {
         ElevatedCard(modifier = Modifier.wrapContentSize()) {
             Column(
                 modifier = Modifier
@@ -121,7 +124,8 @@ fun mensajeRecibido(mensaje: String) {
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(5.dp), horizontalArrangement = Arrangement.Start) {
+            .padding(5.dp), horizontalArrangement = Arrangement.Start
+    ) {
         ElevatedCard(modifier = Modifier.wrapContentSize()) {
             Column(
                 modifier = Modifier
@@ -134,5 +138,49 @@ fun mensajeRecibido(mensaje: String) {
             }
 
         }
+    }
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun preview() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(30.dp),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Column {
+            LazyColumn(modifier = Modifier.padding(10.dp)) {
+                items(
+                    listOf(
+                        Mensaje("2", "Hola"),
+                        Mensaje(
+                            "1",
+                            "Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto "
+                        ),
+                        Mensaje("2", "Que tal"),
+                    )
+                ) { item ->
+                    if (item.identificador == "1")
+                        mensajeEnviado(item.mensaje)
+                    else
+                        mensajeRecibido(item.mensaje)
+
+                }
+            }
+        }
+        Row {
+            TextField(
+                value = "",
+                onValueChange = {}
+            )
+            Spacer(Modifier.padding(5.dp))
+            FloatingActionButton(onClick = {}) {
+                Icon(Icons.AutoMirrored.Filled.Send, "")
+            }
+        }
+
     }
 }

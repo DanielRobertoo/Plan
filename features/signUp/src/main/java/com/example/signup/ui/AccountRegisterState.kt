@@ -24,7 +24,7 @@ data class AccountRegisterState (
 
     val isDatePickerVisible: MutableState<Boolean> = mutableStateOf(false),
 
-    val birthday: Date? = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()),
+    val birthday: String = "",
 
     val isEmailError: Boolean = false,
 

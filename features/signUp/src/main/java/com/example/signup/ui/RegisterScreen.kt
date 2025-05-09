@@ -1,4 +1,4 @@
-/*package com.example.login.ui.register
+package com.example.login.ui.register
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -33,20 +33,19 @@ import java.util.Date
 
 
 data class RegisterEvents(
-    val onUserNameChange: (String) -> Unit = {},
-    val onNameChange: (String) -> Unit = {},
-    val onEmailChange: (String) -> Unit = {},
-    val onSurnameChange: (String) -> Unit = {},
-    val onPasswordChange: (String) -> Unit = {},
-    val onBirthdayChange: (Date?) -> Unit = {},
-    val onChangeIsEmptyField: () -> Unit = {},
+    val onUserNameChange: (String) -> Unit,
+    val onNameChange: (String) -> Unit,
+    val onEmailChange: (String) -> Unit,
+    val onSurnameChange: (String) -> Unit,
+    val onPasswordChange: (String) -> Unit,
+    val onBirthdayChange: (String) -> Unit,
     val onClickRegister: () -> Unit ={}
 ){
 
 }
 
 @Composable
-fun RegisterScreen(modifier: Modifier, viewModel: RegisterViewModel, goToLogin: (String,String) -> Unit) {
+fun RegisterScreen(modifier: Modifier, viewModel: RegisterViewModel, goToLogin: () -> Unit) {
     val eventos = RegisterEvents(
         onUserNameChange =  viewModel::onUserNameChange,
         onEmailChange = viewModel::onEmailChange,
@@ -54,18 +53,17 @@ fun RegisterScreen(modifier: Modifier, viewModel: RegisterViewModel, goToLogin: 
         onSurnameChange = viewModel::onSurnameChange,
         onPasswordChange = viewModel::onPasswordChange,
         onBirthdayChange = viewModel::onBirthdayChange,
-        onChangeIsEmptyField = viewModel::onChangeIsEmptyFields,
         onClickRegister = viewModel::onRegisterClick)
     RegisterScreenState(modifier,viewModel.state,eventos,goToLogin)
 
 }
 
 @Composable
-fun RegisterScreenState(modifier: Modifier, state: AccountRegisterState, events: RegisterEvents, goToLogin: (String,String)->Unit){
+fun RegisterScreenState(modifier: Modifier, state: AccountRegisterState, events: RegisterEvents, goToLogin: ()->Unit){
     when {
         state.isLoading -> LoadingUi()
-        state.isEmptyFields -> AlertDialogOK(message = state.isEmpty ?: "Campos vacios", title = "Error", onDismiss = {events.onChangeIsEmptyField()})
-        state.success -> LaunchedEffect(state.success) { goToLogin(state.email,state.password)}
+        state.isEmptyFields -> AlertDialogOK(message = state.isEmpty ?: "Campos vacios", title = "Error", onDismiss = {})
+        state.success -> LaunchedEffect(state.success) { goToLogin()}
         else -> RegisterContent(modifier, state, events)
     }
 }
@@ -73,21 +71,23 @@ fun RegisterScreenState(modifier: Modifier, state: AccountRegisterState, events:
 @Composable
 fun RegisterContent(modifier: Modifier, state: AccountRegisterState, events: RegisterEvents) {
 
-    Box(modifier = Modifier.fillMaxSize().background(
+    Box(modifier = Modifier
+        .fillMaxSize()
+        /*.background(
         brush = Brush.verticalGradient(
             listOf(
                 Color(0xFFFFA726),
                 Color(0xFF42A5F5)
             )
         )
-    ), contentAlignment = Alignment.Center){
+    ),*/, contentAlignment = Alignment.Center){
         Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier){
             Text(text = "Register", modifier = Modifier.align(Alignment.CenterHorizontally), style = TextStyle(fontSize = 30.0.sp, fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center))
             SpaceBajo()
             UserNameField(value = state.username, isError = state.isUserError,errorFormat = state.userErrorFormat, label = "User Name", onValueChange = events.onUserNameChange)
             NameField(value = state.name, onNameChange = events.onNameChange, isError = state.isNameError, errorFormat = state.nameErrorFormat, label = "Nombre")
             SurnameField(value = state.surname, onValueChange = events.onSurnameChange, isError = state.isSurnameError, errorFormat = state.surnameErrorFormat, label = "Apellidos")
-            BirthdayField(value = state.birthday, isDatePickerVisible = state.isDatePickerVisible, isError = state.isBirthdayError, formatError = state.dateErrorFormat, onDateSelected = events.onBirthdayChange)
+            //BirthdayField(value = state.birthday, isDatePickerVisible = state.isDatePickerVisible, isError = state.isBirthdayError, formatError = state.dateErrorFormat, onDateSelected = events.onBirthdayChange)
             EmailTextField(value = state.email, label = "Email", emailError = state.isEmailError, emailChange = events.onEmailChange, emailErrorFormat = state.emailErrorFormat)
             PasswordField(modifier=modifier.testTag("passwordField"),value = state.password, label = "Password", isError = state.isPasswordError, errorFormat = state.passwordErrorFormat, onValueChange = events.onPasswordChange)
             ButtonRegister(onRegisterClick = events.onClickRegister)
@@ -98,4 +98,4 @@ fun RegisterContent(modifier: Modifier, state: AccountRegisterState, events: Reg
     }
 }
 
-*/
+

@@ -12,34 +12,35 @@ import com.example.chat.ui.CreatePublicacion.CreatePublicationScreen
 import com.example.chat.ui.CreatePublicacion.CreatePublicationViewModel
 import com.example.login.ui.login.LoginScreen
 import com.example.login.ui.login.LoginViewModel
+import com.example.login.ui.register.RegisterScreen
+import com.example.login.ui.register.RegisterViewModel
 import com.example.postlist.ui.PostListScreen
 import com.example.postlist.ui.PostListViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
-fun PlanScreen(modifier: Modifier){
+fun PlanScreen(modifier: Modifier) {
     val navController = rememberNavController()
 
-    NavHost(startDestination = "login", navController = navController){
+    NavHost(startDestination = "login", navController = navController) {
         composable(route = "list") {
             PostListScreen(
                 viewModel = hiltViewModel<PostListViewModel>(),
-                goAdd = {navController.navigate("addPost")},
+                goAdd = { navController.navigate("add") },
                 goRequest = {},
-                modifier = modifier
             )
         }
         composable(route = "add") {
             CreatePublicationScreen(
                 viewModel = hiltViewModel<CreatePublicationViewModel>(),
-                goBack = {navController.popBackStack()},
+                goBack = { navController.popBackStack() },
                 modifier = modifier
             )
         }
         composable(route = "chat") {
             ChatScreen(
                 viewModel = hiltViewModel<ChatViewModel>(),
-                goBack = {navController.popBackStack()},
+                goBack = { navController.popBackStack() },
                 modifier = modifier
             )
         }
@@ -48,8 +49,21 @@ fun PlanScreen(modifier: Modifier){
                 viewModel = hiltViewModel<LoginViewModel>(),
                 email = "",
                 password = "",
-                goToRegister = {},
-                goToListAccount = { navController.navigate("list") }
+                goToRegister = { navController.navigate("signUp") },
+                goToListAccount = {
+                    navController.navigate("list") {
+                        navController.popBackStack()
+                    }
+                },
+                goback = { navController.popBackStack() }
+            )
+        }
+
+        composable(route = "signUp") {
+            RegisterScreen(
+                viewModel = hiltViewModel<RegisterViewModel>(),
+                goToLogin = { navController.popBackStack() },
+                modifier = Modifier
             )
         }
 

@@ -11,7 +11,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostListViewModel @Inject constructor() : ViewModel() {
+
     var state by mutableStateOf(PostListState())
+
     fun getPosts() {
 
     }
@@ -27,7 +29,6 @@ class PostListViewModel @Inject constructor() : ViewModel() {
     fun findUserById(id: String): String {
         return ""
     }
-
 
 
 }

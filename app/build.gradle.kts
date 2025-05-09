@@ -74,6 +74,7 @@ dependencies {
     implementation(project(":features:createPost"))
     implementation(project(":features:chat"))
     implementation(project(":features:login"))
+    implementation(project(":features:signUp"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
