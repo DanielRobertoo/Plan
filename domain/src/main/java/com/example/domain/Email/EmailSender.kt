@@ -28,7 +28,8 @@ fun enviarCodigoPorEmail(
         put("user_id", "5ltpZTxE4r3p522R-") // También llamado "public key"
         put("template_params", JSONObject().apply {
             put("title", toName)
-            put("code", codigo)
+            put("message", "Tu código de verificación es ${codigo}")
+            put("to", toEmail)
         })
     }
 

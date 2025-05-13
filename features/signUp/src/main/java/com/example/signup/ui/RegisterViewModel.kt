@@ -10,11 +10,14 @@ import com.example.base.utils.SupabaseClient.client
 import com.example.base.utils.validateEmail
 import com.example.base.utils.validatePassword
 import com.example.domain.Email.enviarCodigoPorEmail
+import com.example.domain.model.code_verification
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.jan.supabase.auth.OtpType
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.query.Count
 import kotlinx.coroutines.launch
 import kotlinx.serialization.modules.SerializersModule
 import java.time.LocalDate
@@ -60,7 +63,10 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
                     email = state.email
                     password = state.password
                 }
-                val codigo = Random(1).nextInt(0, 100000).toString().padStart(6, '0')
+                var codigo = ""
+                for (i in 0..5){
+                    codigo += Random.nextInt(10).toString()
+                }
                 enviarCodigoPorEmail(
                     codigo = codigo,
                     toName = state.name,
@@ -68,6 +74,7 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
                     toEmail = state.email,
                     onSuccess = { insertCodeVerificationSupabase(state.email, codigo) }
                 )
+                insertCodeVerificationSupabase(state.email, codigo)
                 state = state.copy(isLoading = false, success = true)
             } catch (e: Exception) {
                 Log.d("SIGN UP", "${e.message}")
@@ -77,12 +84,11 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
 
      fun insertCodeVerificationSupabase(email: String, code: String){
          viewModelScope.launch {
-             val id = client.from("code_users").select {
-                 count
-             }
 
-             client.from("code_users").insert(
-                 listOf(id, email, code)
+             val id = client.postgrest.from("code_verification").table.length
+
+             client.from("code_verification").insert(
+                 code_verification(id.toString(), email, code)
              )
          }
 
