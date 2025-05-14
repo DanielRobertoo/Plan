@@ -1,6 +1,7 @@
 package com.example.validateemail.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,16 +13,44 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
+import com.example.chat.ui.base.AlertDialogYesNo
 import com.example.validateemail.usecase.ValidateEmailState
 
-@Composable
-fun ValidateEmailScreen(){
 
+@Composable
+fun ValidateEmailScreen(viewModel: ValidateEmailViewModel, goLogin: () -> Unit, goBack: () -> Unit, email: String, password: String){
+    LaunchedEffect(Unit) {
+        viewModel.assignEmail(email, password)
+    }
+    ValidateEmailViewModelScreen(
+        state = viewModel.state,
+        events = ValidateEmailEvents(
+            reset = viewModel::reset,
+            onValidate = viewModel::validateEmail,
+            onCodeChange = viewModel::onCodeChange,
+            goBack = goBack,
+            goLogin = goLogin
+        )
+    )
+}
+
+
+@Composable
+fun ValidateEmailViewModelScreen(state: ValidateEmailState, events: ValidateEmailEvents){
+    when{
+        state.success -> events.goLogin()
+        state.fail -> AlertDialogYesNo(title = "ERROR CODIGO", message = "El codigo es invalido, quieres volver al registro?", onDismiss = events.reset, onAccept = events.goBack)
+        else -> ValidateEmailContent(
+            state = state, events = events
+        )
+    }
 }
 
 
@@ -30,7 +59,10 @@ fun ValidateEmailContent(state: ValidateEmailState, events: ValidateEmailEvents)
     Column(
         Modifier
             .fillMaxSize()
-            .padding(10.dp)) {
+            .padding(10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
         TextField(
             value = state.code,
             singleLine = true,
@@ -53,7 +85,7 @@ fun ValidateEmailContent(state: ValidateEmailState, events: ValidateEmailEvents)
                     shape = RoundedCornerShape(30.dp)
                 ),
         ) {
-            Text("Login")
+            Text("Validate")
         }
 
     }
@@ -61,5 +93,8 @@ fun ValidateEmailContent(state: ValidateEmailState, events: ValidateEmailEvents)
 
 data class ValidateEmailEvents(
     val onValidate: () -> Unit,
-    val onCodeChange: (String) -> Unit
+    val onCodeChange: (String) -> Unit,
+    val goLogin: () -> Unit,
+    val goBack: () -> Unit,
+    val reset: () -> Unit
 )

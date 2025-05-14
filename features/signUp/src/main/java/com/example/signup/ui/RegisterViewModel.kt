@@ -1,5 +1,6 @@
 package com.example.login.ui.register
 
+import android.graphics.BitmapFactory.Options
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -17,9 +18,14 @@ import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
+import io.github.jan.supabase.postgrest.query.Columns
 import io.github.jan.supabase.postgrest.query.Count
+import io.github.jan.supabase.postgrest.query.filter.TextSearchType
+import io.github.jan.supabase.postgrest.query.request.SelectRequestBuilder
+import io.github.jan.supabase.realtime.selectAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.modules.SerializersModule
+import okhttp3.internal.checkOffsetAndCount
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
@@ -59,10 +65,6 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch {
             try {
                 state = state.copy(isLoading = true)
-                client.auth.signUpWith(Email) {
-                    email = state.email
-                    password = state.password
-                }
                 var codigo = ""
                 for (i in 0..5){
                     codigo += Random.nextInt(10).toString()
@@ -85,10 +87,10 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
      fun insertCodeVerificationSupabase(email: String, code: String){
          viewModelScope.launch {
 
-             val id = client.postgrest.from("code_verification").table.length
+             val id = client.postgrest.from("code_validation").select().decodeList<code_verification>().count()
 
-             client.from("code_verification").insert(
-                 code_verification(id.toString(), email, code)
+             client.from("code_validation").upsert(
+                 code_verification(id, email, code)
              )
          }
 

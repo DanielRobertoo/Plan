@@ -45,7 +45,7 @@ data class RegisterEvents(
 }
 
 @Composable
-fun RegisterScreen(modifier: Modifier, viewModel: RegisterViewModel, goToLogin: () -> Unit) {
+fun RegisterScreen(modifier: Modifier, viewModel: RegisterViewModel, goToLogin: () -> Unit, goValidate: (String,String) -> Unit) {
     val eventos = RegisterEvents(
         onUserNameChange =  viewModel::onUserNameChange,
         onEmailChange = viewModel::onEmailChange,
@@ -54,16 +54,21 @@ fun RegisterScreen(modifier: Modifier, viewModel: RegisterViewModel, goToLogin: 
         onPasswordChange = viewModel::onPasswordChange,
         onBirthdayChange = viewModel::onBirthdayChange,
         onClickRegister = viewModel::onRegisterClick)
-    RegisterScreenState(modifier,viewModel.state,eventos,goToLogin)
+    RegisterScreenState(modifier =modifier,
+        state = viewModel.state,
+        events = eventos,
+        goToLogin = goToLogin,
+        goToValidate = goValidate,
+        )
 
 }
 
 @Composable
-fun RegisterScreenState(modifier: Modifier, state: AccountRegisterState, events: RegisterEvents, goToLogin: ()->Unit){
+fun RegisterScreenState(modifier: Modifier, state: AccountRegisterState, events: RegisterEvents, goToLogin: ()->Unit, goToValidate: (String,String) -> Unit){
     when {
         state.isLoading -> LoadingUi()
         state.isEmptyFields -> AlertDialogOK(message = state.isEmpty ?: "Campos vacios", title = "Error", onDismiss = {})
-        state.success -> LaunchedEffect(state.success) { goToLogin()}
+        state.success -> LaunchedEffect(state.success) { goToValidate(state.email, state.password) }
         else -> RegisterContent(modifier, state, events)
     }
 }

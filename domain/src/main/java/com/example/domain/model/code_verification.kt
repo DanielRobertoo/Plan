@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializer
 
 @Serializable
 data class code_verification(
-    val id: String,
+    val id: Int,
     val email: String,
     val code: String
 )

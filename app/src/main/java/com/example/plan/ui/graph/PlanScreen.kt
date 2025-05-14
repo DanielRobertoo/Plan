@@ -3,9 +3,11 @@ package com.example.plan.ui.graph
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.chat.ui.ChatView.ChatScreen
 import com.example.chat.ui.ChatView.ChatViewModel
 import com.example.chat.ui.CreatePublicacion.CreatePublicationScreen
@@ -16,7 +18,8 @@ import com.example.login.ui.register.RegisterScreen
 import com.example.login.ui.register.RegisterViewModel
 import com.example.postlist.ui.PostListScreen
 import com.example.postlist.ui.PostListViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.example.validateemail.ui.ValidateEmailScreen
+import com.example.validateemail.ui.ValidateEmailViewModel
 
 @Composable
 fun PlanScreen(modifier: Modifier) {
@@ -63,7 +66,30 @@ fun PlanScreen(modifier: Modifier) {
             RegisterScreen(
                 viewModel = hiltViewModel<RegisterViewModel>(),
                 goToLogin = { navController.popBackStack() },
+                goValidate = { email: String, password: String -> navController.navigate("validateEmail/$email/$password") },
                 modifier = Modifier
+            )
+        }
+
+        composable(
+            route = "validateEmail/{email}/{password}",
+            arguments = listOf(
+                navArgument("email") {
+                    type = NavType.StringType
+                },
+                navArgument("password"){
+                    type = NavType.StringType
+                }
+            )
+        ) { argumento ->
+            val email = argumento.arguments?.getString("email")
+            val password = argumento.arguments?.getString("password")
+            ValidateEmailScreen(
+                viewModel = hiltViewModel<ValidateEmailViewModel>(),
+                goLogin = { navController.navigate("login") },
+                goBack = { navController.popBackStack() },
+                email = email!!,
+                password = password!!
             )
         }
 
