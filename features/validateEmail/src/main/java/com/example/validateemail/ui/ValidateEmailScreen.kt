@@ -1,5 +1,6 @@
 package com.example.validateemail.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,11 +30,12 @@ fun ValidateEmailScreen(viewModel: ValidateEmailViewModel, goLogin: () -> Unit, 
     LaunchedEffect(Unit) {
         viewModel.assignEmail(email, password)
     }
+    Log.d("Validate", "creado ${viewModel.state}")
     ValidateEmailViewModelScreen(
         state = viewModel.state,
         events = ValidateEmailEvents(
             reset = viewModel::reset,
-            onValidate = viewModel::validateEmail,
+            onValidate = { viewModel.validateEmail(goLogin) } ,
             onCodeChange = viewModel::onCodeChange,
             goBack = goBack,
             goLogin = goLogin
@@ -45,17 +47,16 @@ fun ValidateEmailScreen(viewModel: ValidateEmailViewModel, goLogin: () -> Unit, 
 @Composable
 fun ValidateEmailViewModelScreen(state: ValidateEmailState, events: ValidateEmailEvents){
     when{
-        state.success -> events.goLogin()
         state.fail -> AlertDialogYesNo(title = "ERROR CODIGO", message = "El codigo es invalido, quieres volver al registro?", onDismiss = events.reset, onAccept = events.goBack)
         else -> ValidateEmailContent(
-            state = state, events = events
+            state = state, events = events, goLogin = events.goLogin
         )
     }
 }
 
 
 @Composable
-fun ValidateEmailContent(state: ValidateEmailState, events: ValidateEmailEvents){
+fun ValidateEmailContent(state: ValidateEmailState, events: ValidateEmailEvents, goLogin: () -> Unit){
     Column(
         Modifier
             .fillMaxSize()
@@ -75,7 +76,7 @@ fun ValidateEmailContent(state: ValidateEmailState, events: ValidateEmailEvents)
             ),
         )
         TextButton(
-            onClick = { events.onValidate() },
+            onClick = { events.onValidate(goLogin) },
             modifier = Modifier
                 .width(120.dp)
                 .background(
@@ -92,7 +93,7 @@ fun ValidateEmailContent(state: ValidateEmailState, events: ValidateEmailEvents)
 }
 
 data class ValidateEmailEvents(
-    val onValidate: () -> Unit,
+    val onValidate: (() -> Unit) -> Unit,
     val onCodeChange: (String) -> Unit,
     val goLogin: () -> Unit,
     val goBack: () -> Unit,

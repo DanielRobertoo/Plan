@@ -1,5 +1,6 @@
 package com.example.login.ui.login
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -55,17 +56,17 @@ fun LoginScreen(
     goToListAccount: () -> Unit,
     goback: () -> Unit
 ) {
-
+    Log.d("Login", "creado ${viewModel.state}")
     val eventos = LoginEvents(
         onEmailChange = viewModel::onEmailChange,
         onPasswordChange = viewModel::onPasswordChange,
-        onClickLogin = viewModel::onLoginClick,
+        onClickLogin = { viewModel.onLoginClick(goToListAccount)},
         onSignupClick = { goToRegister() })
-    LoginScreenLourdes(modifier, viewModel.state, eventos, goToListAccount, goback)
+    LoginScreenViewModel(modifier, viewModel.state, eventos, goToListAccount, goback)
 }
 
 @Composable
-fun LoginScreenLourdes(
+fun LoginScreenViewModel(
     modifier: Modifier = Modifier,
     state: AccountLoginState,
     events: LoginEvents,
@@ -84,12 +85,13 @@ fun LoginScreenLourdes(
             }
         )
 
-        state.success -> { goToListAccount() }
+
         else -> {
             LoginFormContent(
                 modifier = modifier,
                 state = state,
-                events = events
+                events = events,
+                goList= goToListAccount
             )
         }
     }
@@ -99,7 +101,8 @@ fun LoginScreenLourdes(
 fun LoginFormContent(
     modifier: Modifier = Modifier,
     state: AccountLoginState,
-    events: LoginEvents
+    events: LoginEvents,
+    goList: () -> Unit
 ) {
     Box(
         modifier = Modifier

@@ -3,6 +3,8 @@ package com.example.plan.ui.graph
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -22,8 +24,7 @@ import com.example.validateemail.ui.ValidateEmailScreen
 import com.example.validateemail.ui.ValidateEmailViewModel
 
 @Composable
-fun PlanScreen(modifier: Modifier) {
-    val navController = rememberNavController()
+fun PlanScreen(modifier: Modifier, navController: NavHostController) {
 
     NavHost(startDestination = "login", navController = navController) {
         composable(route = "list") {
@@ -55,7 +56,6 @@ fun PlanScreen(modifier: Modifier) {
                 goToRegister = { navController.navigate("signUp") },
                 goToListAccount = {
                     navController.navigate("list") {
-                        navController.popBackStack()
                     }
                 },
                 goback = { navController.popBackStack() }
@@ -66,7 +66,9 @@ fun PlanScreen(modifier: Modifier) {
             RegisterScreen(
                 viewModel = hiltViewModel<RegisterViewModel>(),
                 goToLogin = { navController.popBackStack() },
-                goValidate = { email: String, password: String -> navController.navigate("validateEmail/$email/$password") },
+                goValidate = { email: String, password: String ->
+                    navController.navigate("validateEmail/$email/$password")
+                },
                 modifier = Modifier
             )
         }
@@ -77,7 +79,7 @@ fun PlanScreen(modifier: Modifier) {
                 navArgument("email") {
                     type = NavType.StringType
                 },
-                navArgument("password"){
+                navArgument("password") {
                     type = NavType.StringType
                 }
             )
@@ -86,7 +88,9 @@ fun PlanScreen(modifier: Modifier) {
             val password = argumento.arguments?.getString("password")
             ValidateEmailScreen(
                 viewModel = hiltViewModel<ValidateEmailViewModel>(),
-                goLogin = { navController.navigate("login") },
+                goLogin = {
+                    navController.navigate("login")
+                          },
                 goBack = { navController.popBackStack() },
                 email = email!!,
                 password = password!!

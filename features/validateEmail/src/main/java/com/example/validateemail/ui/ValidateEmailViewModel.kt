@@ -31,18 +31,22 @@ class ValidateEmailViewModel @Inject constructor() : ViewModel() {
         _password = password
     }
 
-    fun validateEmail() {
+    fun validateEmail(goLogin: () -> Unit) {
 
         viewModelScope.launch {
             val lista = client.from("code_validation").select().decodeList<code_verification>()
-            lista.any {
+            val match = lista.any {
                 it.email == _email && it.code == state.code
-            }.let {
+            }
+
+            if (match) {
                 client.auth.signUpWith(Email) {
                     email = _email
                     password = _password
                 }
-                state = state.copy(success = true)
+                goLogin()
+            } else {
+                state = state.copy(fail = true)
             }
         }
     }

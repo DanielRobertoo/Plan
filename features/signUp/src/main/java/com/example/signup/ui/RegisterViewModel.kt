@@ -76,7 +76,6 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
                     toEmail = state.email,
                     onSuccess = { insertCodeVerificationSupabase(state.email, codigo) }
                 )
-                insertCodeVerificationSupabase(state.email, codigo)
                 state = state.copy(isLoading = false, success = true)
             } catch (e: Exception) {
                 Log.d("SIGN UP", "${e.message}")
@@ -89,7 +88,7 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
 
              val id = client.postgrest.from("code_validation").select().decodeList<code_verification>().count()
 
-             client.from("code_validation").upsert(
+             client.from("code_validation").insert(
                  code_verification(id, email, code)
              )
          }

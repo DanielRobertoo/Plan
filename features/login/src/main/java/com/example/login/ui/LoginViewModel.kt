@@ -27,7 +27,7 @@ class LoginViewModel @Inject constructor() : ViewModel() {
         state = state.copy(password = password)
     }
 
-    fun onLoginClick() {
+    fun onLoginClick(goList: () -> Unit) {
         viewModelScope.launch {
             Log.d("LOGIN", "${state.email} ${state.password}")
             try {
@@ -36,7 +36,7 @@ class LoginViewModel @Inject constructor() : ViewModel() {
                     email = state.email
                     password = state.password
                 }
-                state = state.copy(success = true, isLoading = false)
+                goList()
                 Log.d("LOGIN", "${state}")
             } catch (e: Exception) {
                 state = state.copy(isErrorAccount = true, isLoading = false)
