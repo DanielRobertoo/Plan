@@ -34,9 +34,9 @@ import kotlin.random.Random
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor() : ViewModel() {
-    
+
     var state by mutableStateOf(AccountRegisterState())
-    
+
     fun onUserNameChange(s: String) {
         state = state.copy(username = s)
     }
@@ -66,7 +66,7 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
             try {
                 state = state.copy(isLoading = true)
                 var codigo = ""
-                for (i in 0..5){
+                for (i in 0..5) {
                     codigo += Random.nextInt(10).toString()
                 }
                 enviarCodigoPorEmail(
@@ -83,15 +83,26 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-     fun insertCodeVerificationSupabase(email: String, code: String){
-         viewModelScope.launch {
+    fun insertCodeVerificationSupabase(email: String, code: String) {
+        viewModelScope.launch {
 
-             val id = client.postgrest.from("code_validation").select().decodeList<code_verification>().count()
+            val listaCodeVerification =
+                client.postgrest.from("code_validation").select().decodeList<code_verification>()
 
-             client.from("code_validation").insert(
-                 code_verification(id, email, code)
-             )
-         }
+            listaCodeVerification.forEach {
+                if (it.email == state.email) {
+                    state = state.copy(emailExist = true)
+                    return@launch
+                }
+            }
+
+
+            val id = listaCodeVerification.count()
+
+            client.from("code_validation").insert(
+                code_verification(id, email, code)
+            )
+        }
 
     }
 

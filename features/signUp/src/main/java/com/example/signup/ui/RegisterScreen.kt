@@ -71,6 +71,7 @@ fun RegisterScreenState(modifier: Modifier, state: AccountRegisterState, events:
         state.isLoading -> LoadingUi()
         state.isEmptyFields -> AlertDialogOK(message = state.isEmpty ?: "Campos vacios", title = "Error", onDismiss = {})
         state.success -> LaunchedEffect(state.success) { goToValidate(state.email, state.password) }
+        state.emailExist -> AlertDialogOK(message = "Cuenta ya existente", title = "Error", onDismiss = {})
         else -> RegisterContent(modifier, state, events)
     }
 }

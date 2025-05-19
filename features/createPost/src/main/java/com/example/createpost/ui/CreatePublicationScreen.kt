@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,9 +22,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.chat.ui.base.AlertDialogOK
 import com.example.chat.ui.base.DatePickerFieldToModalonChange
-import com.example.chat.ui.base.SimpleExposedDropdownHoras
 import com.example.chat.ui.base.SimpleExposedDropdownMenuEditar
 import com.example.chat.ui.base.SimpleExposedDropdownMinutos
+import com.example.chat.ui.base.SimpleExposedDropdownMomentoDia
 import com.example.createpost.usecase.CreatePublicationState
 
 
@@ -60,11 +62,13 @@ fun CreatePulicationContent(state: CreatePublicationState, events: CreationPubli
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
+
         OutlinedTextField(
             value = state.title,
             onValueChange = {events.onTitleChange(it)},
             shape = RoundedCornerShape(10.dp),
-            modifier = Modifier.width(300.dp)
+            modifier = Modifier.width(300.dp),
+            placeholder = { Text("Titulo") }
         )
         Spacer(modifier = Modifier.padding(5.dp))
 
@@ -74,7 +78,8 @@ fun CreatePulicationContent(state: CreatePublicationState, events: CreationPubli
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier
                 .width(300.dp)
-                .height(150.dp)
+                .height(150.dp),
+            placeholder = { Text("Descripción") }
         )
         SimpleExposedDropdownMenuEditar(Error = false, accion = {events.onSportChange}, cadena = "", opciones = listOf(), contenido = "Gimnasio")
         Spacer(modifier = Modifier.padding(5.dp))
@@ -82,7 +87,8 @@ fun CreatePulicationContent(state: CreatePublicationState, events: CreationPubli
             value = state.sport,
             onValueChange = {events.onSportChange(it)},
             shape = RoundedCornerShape(10.dp),
-            modifier = Modifier.width(300.dp)
+            modifier = Modifier.width(300.dp),
+            placeholder = { Text("Deporte") }
         )
         DatePickerFieldToModalonChange(
             label = "",
@@ -91,11 +97,8 @@ fun CreatePulicationContent(state: CreatePublicationState, events: CreationPubli
             string = "fecha",
         )
         Row {
-            SimpleExposedDropdownHoras(Error = false, accion = {}, cadena = state.hourBegin, contenido = "")
-            SimpleExposedDropdownMinutos(Error = false, accion = {}, cadena = state.minutesBegin, contenido = "")
+            SimpleExposedDropdownMomentoDia(Error = false, accion = {}, cadena = state.hourBegin, contenido = "")
         }
-
-
     }
 }
 
@@ -140,8 +143,7 @@ fun CreatePulicationContentPreview(){
             string = "fecha",
         )
         Row {
-            SimpleExposedDropdownHoras(Error = false, accion = {}, cadena = "horas", contenido = "")
-            SimpleExposedDropdownMinutos(Error = false, accion = {}, cadena = "minutos", contenido = "")
+            SimpleExposedDropdownMomentoDia(Error = false, accion = {}, cadena = "Momento del dia", contenido = "")
         }
 
 

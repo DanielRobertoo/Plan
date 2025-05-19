@@ -63,6 +63,8 @@ data class AccountRegisterState (
 
     val surnameErrorFormat: String = "",
 
+    val emailExist: Boolean = false,
+
 
 
     //RNREGISTER_6: Cuenta ya existe (name user, email)

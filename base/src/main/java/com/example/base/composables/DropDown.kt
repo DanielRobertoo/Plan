@@ -61,7 +61,7 @@ fun SimpleExposedDropdownMenuEditar(cadena: String,contenido:String, Error: Bool
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun SimpleExposedDropdownHoras(cadena: String,contenido:String, Error: Boolean, accion: (String) -> Unit) {
+fun SimpleExposedDropdownMomentoDia(cadena: String, contenido:String, Error: Boolean, accion: (String) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -75,8 +75,9 @@ fun SimpleExposedDropdownHoras(cadena: String,contenido:String, Error: Boolean, 
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
-            modifier = Modifier.menuAnchor().width(140.dp).padding(5.dp).combinedClickable(onClick = {expanded = true}, onLongClick = {}),
+            modifier = Modifier.menuAnchor().width(300.dp).combinedClickable(onClick = {expanded = true}, onLongClick = {}),
             isError = Error,
+            placeholder = { Text("Momento del día") }
 
             )
 
@@ -84,10 +85,7 @@ fun SimpleExposedDropdownHoras(cadena: String,contenido:String, Error: Boolean, 
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            val lista = mutableListOf<String>()
-            for (i in 0..23){
-                lista.add(i.toString())
-            }
+            val lista = mutableListOf<String>("Mañana", "Medio Día", "Tarde")
             lista.forEach {
                     item:String -> DropdownMenuItem(
                 text = { Text(item) },
