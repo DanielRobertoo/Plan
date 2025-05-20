@@ -130,12 +130,6 @@ fun CreatePulicationContentPreview(){
         )
         SimpleExposedDropdownMenuEditar(Error = false, accion = {}, cadena = "", opciones = listOf(), contenido = "Gimnasio")
         Spacer(modifier = Modifier.padding(5.dp))
-        OutlinedTextField(
-            value = "Deporte",
-            onValueChange = {},
-            shape = RoundedCornerShape(10.dp),
-            modifier = Modifier.width(300.dp)
-        )
         DatePickerFieldToModalonChange(
             label = "",
             Error = false,

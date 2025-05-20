@@ -40,14 +40,14 @@ data class RegisterEvents(
     val onSurnameChange: (String) -> Unit,
     val onPasswordChange: (String) -> Unit,
     val onBirthdayChange: (String) -> Unit,
-    val onClickRegister: () -> Unit ={}
+    val onClickRegister: () -> Unit ={},
+    val reset: () -> Unit
 ){
 
 }
 
 @Composable
-fun RegisterScreen(modifier: Modifier, viewModel: RegisterViewModel, goToLogin: () -> Unit, goValidate: (String,String) -> Unit) {
-    Log.d("Register", "creado ${viewModel.state}")
+fun RegisterScreen(modifier: Modifier, viewModel: RegisterViewModel, goToLogin: () -> Unit, goValidate: (String,String) -> Unit, goBack: () -> Unit) {
     val eventos = RegisterEvents(
         onUserNameChange =  viewModel::onUserNameChange,
         onEmailChange = viewModel::onEmailChange,
@@ -55,7 +55,9 @@ fun RegisterScreen(modifier: Modifier, viewModel: RegisterViewModel, goToLogin: 
         onSurnameChange = viewModel::onSurnameChange,
         onPasswordChange = viewModel::onPasswordChange,
         onBirthdayChange = viewModel::onBirthdayChange,
-        onClickRegister = viewModel::onRegisterClick)
+        onClickRegister = viewModel::onRegisterClick,
+        reset = viewModel::onReset
+    )
     RegisterScreenState(modifier =modifier,
         state = viewModel.state,
         events = eventos,
@@ -69,9 +71,10 @@ fun RegisterScreen(modifier: Modifier, viewModel: RegisterViewModel, goToLogin: 
 fun RegisterScreenState(modifier: Modifier, state: AccountRegisterState, events: RegisterEvents, goToLogin: ()->Unit, goToValidate: (String,String) -> Unit){
     when {
         state.isLoading -> LoadingUi()
-        state.isEmptyFields -> AlertDialogOK(message = state.isEmpty ?: "Campos vacios", title = "Error", onDismiss = {})
+        state.isEmptyFields -> AlertDialogOK(message = state.isEmpty ?: "Campos vacios", title = "Error", onDismiss = {events.reset()})
         state.success -> LaunchedEffect(state.success) { goToValidate(state.email, state.password) }
-        state.emailExist -> AlertDialogOK(message = "Cuenta ya existente", title = "Error", onDismiss = {})
+        state.emailExist -> AlertDialogOK(message = "Cuenta ya existente", title = "Error", onDismiss = {events.reset()})
+        state.isEmailInvalid -> AlertDialogOK(message = "Correo Invalido", title = "Error", onDismiss = {events.reset()})
         else -> RegisterContent(modifier, state, events)
     }
 }

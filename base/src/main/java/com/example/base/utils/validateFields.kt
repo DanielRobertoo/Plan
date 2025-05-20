@@ -1,13 +1,10 @@
 package com.example.base.utils
 
 fun validateEmail(email: String): Boolean{
-    //Opcion 1
-    //return Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    //Opcion 2
 
     val emailPattern = "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z]{2,}$"
     val regex = Regex(emailPattern) //Expresión regular
-    return  regex.matches(email)
+    return regex.matches(email)
 
 }
 

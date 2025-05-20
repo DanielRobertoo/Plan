@@ -64,15 +64,34 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
     fun onRegisterClick() {
         viewModelScope.launch {
             try {
+                if (!validateEmail(state.email)){
+                    state = state.copy(isEmailInvalid = true, isLoading = false)
+                    return@launch
+                }
                 state = state.copy(isLoading = true)
                 var codigo = ""
                 for (i in 0..5) {
                     codigo += Random.nextInt(10).toString()
                 }
+
+                val listaCodeVerification =
+                    client.postgrest.from("code_validation").select().decodeList<code_verification>()
+
+                listaCodeVerification.forEach {
+                    Log.d("item", "$it")
+                    if (it.email == state.email && it.validate == 1) {
+                        state = state.copy(emailExist = true, isLoading = false)
+                        Log.d("comprobacion", "$state")
+                        return@launch
+                    }
+                }
+
                 enviarCodigoPorEmail(
                     codigo = codigo,
                     toName = state.name,
-                    onError = {},
+                    onError = {
+
+                    },
                     toEmail = state.email,
                     onSuccess = { insertCodeVerificationSupabase(state.email, codigo) }
                 )
@@ -89,21 +108,17 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
             val listaCodeVerification =
                 client.postgrest.from("code_validation").select().decodeList<code_verification>()
 
-            listaCodeVerification.forEach {
-                if (it.email == state.email) {
-                    state = state.copy(emailExist = true)
-                    return@launch
-                }
-            }
-
-
             val id = listaCodeVerification.count()
 
             client.from("code_validation").insert(
-                code_verification(id, email, code)
+                code_verification(id, email, code, 0)
             )
         }
 
+    }
+
+    fun onReset() {
+        state = state.copy(isLoading = false, emailExist = false, isEmailInvalid = false)
     }
 
 }

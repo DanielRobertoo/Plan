@@ -35,6 +35,7 @@ data class AccountRegisterState (
     val isPasswordError: Boolean = false,
     val isUserError: Boolean = false,
     val isBirthdayError: Boolean = false,
+    val isEmailInvalid: Boolean = false,
 
 
 
@@ -67,12 +68,7 @@ data class AccountRegisterState (
 
 
 
-    //RNREGISTER_6: Cuenta ya existe (name user, email)
-    val accountExitsError: Boolean = false,
 
-    //RNREGISTER_7:Error que venga de la infraestructura
-    // (bases de dats, netflix...)
-    val serverError: String? = null,
 
     //RNREGISTER_8 : Success
     var success: Boolean = false,
