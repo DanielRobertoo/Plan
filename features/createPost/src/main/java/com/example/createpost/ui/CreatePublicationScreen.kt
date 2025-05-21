@@ -12,19 +12,22 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.chat.ui.base.AlertDialogOK
 import com.example.chat.ui.base.DatePickerFieldToModalonChange
+import com.example.chat.ui.base.SimpleExposedDropdownGimnasio
 import com.example.chat.ui.base.SimpleExposedDropdownMenuEditar
 import com.example.chat.ui.base.SimpleExposedDropdownMomentoDia
 import com.example.createpost.usecase.CreatePublicationState
+import com.example.domain.model.DataBase.Gym
+import kotlin.reflect.KSuspendFunction0
 
 
 @Composable
@@ -33,6 +36,9 @@ fun CreatePublicationScreen(
     viewModel: CreatePublicationViewModel,
     modifier: Modifier
 ) {
+    LaunchedEffect(Unit) {
+        viewModel.loadGym()
+    }
     when {
         viewModel.state.errorFields -> AlertDialogOK(
             title = "ERROR",
@@ -54,7 +60,10 @@ fun CreatePublicationScreen(
             onTitleChange = viewModel::onTiTleChange,
             onGymChange = viewModel::onGymChange,
             onMomentDayChange = viewModel::onMomentDayChange
-        ), goBack = goBack)
+        ),
+            goBack = goBack,
+            gymList = viewModel.gym
+        )
     }
 
 }
@@ -65,14 +74,15 @@ data class CreationPublicationEvents(
     val onDateChange: (String) -> Unit,
     val onGymChange: (String) -> Unit,
     val onHourBeginChange: (String) -> Unit,
-    val onMomentDayChange: (String) -> Unit
+    val onMomentDayChange: (String) -> Unit,
 )
 
 @Composable
 fun CreatePulicationContent(
     state: CreatePublicationState,
     events: CreationPublicationEvents,
-    goBack: () -> Unit
+    goBack: () -> Unit,
+    gymList: List<Gym>
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -100,12 +110,12 @@ fun CreatePulicationContent(
                 .height(150.dp),
             placeholder = { Text("Descripción") }
         )
-        SimpleExposedDropdownMenuEditar(
+        SimpleExposedDropdownGimnasio(
             Error = false,
             accion = { events.onGymChange(it) },
             cadena = state.gym,
-            opciones = listOf(),
-            contenido = "Gimnasio"
+            contenido = "Gimnasio",
+            datos = gymList
         )
         DatePickerFieldToModalonChange(
             label = "",

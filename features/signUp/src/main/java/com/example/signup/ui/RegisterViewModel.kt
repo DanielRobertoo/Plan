@@ -1,6 +1,5 @@
 package com.example.login.ui.register
 
-import android.graphics.BitmapFactory.Options
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,26 +8,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.base.utils.SupabaseClient.client
 import com.example.base.utils.validateEmail
-import com.example.base.utils.validatePassword
 import com.example.domain.Email.enviarCodigoPorEmail
-import com.example.domain.model.code_verification
+import com.example.domain.model.DataBase.code_verification
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.jan.supabase.auth.OtpType
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
-import io.github.jan.supabase.postgrest.query.Columns
-import io.github.jan.supabase.postgrest.query.Count
-import io.github.jan.supabase.postgrest.query.filter.TextSearchType
-import io.github.jan.supabase.postgrest.query.request.SelectRequestBuilder
-import io.github.jan.supabase.realtime.selectAsFlow
 import kotlinx.coroutines.launch
-import kotlinx.serialization.modules.SerializersModule
-import okhttp3.internal.checkOffsetAndCount
-import java.time.LocalDate
-import java.time.ZoneId
-import java.util.Date
 import javax.inject.Inject
 import kotlin.random.Random
 

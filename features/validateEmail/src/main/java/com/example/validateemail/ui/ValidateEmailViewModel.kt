@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.base.utils.SupabaseClient.client
-import com.example.domain.model.code_verification
+import com.example.domain.model.DataBase.code_verification
 import com.example.validateemail.usecase.ValidateEmailState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.jan.supabase.auth.auth

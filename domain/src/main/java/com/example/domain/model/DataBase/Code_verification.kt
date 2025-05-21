@@ -1,7 +1,6 @@
-package com.example.domain.model
+package com.example.domain.model.DataBase
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
 
 @Serializable
 data class code_verification(
