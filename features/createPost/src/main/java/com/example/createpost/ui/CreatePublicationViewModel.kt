@@ -20,7 +20,7 @@ class CreatePublicationViewModel @Inject constructor() : ViewModel() {
         state = state.copy(description = texto)
     }
 
-    fun onMeetPoingChange(texto:String){
+    fun onGymChange(texto:String){
         state = state.copy(meetPoint = texto)
     }
 
@@ -32,12 +32,12 @@ class CreatePublicationViewModel @Inject constructor() : ViewModel() {
         state = state.copy(hourBegin = texto)
     }
 
-    fun onSportChange(texto: String){
-        state = state.copy(sport = texto)
-    }
-
     fun resetError() {
         state = state.copy(errorFields = false)
+    }
+
+    fun onMomentDayChange(s: String) {
+        state = state.copy(momentDay = s)
     }
 
 }

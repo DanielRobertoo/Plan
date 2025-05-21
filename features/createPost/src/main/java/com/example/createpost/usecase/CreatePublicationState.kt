@@ -6,8 +6,9 @@ data class CreatePublicationState(
     val date: String = "",
     val hourBegin: String = "",
     val minutesBegin:String = "",
-    val sport: String = "",
+    val gym: String = "",
     val meetPoint: String = "",
+    val momentDay: String = "",
 
     val errorFields: Boolean = false,
     val success:Boolean = false,
