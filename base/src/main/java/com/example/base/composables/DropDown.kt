@@ -106,7 +106,7 @@ fun SimpleExposedDropdownMomentoDia(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            val lista = mutableListOf<String>("Mañana", "Medio Día", "Tarde")
+            val lista = mutableListOf<String>("Mañana", "Tarde")
             lista.forEach { item: String ->
                 DropdownMenuItem(
                     text = { Text(item) },

@@ -1,5 +1,7 @@
 package com.example.createpost.usecase
 
+import com.example.domain.model.post
+
 data class CreatePublicationState(
     val title:String = "",
     val description:String = "",
@@ -7,10 +9,9 @@ data class CreatePublicationState(
     val hourBegin: String = "",
     val minutesBegin:String = "",
     val gym: String = "",
-    val meetPoint: String = "",
     val momentDay: String = "",
 
     val errorFields: Boolean = false,
     val success:Boolean = false,
-    val publications: List<Any> = listOf()
+    val publications: MutableList<post> = mutableListOf()
 )

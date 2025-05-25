@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import com.example.base.PostGym.PostItemBasicFit
 import com.example.base.PostGym.PostItemDefault
@@ -97,10 +98,10 @@ fun PostListContent(listPost: List<post>, findUser: (String) -> String, modifier
     LazyColumn(modifier = modifier) {
         items(listPost) {
             when{
-                it.gym == "basicFit" -> PostItemBasicFit(user = findUser(it.post_creator_id), date = it.date, title = it.title, place = it.gym)
-                it.gym == "forus" -> PostItemForus(user = findUser(it.post_creator_id), date = it.date, title = it.title, place = it.gym)
-                it.gym == "gofit" -> PostItemGofit(user = findUser(it.post_creator_id), date = it.date, title = it.title, place = it.gym)
-                else -> PostItemDefault(user = findUser(it.post_creator_id), date = it.date, title = it.title, place = it.gym)
+                it.gym.toLowerCase().contains("basic-Fit")  -> PostItemBasicFit(user = findUser(it.post_creator_id.toString()), date = it.date, title = it.title, place = it.gym)
+                it.gym.toLowerCase().contains("forus") -> PostItemForus(user = findUser(it.post_creator_id.toString()), date = it.date, title = it.title, place = it.gym)
+                it.gym.toLowerCase().contains("gofit") -> PostItemGofit(user = findUser(it.post_creator_id.toString()), date = it.date, title = it.title, place = it.gym)
+                else -> PostItemDefault(user = findUser(it.post_creator_id.toString()), date = it.date, title = it.title, place = it.gym)
             }
         }
     }

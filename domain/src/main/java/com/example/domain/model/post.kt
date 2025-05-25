@@ -1,15 +1,16 @@
 package com.example.domain.model
 
+import kotlinx.serialization.Serializable
 import java.util.Date
 
+@Serializable
 data class post(
-    val id: String,
-    val post_creator_id: String,
+    val id: Int,
+    val post_creator_id: Int,
     val title: String,
     val description:String,
-    val sport: String,
     val gym:String = "",
     val date: String,
-    val hourBegin:String = "",
-    val createdAt:String
+    val moment_day:String = "",
+    val created_at:String
 )
