@@ -1,6 +1,8 @@
 package com.example.base.PostGym
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -22,9 +24,10 @@ import androidx.compose.ui.unit.dp
 import com.example.base.R
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PostItemDefault(title: String, date: String, user:String, place:String) {
-    ElevatedCard(Modifier.fillMaxWidth().height(260.dp).padding(10.dp)) {
+fun PostItemDefault(title: String, date: String, user:String, place:String,accion: (String) -> Unit) {
+    ElevatedCard(Modifier.fillMaxWidth().height(260.dp).padding(10.dp).combinedClickable(onClick = {accion(user)})) {
         Box(contentAlignment = Alignment.Center) {
             Column(Modifier.fillMaxSize()) {
                 Row {

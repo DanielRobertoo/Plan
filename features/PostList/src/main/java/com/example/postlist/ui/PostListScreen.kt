@@ -38,6 +38,7 @@ import com.example.chat.ui.base.AlertDialogYesNoPost
 import com.example.domain.model.post
 import com.example.postlist.R
 import com.example.postlist.usecase.PostListState
+import java.util.Locale
 
 @Composable
 fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAdd: () -> Unit){
@@ -70,8 +71,8 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
             }
             viewModel.state.postToJoin != null -> {
                 AlertDialogYesNoPost(
-                    title = "ALERTA",
-                    message = "Seguro quieres borrar el aeropuerto?",
+                    title = "Enviar Solicitud",
+                    message = "",
                     onAccept = {/*_post: post -> viewModel.SendRequest(_post)*/ },
                     onDismiss = { viewModel.reset() },
                     post = viewModel.state.postToJoin!!
@@ -82,7 +83,8 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
                 PostListContent(
                     listPost = viewModel.state.posts,
                     findUser = { id: String -> viewModel.findUserById(id) },
-                    modifier = Modifier.padding(padding)
+                    modifier = Modifier.padding(padding),
+                    accion = { id:String -> viewModel.request(id) }
                 )
                 Log.d("list", "creado")
             }
@@ -94,14 +96,25 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
 
 
 @Composable
-fun PostListContent(listPost: List<post>, findUser: (String) -> String, modifier: Modifier){
+fun PostListContent(listPost: List<post>, findUser: (String) -> String, modifier: Modifier, accion: (String) -> Unit){
     LazyColumn(modifier = modifier) {
+        Log.d("lista gimnasios", listPost.toString())
         items(listPost) {
+            var id = it.id
             when{
-                it.gym.toLowerCase().contains("basic-Fit")  -> PostItemBasicFit(user = findUser(it.post_creator_id.toString()), date = it.date, title = it.title, place = it.gym)
-                it.gym.toLowerCase().contains("forus") -> PostItemForus(user = findUser(it.post_creator_id.toString()), date = it.date, title = it.title, place = it.gym)
-                it.gym.toLowerCase().contains("gofit") -> PostItemGofit(user = findUser(it.post_creator_id.toString()), date = it.date, title = it.title, place = it.gym)
-                else -> PostItemDefault(user = findUser(it.post_creator_id.toString()), date = it.date, title = it.title, place = it.gym)
+                it.gym.lowercase(Locale.ROOT).contains("basic-fit")  -> PostItemBasicFit(user = findUser(it.post_creator_id.toString()), date = it.date, title = it.title, place = it.gym, accion = {
+                    accion(id.toString())
+                })
+                it.gym.lowercase(Locale.ROOT).contains("forus") -> PostItemForus(user = findUser(it.post_creator_id.toString()), date = it.date, title = it.title, place = it.gym,
+                    accion = {
+                        accion(id.toString())
+                    })
+                it.gym.lowercase(Locale.ROOT).contains("GO fit") -> PostItemGofit(user = findUser(it.post_creator_id.toString()), date = it.date, title = it.title, place = it.gym,accion = {
+                    accion(id.toString())
+                })
+                else -> PostItemDefault(user = findUser(it.post_creator_id.toString()), date = it.date, title = it.title, place = it.gym,accion = {
+                    accion(id.toString())
+                })
             }
         }
     }

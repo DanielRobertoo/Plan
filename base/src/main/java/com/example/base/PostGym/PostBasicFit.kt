@@ -1,6 +1,8 @@
 package com.example.base.PostGym
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,7 +31,11 @@ import com.example.base.R
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun PostItemBasicFitPreview(){
-    ElevatedCard(Modifier.fillMaxWidth().height(260.dp).padding(10.dp)) {
+    ElevatedCard(
+        Modifier
+            .fillMaxWidth()
+            .height(260.dp)
+            .padding(10.dp)) {
         Box(contentAlignment = Alignment.Center){
             Column(Modifier.fillMaxSize()) {
                 Row {
@@ -58,9 +64,16 @@ fun PostItemBasicFitPreview(){
 
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PostItemBasicFit(title: String, date: String, user:String, place:String) {
-    ElevatedCard(Modifier.fillMaxWidth().height(260.dp).padding(10.dp)) {
+fun PostItemBasicFit(title: String, date: String, user:String, place:String, accion: (String) -> Unit) {
+    ElevatedCard(Modifier
+        .fillMaxWidth()
+        .height(260.dp)
+        .padding(10.dp)
+        .combinedClickable(
+            onClick = { accion(user) }
+        )) {
         Box(contentAlignment = Alignment.Center) {
             Column(Modifier.fillMaxSize()) {
                 Row {

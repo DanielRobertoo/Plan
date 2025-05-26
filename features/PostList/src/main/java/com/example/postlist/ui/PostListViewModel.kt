@@ -37,5 +37,18 @@ class PostListViewModel @Inject constructor() : ViewModel() {
         return ""
     }
 
+    fun request(id: String) {
+        viewModelScope.launch {
+            client.postgrest.from("post").select().decodeList<post>().forEach {
+                if (it.id.toString() == id) {
+                    state = state.copy(postToJoin = it)
+                }
+            }
+
+        }
+
+    }
+
+
 
 }
