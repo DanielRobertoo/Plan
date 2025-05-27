@@ -47,7 +47,7 @@ data class RegisterEvents(
 }
 
 @Composable
-fun RegisterScreen(modifier: Modifier, viewModel: RegisterViewModel, goToLogin: () -> Unit, goValidate: (String,String) -> Unit, goBack: () -> Unit) {
+fun RegisterScreen(modifier: Modifier, viewModel: RegisterViewModel, goToLogin: () -> Unit, goValidate: (String,String) -> Unit) {
     val eventos = RegisterEvents(
         onUserNameChange =  viewModel::onUserNameChange,
         onEmailChange = viewModel::onEmailChange,

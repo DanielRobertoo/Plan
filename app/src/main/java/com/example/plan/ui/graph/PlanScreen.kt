@@ -67,7 +67,6 @@ fun PlanScreen(modifier: Modifier, navController: NavHostController) {
                 goValidate = { email: String, password: String ->
                     navController.navigate("validateEmail/$email/$password")
                 },
-                goBack = {navController.popBackStack()},
                 modifier = Modifier
             )
         }

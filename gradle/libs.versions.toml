@@ -24,6 +24,7 @@ uiToolingPreviewAndroidVersion = "1.7.8"
 hilt="2.52"
 ksp= "2.0.21-1.0.27"
 navigationCompose = "2.8.9"
+foundationLayoutAndroidVersion = "1.6.6"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -56,6 +57,7 @@ androidx-hilt-navigationcompose = "androidx.hilt:hilt-navigation-compose:1.2.0"
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroidVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

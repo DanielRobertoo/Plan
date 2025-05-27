@@ -95,6 +95,9 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
 }
 
 
+
+
+
 @Composable
 fun PostListContent(listPost: List<post>, findUser: (String) -> String, modifier: Modifier, accion: (String) -> Unit){
     LazyColumn(modifier = modifier) {

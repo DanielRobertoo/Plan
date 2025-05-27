@@ -157,7 +157,7 @@ fun CreatePulicationContent(
             DatePickerFieldToModalonChange(
                 label = "",
                 Error = false,
-                accion = { events.onDateChange },
+                accion = { events.onDateChange(it) },
                 string = "fecha",
             )
             Row {
