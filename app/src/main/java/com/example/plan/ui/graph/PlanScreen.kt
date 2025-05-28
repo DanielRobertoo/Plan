@@ -1,6 +1,24 @@
 package com.example.plan.ui.graph
 
+import android.annotation.SuppressLint
+import android.util.Log
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Send
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -21,79 +39,124 @@ import com.example.postlist.ui.PostListViewModel
 import com.example.validateemail.ui.ValidateEmailScreen
 import com.example.validateemail.ui.ValidateEmailViewModel
 
+
 @Composable
 fun PlanScreen(modifier: Modifier, navController: NavHostController) {
-
-    NavHost(startDestination = "login", navController = navController) {
-        composable(route = "list") {
-            PostListScreen(
-                viewModel = hiltViewModel<PostListViewModel>(),
-                goAdd = { navController.navigate("add") },
-                goRequest = {},
-            )
-        }
-        composable(route = "add") {
-            CreatePublicationScreen(
-                viewModel = hiltViewModel<CreatePublicationViewModel>(),
-                goBack = { navController.popBackStack() },
-                modifier = modifier
-            )
-        }
-        composable(route = "chat") {
-            ChatScreen(
-                viewModel = hiltViewModel<ChatViewModel>(),
-                goBack = { navController.popBackStack() },
-                modifier = modifier
-            )
-        }
-        composable(route = "login") {
-            LoginScreen(
-                viewModel = hiltViewModel<LoginViewModel>(),
-                email = "",
-                password = "",
-                goToRegister = { navController.navigate("signUp") },
-                goToListAccount = {
-                    navController.navigate("list") {
-                    }
-                },
-                goback = { navController.popBackStack() }
-            )
-        }
-
-        composable(route = "signUp") {
-            RegisterScreen(
-                viewModel = hiltViewModel<RegisterViewModel>(),
-                goToLogin = { navController.popBackStack() },
-                goValidate = { email: String, password: String ->
-                    navController.navigate("validateEmail/$email/$password")
-                },
-                modifier = Modifier
-            )
-        }
-
-        composable(
-            route = "validateEmail/{email}/{password}",
-            arguments = listOf(
-                navArgument("email") {
-                    type = NavType.StringType
-                },
-                navArgument("password") {
-                    type = NavType.StringType
+    var actual = remember { mutableStateOf("login") }
+    Scaffold(
+        bottomBar = {
+            if (actual.value != "login" && actual.value != "signUp" && actual.value != "validate") {
+                NavigationBar(windowInsets = NavigationBarDefaults.windowInsets) {
+                    NavigationBarItem(
+                        selected = actual.value=="list",
+                        onClick = { navController.navigate("list") },
+                        icon = { Icon(Icons.Filled.Home, null) },
+                        label = { Text(text = "") }
+                    )
+                    NavigationBarItem(
+                        selected = actual.value=="request",
+                        onClick = { /*navController.navigate("request")*/ },
+                        icon = { Icon(Icons.Filled.Email, null) },
+                        label = { Text(text = "") }
+                    )
+                    NavigationBarItem(
+                        selected = actual.value=="chat",
+                        onClick = { /*navController.navigate("chat")*/ },
+                        icon = { Icon(Icons.AutoMirrored.Filled.Send, null) },
+                        label = { Text(text = "") }
+                    )
+                    NavigationBarItem(
+                        selected = actual.value=="perfil",
+                        onClick = { /*navController.navigate("perfil")*/ },
+                        icon = { Icon(Icons.Filled.AccountCircle, null) },
+                        label = { Text(text = "") }
+                    )
                 }
-            )
-        ) { argumento ->
-            val email = argumento.arguments?.getString("email")
-            val password = argumento.arguments?.getString("password")
-            ValidateEmailScreen(
-                viewModel = hiltViewModel<ValidateEmailViewModel>(),
-                goLogin = {
-                    navController.navigate("login")
-                          },
-                goBack = { navController.popBackStack() },
-                email = email!!,
-                password = password!!
-            )
-        }
+            } else {
 
+            }
+        }
+    ) {
+
+
+        NavHost(startDestination = "login", navController = navController, modifier = Modifier.padding(it)) {
+            composable(route = "list") {
+                actual.value = "list"
+                Log.d("actual", "$actual")
+                PostListScreen(
+                    viewModel = hiltViewModel<PostListViewModel>(),
+                    goAdd = { navController.navigate("add") },
+                    goRequest = {},
+                )
+            }
+            composable(route = "add") {
+                actual.value = "add"
+                CreatePublicationScreen(
+                    viewModel = hiltViewModel<CreatePublicationViewModel>(),
+                    goBack = { navController.popBackStack() },
+                    modifier = modifier
+                )
+            }
+            composable(route = "chat") {
+                actual.value = "chat"
+                ChatScreen(
+                    viewModel = hiltViewModel<ChatViewModel>(),
+                    goBack = { navController.popBackStack() },
+                    modifier = modifier
+                )
+            }
+            composable(route = "login") {
+                actual.value = "login"
+                LoginScreen(
+                    viewModel = hiltViewModel<LoginViewModel>(),
+                    email = "",
+                    password = "",
+                    goToRegister = { navController.navigate("signUp") },
+                    goToListAccount = {
+                        navController.navigate("list") {
+                        }
+                    },
+                    goback = { navController.popBackStack() }
+                )
+            }
+
+            composable(route = "signUp") {
+                actual.value = "signUp"
+                RegisterScreen(
+                    viewModel = hiltViewModel<RegisterViewModel>(),
+                    goToLogin = { navController.popBackStack() },
+                    goValidate = { email: String, password: String ->
+                        navController.navigate("validateEmail/$email/$password")
+                    },
+                    modifier = Modifier
+                )
+            }
+
+            composable(
+                route = "validateEmail/{email}/{password}",
+                arguments = listOf(
+                    navArgument("email") {
+                        type = NavType.StringType
+                    },
+                    navArgument("password") {
+                        type = NavType.StringType
+                    }
+                )
+            ) { argumento ->
+                val email = argumento.arguments?.getString("email")
+                val password = argumento.arguments?.getString("password")
+                actual.value = "validate"
+                ValidateEmailScreen(
+                    viewModel = hiltViewModel<ValidateEmailViewModel>(),
+                    goLogin = {
+                        navController.navigate("login")
+                    },
+                    goBack = { navController.popBackStack() },
+                    email = email!!,
+                    password = password!!
+                )
+            }
+
+        }
     }
 }
