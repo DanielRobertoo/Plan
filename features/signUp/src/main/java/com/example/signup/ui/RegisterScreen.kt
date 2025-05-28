@@ -29,6 +29,8 @@ import com.example.base.composables.SpaceBajo
 import com.example.base.composables.SurnameField
 import com.example.base.composables.UserNameField
 import com.example.chat.ui.base.AlertDialogOK
+import com.example.chat.ui.base.DatePickerFieldToModalonChange
+import com.example.chat.ui.base.DatePickerFieldToModalonChangeRegister
 import java.time.LocalDate
 import java.util.Date
 
@@ -47,7 +49,7 @@ data class RegisterEvents(
 }
 
 @Composable
-fun RegisterScreen(modifier: Modifier, viewModel: RegisterViewModel, goToLogin: () -> Unit, goValidate: (String,String) -> Unit) {
+fun RegisterScreen(modifier: Modifier, viewModel: RegisterViewModel, goToLogin: () -> Unit, goValidate: (String,String,String) -> Unit) {
     val eventos = RegisterEvents(
         onUserNameChange =  viewModel::onUserNameChange,
         onEmailChange = viewModel::onEmailChange,
@@ -68,11 +70,11 @@ fun RegisterScreen(modifier: Modifier, viewModel: RegisterViewModel, goToLogin: 
 }
 
 @Composable
-fun RegisterScreenState(modifier: Modifier, state: AccountRegisterState, events: RegisterEvents, goToLogin: ()->Unit, goToValidate: (String,String) -> Unit){
+fun RegisterScreenState(modifier: Modifier, state: AccountRegisterState, events: RegisterEvents, goToLogin: ()->Unit, goToValidate: (String,String,String) -> Unit){
     when {
         state.isLoading -> LoadingUi()
         state.isEmptyFields -> AlertDialogOK(message = state.isEmpty ?: "Campos vacios", title = "Error", onDismiss = {events.reset()})
-        state.success -> LaunchedEffect(state.success) { goToValidate(state.email, state.password) }
+        state.success -> LaunchedEffect(state.success) { goToValidate(state.email, state.password, state.userId) }
         state.emailExist -> AlertDialogOK(message = "Cuenta ya existente", title = "Error", onDismiss = {events.reset()})
         state.isEmailInvalid -> AlertDialogOK(message = "Correo Invalido", title = "Error", onDismiss = {events.reset()})
         else -> RegisterContent(modifier, state, events)
@@ -98,7 +100,12 @@ fun RegisterContent(modifier: Modifier, state: AccountRegisterState, events: Reg
             UserNameField(value = state.username, isError = state.isUserError,errorFormat = state.userErrorFormat, label = "User Name", onValueChange = events.onUserNameChange)
             NameField(value = state.name, onNameChange = events.onNameChange, isError = state.isNameError, errorFormat = state.nameErrorFormat, label = "Nombre")
             SurnameField(value = state.surname, onValueChange = events.onSurnameChange, isError = state.isSurnameError, errorFormat = state.surnameErrorFormat, label = "Apellidos")
-            //BirthdayField(value = state.birthday, isDatePickerVisible = state.isDatePickerVisible, isError = state.isBirthdayError, formatError = state.dateErrorFormat, onDateSelected = events.onBirthdayChange)
+            DatePickerFieldToModalonChangeRegister(
+                label = "",
+                isError = false,
+                onValueChange = { events.onBirthdayChange(it) },
+                value = state.birthday,
+            )
             EmailTextField(value = state.email, label = "Email", emailError = state.isEmailError, emailChange = events.onEmailChange, emailErrorFormat = state.emailErrorFormat)
             PasswordField(modifier=modifier.testTag("passwordField"),value = state.password, label = "Password", isError = state.isPasswordError, errorFormat = state.passwordErrorFormat, onValueChange = events.onPasswordChange)
             ButtonRegister(onRegisterClick = events.onClickRegister)

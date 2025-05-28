@@ -2,6 +2,7 @@ package com.example.login.ui.register
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import com.example.domain.model.user
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
@@ -78,8 +79,5 @@ data class AccountRegisterState (
     //Requerimientos NO Funcional
     //RNFLOGIN_1 : Tiempo de espera de conexión
     val isLoading: Boolean = false,
-
-    ) {
-
-
-}
+    val userId: String = ""
+    )

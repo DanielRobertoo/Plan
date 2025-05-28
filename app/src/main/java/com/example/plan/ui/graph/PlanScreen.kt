@@ -125,26 +125,30 @@ fun PlanScreen(modifier: Modifier, navController: NavHostController) {
                 RegisterScreen(
                     viewModel = hiltViewModel<RegisterViewModel>(),
                     goToLogin = { navController.popBackStack() },
-                    goValidate = { email: String, password: String ->
-                        navController.navigate("validateEmail/$email/$password")
+                    goValidate = { email: String, password: String, userId:String ->
+                        navController.navigate("validateEmail/$email/$password/$userId")
                     },
                     modifier = Modifier
                 )
             }
 
             composable(
-                route = "validateEmail/{email}/{password}",
+                route = "validateEmail/{email}/{password}/{userId}",
                 arguments = listOf(
                     navArgument("email") {
                         type = NavType.StringType
                     },
                     navArgument("password") {
                         type = NavType.StringType
+                    },
+                    navArgument("userId"){
+                        type = NavType.StringType
                     }
                 )
             ) { argumento ->
                 val email = argumento.arguments?.getString("email")
                 val password = argumento.arguments?.getString("password")
+                val userInfo = argumento.arguments?.getString("userId")
                 actual.value = "validate"
                 ValidateEmailScreen(
                     viewModel = hiltViewModel<ValidateEmailViewModel>(),
@@ -153,7 +157,8 @@ fun PlanScreen(modifier: Modifier, navController: NavHostController) {
                     },
                     goBack = { navController.popBackStack() },
                     email = email!!,
-                    password = password!!
+                    password = password!!,
+                    userId = userInfo!!
                 )
             }
 

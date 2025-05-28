@@ -79,6 +79,8 @@ dependencies {
     implementation(libs.foundation.layout.android)
     implementation(libs.foundation.layout.android)
     implementation(libs.foundation.layout.android)
+    implementation(project(":domain"))
+    implementation(project(":base"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -96,4 +98,6 @@ dependencies {
     implementation("io.github.jan-tennert.supabase:auth-kt")
     implementation("io.github.jan-tennert.supabase:realtime-kt")
     implementation("io.ktor:ktor-client-okhttp:3.0.3")
+
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 }

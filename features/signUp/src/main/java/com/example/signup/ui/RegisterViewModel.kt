@@ -10,10 +10,14 @@ import com.example.base.utils.SupabaseClient.client
 import com.example.base.utils.validateEmail
 import com.example.domain.Email.enviarCodigoPorEmail
 import com.example.domain.model.DataBase.code_verification
+import com.example.domain.model.user
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.Period
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import kotlin.random.Random
 
@@ -45,6 +49,13 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
     fun onBirthdayChange(s: String) {
         state = state.copy(birthday = s)
     }
+    fun ageCalculator() : String{
+        if (state.birthday == ""){
+            state = state.copy(isEmptyFields = true)
+            return ""
+        }
+        return Period.between(LocalDate.parse(state.birthday, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalDate.now()).years.toString()
+    }
 
     fun onRegisterClick() {
         viewModelScope.launch {
@@ -61,6 +72,8 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
 
                 val listaCodeVerification =
                     client.postgrest.from("code_validation").select().decodeList<code_verification>()
+
+                val id_User = client.postgrest.from("user").select().decodeList<user>().count()
 
                 listaCodeVerification.forEach {
                     Log.d("item", "$it")
@@ -80,7 +93,18 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
                     toEmail = state.email,
                     onSuccess = { insertCodeVerificationSupabase(state.email, codigo) }
                 )
-                state = state.copy(isLoading = false, success = true)
+                val userToSend = user(
+                    age = ageCalculator(),
+                    created_at = LocalDate.now().toString(),
+                    name = state.name,
+                    surname = state.surname,
+                    user_name = state.username,
+                    id = id_User,
+                    enabled = 0,
+                    email = state.email
+                )
+                client.postgrest.from("user").insert(userToSend)
+                state = state.copy(isLoading = false, success = true, userId = userToSend.id.toString())
             } catch (e: Exception) {
                 Log.d("SIGN UP", "${e.message}")
             }

@@ -59,4 +59,7 @@ dependencies {
     implementation("io.github.jan-tennert.supabase:auth-kt")
     implementation("io.github.jan-tennert.supabase:realtime-kt")
     implementation("io.ktor:ktor-client-okhttp:2.3.10")
+
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
 }

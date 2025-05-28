@@ -26,9 +26,9 @@ import com.example.validateemail.usecase.ValidateEmailState
 
 
 @Composable
-fun ValidateEmailScreen(viewModel: ValidateEmailViewModel, goLogin: () -> Unit, goBack: () -> Unit, email: String, password: String){
+fun ValidateEmailScreen(viewModel: ValidateEmailViewModel, goLogin: () -> Unit, goBack: () -> Unit, email: String, password: String, userId: String){
     LaunchedEffect(Unit) {
-        viewModel.assignEmail(email, password)
+        viewModel.assignEmail(email, password, userId)
     }
     Log.d("Validate", "creado ${viewModel.state}")
     ValidateEmailViewModelScreen(

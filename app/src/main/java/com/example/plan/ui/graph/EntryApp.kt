@@ -70,39 +70,45 @@ fun NavGraphBuilder.login(navController: NavController){
 }
 
 fun NavGraphBuilder.signUp(navController: NavController){
-    composable(route = EntryAppGraph.signUp()){
+    composable(route = "signUp") {
         RegisterScreen(
             viewModel = hiltViewModel<RegisterViewModel>(),
-            modifier = Modifier,
-            goToLogin = {navController.navigate(EntryAppGraph.login())},
-            goValidate = { email: String, password: String ->
-                navController.navigate("${EntryAppGraph.validate()}/$email/$password")
-            }
+            goToLogin = { navController.popBackStack() },
+            goValidate = { email: String, password: String, userId:String ->
+                navController.navigate("validateEmail/$email/$password/$userId")
+            },
+            modifier = Modifier
         )
     }
 }
 
 fun NavGraphBuilder.validate(navController: NavController){
-    composable(route = "${EntryAppGraph.validate()}/{email}/{password}",
+    composable(
+        route = "validateEmail/{email}/{password}/{userId}",
         arguments = listOf(
             navArgument("email") {
                 type = NavType.StringType
             },
             navArgument("password") {
                 type = NavType.StringType
+            },
+            navArgument("userId"){
+                type = NavType.StringType
             }
         )
     ) { argumento ->
         val email = argumento.arguments?.getString("email")
         val password = argumento.arguments?.getString("password")
+        val userInfo = argumento.arguments?.getString("userId")
         ValidateEmailScreen(
             viewModel = hiltViewModel<ValidateEmailViewModel>(),
             goLogin = {
-                navController.navigate(EntryAppGraph.login())
+                navController.navigate("login")
             },
             goBack = { navController.popBackStack() },
             email = email!!,
-            password = password!!
+            password = password!!,
+            userId = userInfo!!
         )
     }
 }

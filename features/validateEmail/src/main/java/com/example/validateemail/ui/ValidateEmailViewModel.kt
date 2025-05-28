@@ -7,11 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.base.utils.SupabaseClient.client
 import com.example.domain.model.DataBase.code_verification
+import com.example.domain.model.user
 import com.example.validateemail.usecase.ValidateEmailState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,14 +23,16 @@ class ValidateEmailViewModel @Inject constructor() : ViewModel() {
 
     var _email: String = ""
     var _password: String = ""
+    var _idUser: String = ""
 
     fun onCodeChange(string: String) {
         state = state.copy(code = string)
     }
 
-    fun assignEmail(email: String, password: String){
+    fun assignEmail(email: String, password: String, userId: String){
         _email = email
         _password = password
+        _idUser = userId
     }
 
     fun validateEmail(goLogin: () -> Unit) {
@@ -43,6 +47,13 @@ class ValidateEmailViewModel @Inject constructor() : ViewModel() {
                 client.auth.signUpWith(Email) {
                     email = _email
                     password = _password
+                }
+                client.postgrest.from("user").select().decodeList<user>().forEach {
+                    if (it.id.toString() == _idUser){
+                        var userUpdate = it
+                        userUpdate = userUpdate.copy(enabled = 1)
+                        client.postgrest.from("user").upsert(userUpdate)
+                    }
                 }
                 goLogin()
             } else {

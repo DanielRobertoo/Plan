@@ -32,6 +32,7 @@ import com.example.base.composables.NoDataScreen
 import com.example.base.composables.PasswordField
 import com.example.base.composables.SpaceMedio
 import com.example.chat.ui.base.AlertDialogOK
+import kotlinx.coroutines.delay
 
 
 /**
@@ -56,6 +57,10 @@ fun LoginScreen(
     goToListAccount: () -> Unit,
     goback: () -> Unit
 ) {
+    LaunchedEffect(Unit) {
+
+        viewModel.checkAndAsign(goToListAccount)
+    }
     Log.d("Login", "creado ${viewModel.state}")
     val eventos = LoginEvents(
         onEmailChange = viewModel::onEmailChange,
