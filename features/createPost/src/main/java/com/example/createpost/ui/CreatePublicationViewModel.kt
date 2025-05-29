@@ -6,10 +6,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.base.datasore.UserPreferences
 import com.example.base.utils.SupabaseClient.client
 import com.example.createpost.usecase.CreatePublicationState
 import com.example.domain.model.DataBase.Gym
 import com.example.domain.model.post
+import com.example.domain.model.user
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
@@ -18,10 +20,12 @@ import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
-class CreatePublicationViewModel @Inject constructor() : ViewModel() {
+class CreatePublicationViewModel @Inject constructor(val preferences: UserPreferences) : ViewModel() {
     var state by mutableStateOf(CreatePublicationState())
+    var username: String = ""
 
-    var idUser: Int? = 2
+
+
 
     var gym: List<Gym> = listOf()
 
@@ -52,7 +56,18 @@ class CreatePublicationViewModel @Inject constructor() : ViewModel() {
     fun onMomentDayChange(s: String) {
         state = state.copy(momentDay = s)
     }
-
+    fun loadUserName(){
+        viewModelScope.launch {
+            Log.d("resultado usuarios", "${preferences.getEmail()}")
+            client.from("user").select().decodeList<user>().forEach {
+                Log.d("resultado usuarios", "$it")
+                if (it.email == preferences.getEmail()) {
+                    username = "${it.user_name}, ${it.age}"
+                    return@forEach
+                }
+            }
+        }
+    }
     fun loadGym(){
         viewModelScope.launch {
             val lista = client.from("gym").select().decodeList<Gym>().toMutableList()
@@ -80,7 +95,7 @@ class CreatePublicationViewModel @Inject constructor() : ViewModel() {
                 date = state.date,
                 gym = state.gym,
                 description = state.description,
-                post_creator_id = idUser!!,
+                post_creator_username = username,
                 moment_day = state.momentDay
             )
             state.publications.add(postToLoad)

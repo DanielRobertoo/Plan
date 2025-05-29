@@ -119,6 +119,7 @@ fun NavGraphBuilder.postlist(navController: NavController){
             viewModel = hiltViewModel<PostListViewModel>(),
             goAdd = { navController.navigate(EntryAppGraph.createpost()) },
             goRequest = {},
+            goback = {navController.navigate(EntryAppGraph.signUp())}
         )
     }
 }

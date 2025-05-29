@@ -7,5 +7,6 @@ data class PostListState(
     val noData: Boolean = false,
     val posts: List<post> = emptyList(),
     val postToJoin: post? = null,
-    val sorted: Boolean = false
+    val sorted: Boolean = false,
+    val cerrarSesion: Boolean = false
     )

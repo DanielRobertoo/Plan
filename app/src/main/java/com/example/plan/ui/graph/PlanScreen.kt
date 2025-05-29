@@ -41,7 +41,7 @@ import com.example.validateemail.ui.ValidateEmailViewModel
 
 
 @Composable
-fun PlanScreen(modifier: Modifier, navController: NavHostController) {
+fun PlanScreen(navController: NavHostController) {
     var actual = remember { mutableStateOf("login") }
     Scaffold(
         bottomBar = {
@@ -87,6 +87,7 @@ fun PlanScreen(modifier: Modifier, navController: NavHostController) {
                     viewModel = hiltViewModel<PostListViewModel>(),
                     goAdd = { navController.navigate("add") },
                     goRequest = {},
+                    goback = {navController.navigate("login")}
                 )
             }
             composable(route = "add") {
@@ -94,7 +95,7 @@ fun PlanScreen(modifier: Modifier, navController: NavHostController) {
                 CreatePublicationScreen(
                     viewModel = hiltViewModel<CreatePublicationViewModel>(),
                     goBack = { navController.popBackStack() },
-                    modifier = modifier
+                    modifier = Modifier
                 )
             }
             composable(route = "chat") {
@@ -102,7 +103,7 @@ fun PlanScreen(modifier: Modifier, navController: NavHostController) {
                 ChatScreen(
                     viewModel = hiltViewModel<ChatViewModel>(),
                     goBack = { navController.popBackStack() },
-                    modifier = modifier
+                    modifier = Modifier
                 )
             }
             composable(route = "login") {

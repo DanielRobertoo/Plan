@@ -15,12 +15,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardElevation
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,14 +40,16 @@ import com.example.base.PostGym.PostItemForus
 import com.example.base.PostGym.PostItemGofit
 import com.example.base.composables.LoadingUi
 import com.example.base.composables.NoDataScreen
+import com.example.chat.ui.base.AlertDialogYesNo
 import com.example.chat.ui.base.AlertDialogYesNoPost
 import com.example.domain.model.post
 import com.example.postlist.R
 import com.example.postlist.usecase.PostListState
 import java.util.Locale
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAdd: () -> Unit){
+fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAdd: () -> Unit, goback: () -> Unit){
     LaunchedEffect(Unit) {
         viewModel.getPosts()
     }
@@ -49,7 +57,7 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp),
+            .padding(),
         floatingActionButton = {
             FloatingActionButton(onClick = {goAdd() }) {
                 Icon(
@@ -58,6 +66,11 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
                 )
             }
 
+        },topBar = {
+            CenterAlignedTopAppBar(
+                title = { Text("") },
+                actions = { IconButton(onClick = { viewModel.setLogOut() }, content = { Icon( imageVector = Icons.Filled.ExitToApp, contentDescription = "")}) },
+            )
         }
     ) { padding ->
         when{
@@ -79,10 +92,18 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
                 )
                 Log.d("join", "creado")
             }
+            viewModel.state.cerrarSesion -> AlertDialogYesNo(
+                title = "Cerrar Sesion",
+                message = "",
+                onAccept = {
+                    viewModel.logOut()
+                    goback()
+                           },
+                onDismiss = { viewModel.reset() },
+            )
             viewModel.state.posts.isNotEmpty() -> {
                 PostListContent(
                     listPost = viewModel.state.posts,
-                    findUser = { id: String -> viewModel.findUserById(id) },
                     modifier = Modifier.padding(padding),
                     accion = { id:String -> viewModel.request(id) }
                 )
@@ -99,23 +120,23 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
 
 
 @Composable
-fun PostListContent(listPost: List<post>, findUser: (String) -> String, modifier: Modifier, accion: (String) -> Unit){
+fun PostListContent(listPost: List<post>, modifier: Modifier, accion: (String) -> Unit){
     LazyColumn(modifier = modifier) {
         Log.d("lista gimnasios", listPost.toString())
         items(listPost) {
             var id = it.id
             when{
-                it.gym.lowercase(Locale.ROOT).contains("basic-fit")  -> PostItemBasicFit(user = findUser(it.post_creator_id.toString()), date = it.date, title = it.title, place = it.gym, accion = {
+                it.gym.lowercase(Locale.ROOT).contains("basic-fit")  -> PostItemBasicFit(user = it.post_creator_username, date = it.date, title = it.title, place = it.gym, accion = {
                     accion(id.toString())
                 })
-                it.gym.lowercase(Locale.ROOT).contains("forus") -> PostItemForus(user = findUser(it.post_creator_id.toString()), date = it.date, title = it.title, place = it.gym,
+                it.gym.lowercase(Locale.ROOT).contains("forus") -> PostItemForus(user = it.post_creator_username, date = it.date, title = it.title, place = it.gym,
                     accion = {
                         accion(id.toString())
                     })
-                it.gym.lowercase(Locale.ROOT).contains("GO fit") -> PostItemGofit(user = findUser(it.post_creator_id.toString()), date = it.date, title = it.title, place = it.gym,accion = {
+                it.gym.lowercase(Locale.ROOT).contains("GO fit") -> PostItemGofit(user = it.post_creator_username, date = it.date, title = it.title, place = it.gym,accion = {
                     accion(id.toString())
                 })
-                else -> PostItemDefault(user = findUser(it.post_creator_id.toString()), date = it.date, title = it.title, place = it.gym,accion = {
+                else -> PostItemDefault(user = it.post_creator_username, date = it.date, title = it.title, place = it.gym,accion = {
                     accion(id.toString())
                 })
             }

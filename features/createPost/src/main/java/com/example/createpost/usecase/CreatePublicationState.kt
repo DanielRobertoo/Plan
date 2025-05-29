@@ -10,6 +10,7 @@ data class CreatePublicationState(
     val minutesBegin:String = "",
     val gym: String = "",
     val momentDay: String = "",
+    val creator_post_username: String = "",
 
     val errorFields: Boolean = false,
     val success:Boolean = false,

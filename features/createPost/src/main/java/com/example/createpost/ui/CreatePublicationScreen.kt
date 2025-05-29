@@ -50,6 +50,7 @@ fun CreatePublicationScreen(
 ) {
     LaunchedEffect(Unit) {
         viewModel.loadGym()
+        viewModel.loadUserName()
     }
     when {
         viewModel.state.errorFields -> AlertDialogOK(

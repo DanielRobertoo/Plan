@@ -24,9 +24,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             PlanTheme {
                 val navController = rememberNavController()
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                   PlanScreen(Modifier.padding(innerPadding),navController)
-                }
+                   PlanScreen(navController)
             }
         }
     }

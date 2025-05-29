@@ -3,6 +3,10 @@ package com.example.chat.ui.base
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -12,6 +16,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -37,9 +42,9 @@ fun AlertDialogOKPreview() {
 fun AlertDialogOK(
     title: String = "",
     message: String,
-    onDismiss: () -> Unit // Acción al cerrar el diálogo
+    onDismiss: () -> Unit
 ) {
-    // Estado del diálogo
+
     val dialogState = remember { mutableStateOf(true) }
 
     if (dialogState.value) {
@@ -86,14 +91,14 @@ fun AlertDialogOK(
                     )
                 }
             },
-            shape = RoundedCornerShape(16.dp), // Bordes redondeados del diálogo
-            containerColor = Color.White, // Color de fondo del diálogo
+            shape = RoundedCornerShape(16.dp),
+            containerColor = Color.White,
         )
     }
 }
 
 @Composable
-fun AlertDialogYesNoPost(
+fun AlertDialogYesNoPost2(
     title: String = "",
     message: String,
     onDismiss: () -> Unit,
@@ -123,11 +128,16 @@ fun AlertDialogYesNoPost(
             text = {
                 Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
                     Text(post.description)
-                    Icon(imageVector = Icons.Filled.AccountCircle, contentDescription = "")
+
                     Column {
                         Text(post.gym)
                         Text("${post.date} / ${post.moment_day}")
                     }
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Icon(imageVector = Icons.Filled.AccountCircle, contentDescription = "")
+                        Text(post.post_creator_username)
+                    }
+
                 }
             },
             confirmButton = {
@@ -173,6 +183,104 @@ fun AlertDialogYesNoPost(
         )
     }
 }
+
+@Composable
+fun AlertDialogYesNoPost(
+    title: String = "",
+    message: String = "",
+    post: post,
+    onDismiss: () -> Unit,
+    onAccept: (post) -> Unit,
+) {
+    val openDialog = remember { mutableStateOf(true) }
+
+    if (openDialog.value) {
+        AlertDialog(
+            onDismissRequest = {
+                openDialog.value = false
+                onDismiss()
+            },
+            title = {
+                if (title.isNotEmpty()) {
+                    Text(
+                        text = title,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+            },
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    if (message.isNotEmpty()) {
+                        Text(
+                            text = message,
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
+
+                    Text(
+                        text = post.description,
+                        style = MaterialTheme.typography.bodyLarge,
+                        fontWeight = FontWeight.Medium
+                    )
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.AccountCircle,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                        Text(
+                            text = post.post_creator_username,
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Text(
+                        text = "${post.gym} - ${post.date} (${post.moment_day})",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        openDialog.value = false
+                        onAccept(post)
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text("Aceptar", fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                OutlinedButton(
+                    onClick = {
+                        openDialog.value = false
+                        onDismiss()
+                    }
+                ) {
+                    Text("Cancelar")
+                }
+            },
+            shape = RoundedCornerShape(16.dp),
+            containerColor = MaterialTheme.colorScheme.surface,
+        )
+    }
+}
+
 @Composable
 fun AlertDialogYesNo(
     title: String = "",
