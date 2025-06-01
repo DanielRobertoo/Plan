@@ -47,7 +47,7 @@ fun ValidateEmailScreen(viewModel: ValidateEmailViewModel, goLogin: () -> Unit, 
 @Composable
 fun ValidateEmailViewModelScreen(state: ValidateEmailState, events: ValidateEmailEvents){
     when{
-        state.fail -> AlertDialogYesNo(title = "ERROR CODIGO", message = "El codigo es invalido, quieres volver al registro?", onDismiss = events.reset, onAccept = events.goBack)
+        state.fail -> AlertDialogYesNo(title = "ERROR CODIGO", message = "El codigo es invalido, quieres volver al registro?", onDismiss = { events.reset() }, onAccept = { events.goBack() })
         else -> ValidateEmailContent(
             state = state, events = events, goLogin = events.goLogin
         )

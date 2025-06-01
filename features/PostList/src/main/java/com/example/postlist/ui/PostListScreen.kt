@@ -110,9 +110,7 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
                 Log.d("list", "creado")
             }
         }
-
     }
-
 }
 
 
