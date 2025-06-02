@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun ChatListItem(
     //profilePicture: Int,
-    contactName: String,
+    userName: String,
     lastMessage: String,
     time: String,
     unreadCount: Int = 0,
@@ -55,7 +55,7 @@ fun ChatListItem(
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            Text(text = contactName, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(text = userName, fontSize = 16.sp, fontWeight = FontWeight.Bold)
             Text(
                 text = lastMessage,
                 fontSize = 14.sp,
@@ -68,7 +68,7 @@ fun ChatListItem(
         Column(
             horizontalAlignment = Alignment.End
         ) {
-            Text(text = time, fontSize = 12.sp, color = Color.Gray)
+            //Text(text = time, fontSize = 12.sp, color = Color.Gray)
             if (unreadCount > 0) {
                 Spacer(modifier = Modifier.height(4.dp))
                 Badge(
@@ -86,7 +86,7 @@ fun ChatListItem(
 fun ChatListItemPreview() {
     ChatListItem(
 
-        contactName = "Juan Pérez",
+        userName = "Juan Pérez",
         lastMessage = "¿Vienes mañana?",
         time = "12:45",
         unreadCount = 2

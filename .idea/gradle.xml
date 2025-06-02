@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/features/createPost" />
             <option value="$PROJECT_DIR$/features/login" />
             <option value="$PROJECT_DIR$/features/profile" />
+            <option value="$PROJECT_DIR$/features/requestList" />
             <option value="$PROJECT_DIR$/features/signUp" />
             <option value="$PROJECT_DIR$/features/validateEmail" />
           </set>
