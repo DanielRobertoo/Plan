@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.example.requestlist"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 33

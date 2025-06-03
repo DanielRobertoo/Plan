@@ -81,7 +81,7 @@ data class ProfileEvents(
 
 @Composable
 fun ProfileContent(state: ProfileState, events: ProfileEvents) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    /*Column(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -123,5 +123,5 @@ fun ProfileContent(state: ProfileState, events: ProfileEvents) {
                 }
             }
         }
-    }
+    }*/
 }
