@@ -15,10 +15,10 @@
       </SelectionState>
       <SelectionState runConfigName="features.chatlist">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-06-04T11:23:45.709689700Z">
+        <DropdownSelection timestamp="2025-06-04T17:10:27.450256Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\rober\.android\avd\Pixel_5_API_34.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\4 Gatitos\.android\avd\Pixel_5_API_33.avd" />
             </handle>
           </Target>
         </DropdownSelection>

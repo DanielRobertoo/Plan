@@ -7,20 +7,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import com.example.base.composables.LoadingUi
 import com.example.base.composables.NoDataScreen
+import com.example.chatlist.usecase.chatToShow
 import com.example.domain.model.chat
 import com.example.domain.model.post
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ChatListScreen(viewModel: chatListViewModel, goChat: (Int) -> Unit){
+fun ChatListScreen(viewModel: ChatListViewModel){
     LaunchedEffect(Unit) {
-        viewModel.getPosts()
+        viewModel.getChat()
     }
 
     Scaffold(
@@ -37,11 +39,11 @@ fun ChatListScreen(viewModel: chatListViewModel, goChat: (Int) -> Unit){
                 NoDataScreen()
                 Log.d("no data", "creado")
             }
-            viewModel.state.chats.isNotEmpty() -> {
+            viewModel.state.listChatShow.isNotEmpty() -> {
                 ChatListContent(
-                    listChat = viewModel.state.chats,
+                    listChat = viewModel.state.listChatShow,
                     modifier = Modifier.padding(padding),
-                    accion = {id: Int -> goChat(id)},
+                    accion = {/*id: Int -> goChat(id)*/},
                     viewModel = viewModel
                 )
             }
@@ -54,25 +56,17 @@ fun ChatListScreen(viewModel: chatListViewModel, goChat: (Int) -> Unit){
 
 
 @Composable
-fun ChatListContent(listChat: List<chat>, modifier: Modifier, accion: (Int) -> Unit, viewModel: chatListViewModel){
+fun ChatListContent(listChat: List<chatToShow>, modifier: Modifier, accion: (Int) -> Unit, viewModel: ChatListViewModel){
     LazyColumn(modifier = modifier) {
         items(listChat) {
-            if(it.user1_id == viewModel.idUser){
                 ChatListItem(
-                    userName = viewModel.getNameSender(it.user2_id),
-                    onClick = {accion(it.id)},
-                    lastMessage = viewModel.getLastMessage(it.user2_id),
-                    time = it.created_at
+                    userName = it.username,
+                    onClick = {accion(it.idChat!!)},
+                    lastMessage = it.lastMessage,
+                    time = it.time
                 )
-            }
-            if (it.user2_id == viewModel.idUser) {
-                ChatListItem(
-                    userName = viewModel.getNameSender(it.user1_id),
-                    onClick = {accion(it.id)},
-                    lastMessage = viewModel.getLastMessage(it.user1_id),
-                    time = it.created_at
-                )
-            }
+            HorizontalDivider()
+
         }
     }
 }

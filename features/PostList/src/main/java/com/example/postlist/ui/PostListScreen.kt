@@ -131,7 +131,7 @@ fun PostListContent(listPost: List<post>, modifier: Modifier, accion: (String) -
                     accion = {
                         accion(id.toString())
                     })
-                it.gym.lowercase(Locale.ROOT).contains("GO fit") -> PostItemGofit(user = it.post_creator_username, date = it.date, title = it.title, place = it.gym,accion = {
+                it.gym.lowercase(Locale.ROOT).contains("go fit") -> PostItemGofit(user = it.post_creator_username, date = it.date, title = it.title, place = it.gym,accion = {
                     accion(id.toString())
                 })
                 else -> PostItemDefault(user = it.post_creator_username, date = it.date, title = it.title, place = it.gym,accion = {

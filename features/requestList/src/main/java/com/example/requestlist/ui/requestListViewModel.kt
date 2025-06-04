@@ -60,6 +60,7 @@ class RequestListViewModel @Inject constructor(val preferences: UserPreferences)
             lista.removeAll{
                 it.id == idRequest
             }
+            state = state.copy(requests = lista.toList())
         }
 
     }

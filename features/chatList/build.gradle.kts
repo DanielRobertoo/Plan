@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
@@ -11,23 +11,15 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.plan"
         minSdk = 33
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        consumerProguardFiles("consumer-rules.pro")
+
         buildConfigField("String","supabaseKey","\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJvd3lod3ZubXJqbmZiZ3NweGZhIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NjIyNTc5MiwiZXhwIjoyMDYxODAxNzkyfQ.gmf2ZbrWVg_UTH7xmdpmt2dsCowSkNGwmBgpWd7lCfw\"")
         buildConfigField("String","supabaseUrl","\"https://rowyhwvnmrjnfbgspxfa.supabase.co\"")
     }
-    buildFeatures {
-        compose = true
-        buildConfig = true
-    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -55,6 +47,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
 }
 
 dependencies {
@@ -67,19 +63,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.navigation.compose)
-    implementation(project(":features:PostList"))
-    implementation(project(":features:createPost"))
-    implementation(project(":features:chat"))
-    implementation(project(":features:login"))
-    implementation(project(":features:signUp"))
-    implementation(project(":features:validateEmail"))
-    implementation(libs.foundation.layout.android)
-    implementation(libs.foundation.layout.android)
-    implementation(libs.foundation.layout.android)
     implementation(project(":domain"))
     implementation(project(":base"))
-    implementation(libs.ui.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -87,10 +72,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation(libs.androidx.hilt.navigationcompose)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigationcompose)
 
     implementation(platform("io.github.jan-tennert.supabase:bom:3.1.1"))
     implementation("io.github.jan-tennert.supabase:postgrest-kt")
@@ -99,4 +84,6 @@ dependencies {
     implementation("io.ktor:ktor-client-okhttp:3.0.3")
 
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+
 }

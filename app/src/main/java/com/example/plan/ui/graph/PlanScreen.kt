@@ -30,6 +30,8 @@ import com.example.chat.ui.ChatView.ChatScreen
 import com.example.chat.ui.ChatView.ChatViewModel
 import com.example.chat.ui.CreatePublicacion.CreatePublicationScreen
 import com.example.chat.ui.CreatePublicacion.CreatePublicationViewModel
+import com.example.chatlist.ui.ChatListScreen
+import com.example.chatlist.ui.ChatListViewModel
 import com.example.login.ui.login.LoginScreen
 import com.example.login.ui.login.LoginViewModel
 import com.example.login.ui.register.RegisterScreen
@@ -56,14 +58,14 @@ fun PlanScreen(navController: NavHostController) {
                         label = { Text(text = "") }
                     )
                     NavigationBarItem(
-                        selected = actual.value=="request",
+                        selected = actual.value=="requestList",
                         onClick = { navController.navigate("requestList") },
                         icon = { Icon(Icons.Filled.Email, null) },
                         label = { Text(text = "") }
                     )
                     NavigationBarItem(
-                        selected = actual.value=="chat",
-                        onClick = { /*navController.navigate("chat")*/ },
+                        selected = actual.value=="chatList",
+                        onClick = { navController.navigate("chatList") },
                         icon = { Icon(Icons.AutoMirrored.Filled.Send, null) },
                         label = { Text(text = "") }
                     )
@@ -170,6 +172,12 @@ fun PlanScreen(navController: NavHostController) {
             ) {
                 RequestListScreen(
                     viewModel = hiltViewModel<RequestListViewModel>()
+                )
+            }
+
+            composable(route = "chatList") {
+                ChatListScreen(
+                    viewModel = hiltViewModel<ChatListViewModel>()
                 )
             }
 

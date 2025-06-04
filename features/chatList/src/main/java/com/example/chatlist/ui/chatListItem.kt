@@ -28,7 +28,6 @@ fun ChatListItem(
     userName: String,
     lastMessage: String,
     time: String,
-    unreadCount: Int = 0,
     onClick: () -> Unit = {}
 ) {
     Row(
@@ -68,20 +67,13 @@ fun ChatListItem(
         Column(
             horizontalAlignment = Alignment.End
         ) {
-            //Text(text = time, fontSize = 12.sp, color = Color.Gray)
-            if (unreadCount > 0) {
-                Spacer(modifier = Modifier.height(4.dp))
-                Badge(
-                    containerColor = MaterialTheme.colorScheme.primary
-                ) {
-                    Text(text = unreadCount.toString(), color = Color.White, fontSize = 12.sp)
-                }
-            }
+            Text(text = time, fontSize = 12.sp, color = Color.Gray)
+            Spacer(modifier = Modifier.height(4.dp))
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun ChatListItemPreview() {
     ChatListItem(
@@ -89,6 +81,5 @@ fun ChatListItemPreview() {
         userName = "Juan Pérez",
         lastMessage = "¿Vienes mañana?",
         time = "12:45",
-        unreadCount = 2
     )
 }
