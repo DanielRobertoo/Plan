@@ -36,6 +36,8 @@ import com.example.login.ui.register.RegisterScreen
 import com.example.login.ui.register.RegisterViewModel
 import com.example.postlist.ui.PostListScreen
 import com.example.postlist.ui.PostListViewModel
+import com.example.requestlist.ui.RequestListScreen
+import com.example.requestlist.ui.RequestListViewModel
 import com.example.validateemail.ui.ValidateEmailScreen
 import com.example.validateemail.ui.ValidateEmailViewModel
 
@@ -55,7 +57,7 @@ fun PlanScreen(navController: NavHostController) {
                     )
                     NavigationBarItem(
                         selected = actual.value=="request",
-                        onClick = { /*navController.navigate("request")*/ },
+                        onClick = { navController.navigate("requestList") },
                         icon = { Icon(Icons.Filled.Email, null) },
                         label = { Text(text = "") }
                     )
@@ -160,6 +162,14 @@ fun PlanScreen(navController: NavHostController) {
                     email = email!!,
                     password = password!!,
                     userId = userInfo!!
+                )
+            }
+
+            composable(
+                route = "requestList"
+            ) {
+                RequestListScreen(
+                    viewModel = hiltViewModel<RequestListViewModel>()
                 )
             }
 

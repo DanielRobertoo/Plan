@@ -27,9 +27,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.domain.model.request
 
 @Composable
-fun PostRequestItemForus(title: String, date: String, username: String, onAccept: (Int) -> Unit, onRefuse: (Int) -> Unit, idRequest: Int) {
+fun PostRequestItemForus(request: request, onAccept: (Int, Int, Int) -> Unit, onRefuse: (Int) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -46,13 +47,13 @@ fun PostRequestItemForus(title: String, date: String, username: String, onAccept
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column {
-                Text(text = "Título: ${title}")
-                Text(text = "Fecha: $date")
-                Text(text = "Con: $username")
+                Text(text = "Título: ${request.title}")
+                Text(text = "Fecha: ${request.date}")
+                Text(text = "Con: ${request.username_request}")
             }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 FloatingActionButton(
-                    onClick = {},
+                    onClick = {onAccept(request.id, request.id_guest, request.id_owner)},
                     elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 0.dp),
                     containerColor = Color.Transparent
                 ) {
@@ -91,7 +92,7 @@ fun PostRequestItemForusPreview() {
             Column {
                 Text(text = "Título: Rutina de pierna")
                 Text(text = "Fecha: 03/06")
-                Text(text = "Con: Roberto, 21")
+                Text(text = "Con: Roberto")
             }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 FloatingActionButton(

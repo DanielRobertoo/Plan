@@ -81,6 +81,7 @@ dependencies {
     implementation(libs.foundation.layout.android)
     implementation(project(":domain"))
     implementation(project(":base"))
+    implementation(project(":features:requestList"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

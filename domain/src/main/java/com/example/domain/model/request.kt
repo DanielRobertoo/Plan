@@ -11,5 +11,13 @@ data class request(
     val date: String,
     val created_at: String,
     val username_request: String,
-    val gym: String
-)
+    val gym: String,
+    val state: Int
+){
+    override fun equals(other: Any?): Boolean {
+        if (other is request){
+            return other.id == this.id
+        }
+        return false
+    }
+}

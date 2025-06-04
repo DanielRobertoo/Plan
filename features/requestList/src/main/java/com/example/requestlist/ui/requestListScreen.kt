@@ -53,12 +53,11 @@ import com.example.base.PostRequest.PostRequestItemGoFit
 import com.example.requestlist.R
 import java.util.Locale
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
-fun ChatListScreen(viewModel: requestListViewModel, goChat: (Int) -> Unit){
+fun RequestListScreen(viewModel: RequestListViewModel){
     LaunchedEffect(Unit) {
-        //viewModel.getPosts()
+        viewModel.getRequest()
     }
 
     Scaffold(
@@ -79,7 +78,7 @@ fun ChatListScreen(viewModel: requestListViewModel, goChat: (Int) -> Unit){
                 RequestListContent(
                     listChat = viewModel.state.requests,
                     modifier = Modifier.padding(padding),
-                    onAccept = { id:Int -> viewModel.onAccept(id)},
+                    onAccept = { idRequest:Int, idOwner: Int, idGuest: Int -> viewModel.onAccept(idRequest, idOwner, idGuest)},
                     onRefuse = { id:Int -> viewModel.onRefuse(id)}
                 )
             }
@@ -92,14 +91,14 @@ fun ChatListScreen(viewModel: requestListViewModel, goChat: (Int) -> Unit){
 
 
 @Composable
-fun RequestListContent(listChat: List<request>, modifier: Modifier, onAccept: (Int) -> Unit, onRefuse: (Int) -> Unit ){
+fun RequestListContent(listChat: List<request>, modifier: Modifier, onAccept: (Int, Int,Int) -> Unit, onRefuse: (Int) -> Unit ){
     LazyColumn(modifier = modifier) {
         items(listChat) {
             when{
-                it.gym.lowercase(Locale.ROOT).contains("basic-fit")  -> PostRequestItemBasicFit(username = it.username_request, date = it.date, title = it.title, onAccept = onAccept, onRefuse = onRefuse, idRequest = it.id)
-                it.gym.lowercase(Locale.ROOT).contains("forus") -> PostRequestItemForus(username = it.username_request, date = it.date, title = it.title, onAccept = onAccept, onRefuse = onRefuse, idRequest = it.id)
-                it.gym.lowercase(Locale.ROOT).contains("GO fit") -> PostRequestItemGoFit(username = it.username_request, date = it.date, title = it.title, onAccept = onAccept, onRefuse = onRefuse, idRequest = it.id)
-                else -> PostRequestItemDefault(username = it.username_request, date = it.date, title = it.title, onAccept = onAccept, onRefuse = onRefuse, idRequest = it.id)
+                it.gym.lowercase(Locale.ROOT).contains("basic-fit")  -> PostRequestItemBasicFit(request = it, onAccept = onAccept, onRefuse = onRefuse)
+                it.gym.lowercase(Locale.ROOT).contains("forus") -> PostRequestItemForus(request = it, onAccept = onAccept, onRefuse = onRefuse)
+                it.gym.lowercase(Locale.ROOT).contains("GO fit") -> PostRequestItemGoFit(request = it, onAccept = onAccept, onRefuse = onRefuse)
+                else -> PostRequestItemDefault(request = it, onAccept = onAccept, onRefuse = onRefuse)
             }
         }
     }

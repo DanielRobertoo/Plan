@@ -27,9 +27,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.domain.model.request
 
 @Composable
-fun PostRequestItemDefault(title: String, date: String, username: String, onAccept: (Int) -> Unit, onRefuse: (Int) -> Unit, idRequest: Int) {
+fun PostRequestItemDefault(request: request, onAccept: (Int,Int, Int) -> Unit, onRefuse: (Int) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -40,26 +41,26 @@ fun PostRequestItemDefault(title: String, date: String, username: String, onAcce
     ) {
         Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
             Image(
-                painter = painterResource(com.example.base.R.drawable.gofit),
+                painter = painterResource(com.example.base.R.drawable.plan),
                 contentDescription = null,
                 modifier = Modifier.size(60.dp)
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column {
-                Text(text = "Título: ${title}")
-                Text(text = "Fecha: $date")
-                Text(text = "Con: $username")
+                Text(text = "Título: ${request.title}")
+                Text(text = "Fecha: ${request.date}")
+                Text(text = "Con: ${request.username_request}")
             }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 FloatingActionButton(
-                    onClick = {},
+                    onClick = {onAccept(request.id, request.id_guest, request.id_owner)},
                     elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 0.dp),
                     containerColor = Color.Transparent
                 ) {
                     Icon(imageVector = Icons.Filled.Check, contentDescription = "")
                 }
                 FloatingActionButton(
-                    onClick = {},
+                    onClick = {onRefuse(request.id)},
                     elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 0.dp),
                     containerColor = Color.Transparent
                 ) {
@@ -83,7 +84,7 @@ fun PostRequestItemDefaultPreview() {
     ) {
         Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
             Image(
-                painter = painterResource(com.example.base.R.drawable.gofit),
+                painter = painterResource(com.example.base.R.drawable.plan),
                 contentDescription = null,
                 modifier = Modifier.size(60.dp)
             )
@@ -91,7 +92,7 @@ fun PostRequestItemDefaultPreview() {
             Column {
                 Text(text = "Título: Rutina de pierna")
                 Text(text = "Fecha: 03/06")
-                Text(text = "Con: Roberto, 21")
+                Text(text = "Con: Roberto")
             }
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 FloatingActionButton(

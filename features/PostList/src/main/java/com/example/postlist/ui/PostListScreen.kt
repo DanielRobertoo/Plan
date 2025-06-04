@@ -86,7 +86,7 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
                 AlertDialogYesNoPost(
                     title = "Enviar Solicitud",
                     message = "",
-                    onAccept = {/*_post: post -> viewModel.SendRequest(_post)*/ },
+                    onAccept = {_post: post -> viewModel.SendRequest(_post) },
                     onDismiss = { viewModel.reset() },
                     post = viewModel.state.postToJoin!!
                 )
@@ -105,7 +105,7 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
                 PostListContent(
                     listPost = viewModel.state.posts,
                     modifier = Modifier.padding(padding),
-                    accion = { id:String -> viewModel.request(id) }
+                    accion = { id:String -> viewModel.askRequest(id) }
                 )
                 Log.d("list", "creado")
             }
