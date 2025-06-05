@@ -62,7 +62,7 @@ class CreatePublicationViewModel @Inject constructor(val preferences: UserPrefer
             client.from("user").select().decodeList<user>().forEach {
                 Log.d("resultado usuarios", "$it")
                 if (it.email == preferences.getEmail()) {
-                    username = "${it.user_name}, ${it.age}"
+                    username = "${it.user_name}"
                     return@forEach
                 }
             }

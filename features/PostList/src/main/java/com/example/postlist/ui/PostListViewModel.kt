@@ -92,4 +92,4 @@ class PostListViewModel @Inject constructor(val preferences: UserPreferences) : 
     }
 
 
-}
+   }
