@@ -8,5 +8,5 @@ data class message(
     val conversation_id :Int,
     val sender_id:Int,
     val content:String,
-    val sent_at:String,
+    val send_at:String,
 )

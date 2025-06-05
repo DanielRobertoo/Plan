@@ -4,16 +4,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.base.datasore.UserPreferences
+import com.example.base.utils.SupabaseClient.client
 import com.example.chat.usecase.ChatState
+import com.example.domain.model.message
+import com.example.domain.model.user
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.jan.supabase.postgrest.from
+import io.github.jan.supabase.postgrest.postgrest
+import kotlinx.coroutines.launch
+import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
-class ChatViewModel @Inject constructor(): ViewModel() {
-    var chatState by mutableStateOf(ChatState())
+class ChatViewModel @Inject constructor(val preferences: UserPreferences): ViewModel() {
+    var state by mutableStateOf(ChatState())
+    var idUser: Int? = null
 
     fun onMessageTextChange(mensaje:String){
-        chatState = chatState.copy(messageToSend = mensaje)
+        state = state.copy(messageToSend = mensaje)
     }
 
     fun blockUser() {
@@ -25,6 +35,40 @@ class ChatViewModel @Inject constructor(): ViewModel() {
     }
 
     fun onMessageTextSent() {
-        TODO("Not yet implemented")
+        viewModelScope.launch {
+            val mensaje = message(
+                id = client.postgrest.from("message").select().decodeList<message>().count(),
+                send_at = LocalDate.now().toString(),
+                content = state.messageToSend,
+                sender_id = state.idUser!!,
+                conversation_id = state.idChat!!
+            )
+            val lista = state.mensajes.toMutableList()
+            lista.add(mensaje)
+            state = state.copy(mensajes = lista)
+
+            client.postgrest.from("message").insert(mensaje)
+        }
+
+
+    }
+
+    fun getMessages(_idChat: Int) {
+        state = state.copy(idChat = _idChat)
+        viewModelScope.launch {
+            state = state.copy(
+                mensajes = client.postgrest.from("message").select(){
+                filter {
+                    eq("conversation_id", _idChat)
+                }
+            }.decodeList<message>(),
+                idUser = client.postgrest.from("user").select(){
+                    filter {
+                        eq("email",preferences.getEmail()!!)
+                    }
+                }.decodeSingle<user>().id
+            )
+
+        }
     }
 }

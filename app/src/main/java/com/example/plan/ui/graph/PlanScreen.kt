@@ -102,12 +102,20 @@ fun PlanScreen(navController: NavHostController) {
                     modifier = Modifier
                 )
             }
-            composable(route = "chat") {
+            composable(route = "chat/{id}",
+                arguments = listOf(
+                    navArgument("id"){
+                        type = NavType.IntType
+                    }
+                )
+            ) {
+                val id = it.arguments?.getInt("id")
                 actual.value = "chat"
                 ChatScreen(
                     viewModel = hiltViewModel<ChatViewModel>(),
                     goBack = { navController.popBackStack() },
-                    modifier = Modifier
+                    modifier = Modifier,
+                    idChat = id!!
                 )
             }
             composable(route = "login") {
@@ -176,8 +184,12 @@ fun PlanScreen(navController: NavHostController) {
             }
 
             composable(route = "chatList") {
+                actual.value = "chatList"
                 ChatListScreen(
-                    viewModel = hiltViewModel<ChatListViewModel>()
+                    viewModel = hiltViewModel<ChatListViewModel>(),
+                    goChat = {
+                        id: Int -> navController.navigate("chat/${id}")
+                    }
                 )
             }
 

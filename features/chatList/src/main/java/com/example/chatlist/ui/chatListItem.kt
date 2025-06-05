@@ -1,7 +1,9 @@
 package com.example.chatlist.ui
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,8 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Badge
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,16 +28,20 @@ fun ChatListItem(
     userName: String,
     lastMessage: String,
     time: String,
-    onClick: () -> Unit = {}
+    onClick: (Int) -> Unit,
+    id: Int
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .combinedClickable(onClick = { })
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        // Profile Image
+    Box(modifier = Modifier.combinedClickable(onClick = {
+        onClick(id)
+    })) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Profile Image
 //        Image(
 //            painter = painterResource(id = profilePicture),
 //            contentDescription = "Profile Picture",
@@ -48,27 +52,28 @@ fun ChatListItem(
 //                .padding(2.dp)
 //        )
 
-        Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(12.dp))
 
-        // Chat content
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(text = userName, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            Text(
-                text = lastMessage,
-                fontSize = 14.sp,
-                color = Color.Gray,
-                maxLines = 1
-            )
-        }
+            // Chat content
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(text = userName, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = lastMessage,
+                    fontSize = 14.sp,
+                    color = Color.Gray,
+                    maxLines = 1
+                )
+            }
 
-        // Time and unread badge
-        Column(
-            horizontalAlignment = Alignment.End
-        ) {
-            Text(text = time, fontSize = 12.sp, color = Color.Gray)
-            Spacer(modifier = Modifier.height(4.dp))
+            // Time and unread badge
+            Column(
+                horizontalAlignment = Alignment.End
+            ) {
+                Text(text = time, fontSize = 12.sp, color = Color.Gray)
+                Spacer(modifier = Modifier.height(4.dp))
+            }
         }
     }
 }
@@ -81,5 +86,7 @@ fun ChatListItemPreview() {
         userName = "Juan Pérez",
         lastMessage = "¿Vienes mañana?",
         time = "12:45",
+        onClick = {},
+        id = 1
     )
 }

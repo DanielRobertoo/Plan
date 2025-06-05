@@ -62,7 +62,7 @@ class ChatListViewModel @Inject constructor(val preferences: UserPreferences) : 
                 }
                 else {
                     mensaje = listaMensajes.last().content
-                    time = listaMensajes.last().sent_at
+                    time = listaMensajes.last().send_at
                 }
 
                 client.postgrest.from("user").select().decodeList<user>().forEach {

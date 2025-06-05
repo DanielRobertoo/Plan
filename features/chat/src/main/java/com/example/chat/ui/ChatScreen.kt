@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,9 +29,12 @@ import com.example.chat.usecase.ChatState
 
 
 @Composable
-fun ChatScreen(viewModel: ChatViewModel, goBack: () -> Unit, modifier: Modifier) {
+fun ChatScreen(viewModel: ChatViewModel, goBack: () -> Unit, modifier: Modifier, idChat: Int) {
+    LaunchedEffect(Unit) {
+        viewModel.getMessages(idChat)
+    }
     when {
-        viewModel.chatState.onActiveBlock -> AlertDialogYesNo(
+        viewModel.state.onActiveBlock -> AlertDialogYesNo(
             title = "BLOQUEAR USUARIO",
             message = "Seguro quieres bloquear a este usuario?",
             onAccept = { viewModel.blockUser() },
@@ -42,7 +46,7 @@ fun ChatScreen(viewModel: ChatViewModel, goBack: () -> Unit, modifier: Modifier)
                 onTextChange = viewModel::onMessageTextChange,
                 onMessageSent = viewModel::onMessageTextSent
             ),
-            state = viewModel.chatState
+            state = viewModel.state
         )
     }
 }
@@ -64,19 +68,12 @@ fun ChatContent(chatEvents: ChatEvents, state: ChatState) {
         Column {
             LazyColumn(modifier = Modifier.padding(10.dp)) {
                 items(
-                    listOf(
-                        Mensaje("2", "Hola"),
-                        Mensaje(
-                            "1",
-                            "Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto Texto "
-                        ),
-                        Mensaje("2", "Que tal"),
-                    )
+                    state.mensajes
                 ) { item ->
-                    if (item.identificador == "1")
-                        mensajeEnviado(item.mensaje)
+                    if (item.sender_id == state.idUser)
+                        mensajeEnviado(item.content)
                     else
-                        mensajeRecibido(item.mensaje)
+                        mensajeRecibido(item.content)
 
                 }
             }
