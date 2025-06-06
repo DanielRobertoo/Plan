@@ -50,10 +50,7 @@ class ChatListViewModel @Inject constructor(val preferences: UserPreferences) : 
                 val listaMensajes = client.postgrest.from("message").select(){
                     filter {
 
-                        and {
                             eq("conversation_id", it.id)
-                            eq("sender_id", idUse)
-                        }
                     }
                 }.decodeList<message>()
                 if (listaMensajes.count() == 0){

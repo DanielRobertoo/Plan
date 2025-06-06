@@ -124,14 +124,14 @@ fun CreatePulicationContent(
                 opciones = listOf(
                     "Pecho y tríceps",
                     "Espalda y bíceps",
-                    "Piernas (cuádriceps, femorales, glúteos)",
+                    "Piernas",
                     "Hombros y trapecios",
-                    "Core (abdominales y zona lumbar)",
-                    "Cardio (cinta, elíptica, bici)",
-                    "Full body (entrenamiento de cuerpo completo)",
-                    "HIIT (entrenamiento por intervalos de alta intensidad)",
-                    "Día de movilidad y estiramientos",
-                    "Entrenamiento funcional o cross-training"
+                    "Core",
+                    "Cardio",
+                    "Full body",
+                    "HIIT",
+                    "Movilidad",
+                    "Cross-training"
                 ),
                 cadena = "Rutina",
                 accion = events.onTitleChange,

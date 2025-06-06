@@ -26,7 +26,16 @@ class PostListViewModel @Inject constructor(val preferences: UserPreferences) : 
 
     fun getPosts() {
         viewModelScope.launch {
-            state = state.copy(posts = client.postgrest.from("post").select().decodeList<post>())
+            val name = client.postgrest.from("user").select(){
+                filter {
+                    eq("email", preferences.getEmail()!!)
+                }
+            }.decodeSingle<user>().user_name
+            state = state.copy(posts = client.postgrest.from("post").select(){
+                filter {
+                    neq("post_creator_username", name)
+                }
+            }.decodeList<post>())
             Log.d("Lista post", state.posts.toString())
         }
 
