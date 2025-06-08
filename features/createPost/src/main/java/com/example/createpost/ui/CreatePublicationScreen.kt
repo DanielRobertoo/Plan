@@ -53,6 +53,11 @@ fun CreatePublicationScreen(
         viewModel.loadUserName()
     }
     when {
+        viewModel.state.errorDate -> AlertDialogOK(
+            title = "ERROR FECHA",
+            message = "No puedes seleccionar una fecha anterior a la actual",
+            onDismiss = {viewModel.resetError()}
+        )
         viewModel.state.errorFields -> AlertDialogOK(
             title = "ERROR",
             message = "Campos inválidos",

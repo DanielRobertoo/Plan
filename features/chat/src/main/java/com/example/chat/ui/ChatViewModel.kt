@@ -13,6 +13,7 @@ import com.example.domain.model.user
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -45,7 +46,7 @@ class ChatViewModel @Inject constructor(val preferences: UserPreferences): ViewM
             )
             val lista = state.mensajes.toMutableList()
             lista.add(mensaje)
-            state = state.copy(mensajes = lista)
+            state = state.copy(mensajes = lista, messageToSend = "")
 
             client.postgrest.from("message").insert(mensaje)
         }
@@ -56,18 +57,22 @@ class ChatViewModel @Inject constructor(val preferences: UserPreferences): ViewM
     fun getMessages(_idChat: Int) {
         state = state.copy(idChat = _idChat)
         viewModelScope.launch {
-            state = state.copy(
-                mensajes = client.postgrest.from("message").select(){
-                filter {
-                    eq("conversation_id", _idChat)
-                }
-            }.decodeList<message>(),
-                idUser = client.postgrest.from("user").select(){
-                    filter {
-                        eq("email",preferences.getEmail()!!)
-                    }
-                }.decodeSingle<user>().id
-            )
+            while (true){
+                delay(3000)
+                state = state.copy(
+                    mensajes = client.postgrest.from("message").select(){
+                        filter {
+                            eq("conversation_id", _idChat)
+                        }
+                    }.decodeList<message>(),
+                    idUser = client.postgrest.from("user").select(){
+                        filter {
+                            eq("email",preferences.getEmail()!!)
+                        }
+                    }.decodeSingle<user>().id
+                )
+            }
+
 
         }
     }

@@ -14,5 +14,6 @@ data class CreatePublicationState(
 
     val errorFields: Boolean = false,
     val success:Boolean = false,
-    val publications: MutableList<post> = mutableListOf()
+    val publications: MutableList<post> = mutableListOf(),
+    val errorDate: Boolean = false
 )

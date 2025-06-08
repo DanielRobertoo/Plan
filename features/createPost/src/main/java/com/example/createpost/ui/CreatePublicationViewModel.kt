@@ -16,7 +16,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.postgrest
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalTime
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,7 +41,13 @@ class CreatePublicationViewModel @Inject constructor(val preferences: UserPrefer
     }
 
     fun onDateChange(texto:String){
-        state = state.copy(date = texto)
+        if (LocalDate.parse(texto, DateTimeFormatter.ofPattern("dd/MM/yyyy")).isBefore(LocalDate.now())){
+            state = state.copy(errorDate = true)
+        }
+        else{
+            state = state.copy(date = texto)
+        }
+
     }
 
     fun onTimeSetChange(texto:String){
@@ -50,7 +59,7 @@ class CreatePublicationViewModel @Inject constructor(val preferences: UserPrefer
     }
 
     fun resetError() {
-        state = state.copy(errorFields = false)
+        state = state.copy(errorFields = false, errorDate = false)
     }
 
     fun onMomentDayChange(s: String) {
