@@ -1,5 +1,6 @@
 package com.example.profile.ui
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,6 +36,10 @@ import com.example.base.PostGym.PostItemDefault
 import com.example.base.PostGym.PostItemForus
 import com.example.base.PostGym.PostItemGofit
 import com.example.base.PostGym.PostItemGofitPreview
+import com.example.base.composables.LoadingUi
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 
 @Preview(showSystemUi = true, showBackground = true)
@@ -81,7 +87,17 @@ fun ProfileContentPreview() {
 }
 
 @Composable
-fun ProfileScreen(viewModel: ProfileViewModel, onEdit: (id: Int) -> Unit) {
+fun ProfileScreen(viewModel: ProfileViewModel, onEditPost: (id: Int) -> Unit ) {
+    LaunchedEffect(Unit) {
+        viewModel.getData()
+    }
+    when{
+        viewModel.state.loading -> LoadingUi()
+        else -> ProfileContent(
+            onEdit = onEditPost,
+            state = viewModel.state
+        )
+    }
 
 }
 
@@ -92,7 +108,7 @@ data class ProfileEvents(
 )
 
 @Composable
-fun ProfileContent(state: ProfileState, events: ProfileEvents, onEdit:(id:Int) -> Unit) {
+fun ProfileContent(state: ProfileState, onEdit:(id:Int) -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -106,9 +122,16 @@ fun ProfileContent(state: ProfileState, events: ProfileEvents, onEdit:(id:Int) -
                 contentDescription = "",
                 Modifier.size(80.dp)
             )
-            Text("${state.user!!.user_name}")
+            Text("${
+                if(state.user != null){
+                    state.user.user_name
+                }
+                else{
+                    ""
+                }
+            }")
             ElevatedButton(
-                onClick = {events.EditProfile(state.user!!.id)},
+                onClick = {/*events.EditProfile(state.user!!.id)*/},
                 elevation = ButtonDefaults.buttonElevation(0.dp),
                 colors = ButtonColors(
                     contentColor = Color.Black,
@@ -122,27 +145,30 @@ fun ProfileContent(state: ProfileState, events: ProfileEvents, onEdit:(id:Int) -
             }
         }
         Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-            Text("Publicaciones")
+            Text("Publicaciones Activas")
         }
         HorizontalDivider()
         LazyColumn {
             items(state.posts){
+                Log.d("post", it.toString())
                 val id = it.id
-                when{
-
-                    it.gym == "basicFit" -> PostItemBasicFit(user = "${state.user!!.user_name}", date = it.date, title = it.title, place = it.gym, accion = {
-                        onEdit(id)
-                    })
-                    it.gym == "forus" -> PostItemForus(user = "${state.user!!.user_name}", date = it.date, title = it.title, place = it.gym, accion = {
-                        onEdit(id)
-                    })
-                    it.gym == "gofit" -> PostItemGofit(user = "${state.user!!.user_name}", date = it.date, title = it.title, place = it.gym, accion = {
-                        onEdit(id)
-                    })
-                    else -> PostItemDefault(user = "${state.user!!.user_name}", date = it.date, title = it.title, place = it.gym, accion = {
-                        onEdit(id)
-                    })
+                if (!LocalDate.parse(it.date, DateTimeFormatter.ofPattern("dd/MM/yyyy")).isBefore(LocalDate.now())){
+                    when{
+                        it.gym.lowercase(Locale.ROOT).contains("basic-fit") -> PostItemBasicFit(user = "${state.user!!.user_name}", date = it.date, title = it.title, place = it.gym, accion = {
+                            onEdit(id)
+                        })
+                        it.gym.lowercase(Locale.ROOT).contains("forus") -> PostItemForus(user = "${state.user!!.user_name}", date = it.date, title = it.title, place = it.gym, accion = {
+                            onEdit(id)
+                        })
+                        it.gym.lowercase(Locale.ROOT).contains("go fit") -> PostItemGofit(user = "${state.user!!.user_name}", date = it.date, title = it.title, place = it.gym, accion = {
+                            onEdit(id)
+                        })
+                        else -> PostItemDefault(user = "${state.user!!.user_name}", date = it.date, title = it.title, place = it.gym, accion = {
+                            onEdit(id)
+                        })
+                    }
                 }
+
             }
         }
     }

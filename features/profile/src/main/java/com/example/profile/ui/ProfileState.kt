@@ -6,5 +6,6 @@ import com.example.domain.model.user
 data class ProfileState(
     val postToCheck: post? = null,
     val posts: MutableList<post> = mutableListOf(),
-    val user: user? = null
+    val user: user? = null,
+    val loading: Boolean = false
 )

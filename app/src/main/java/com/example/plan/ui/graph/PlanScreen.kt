@@ -38,6 +38,8 @@ import com.example.login.ui.register.RegisterScreen
 import com.example.login.ui.register.RegisterViewModel
 import com.example.postlist.ui.PostListScreen
 import com.example.postlist.ui.PostListViewModel
+import com.example.profile.ui.ProfileScreen
+import com.example.profile.ui.ProfileViewModel
 import com.example.requestlist.ui.RequestListScreen
 import com.example.requestlist.ui.RequestListViewModel
 import com.example.validateemail.ui.ValidateEmailScreen
@@ -70,8 +72,8 @@ fun PlanScreen(navController: NavHostController) {
                         label = { Text(text = "") }
                     )
                     NavigationBarItem(
-                        selected = actual.value=="perfil",
-                        onClick = { /*navController.navigate("perfil")*/ },
+                        selected = actual.value=="profile",
+                        onClick = { navController.navigate("profile") },
                         icon = { Icon(Icons.Filled.AccountCircle, null) },
                         label = { Text(text = "") }
                     )
@@ -190,6 +192,14 @@ fun PlanScreen(navController: NavHostController) {
                     goChat = {
                         id: Int -> navController.navigate("chat/${id}")
                     }
+                )
+            }
+
+            composable(route = "profile") {
+                actual.value = "profile"
+                ProfileScreen(
+                    viewModel = hiltViewModel<ProfileViewModel>(),
+                    onEditPost = {}
                 )
             }
 

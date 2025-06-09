@@ -83,6 +83,7 @@ dependencies {
     implementation(project(":base"))
     implementation(project(":features:requestList"))
     implementation(project(":features:chatList"))
+    implementation(project(":features:profile"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
