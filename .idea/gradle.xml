@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/features/chat" />
             <option value="$PROJECT_DIR$/features/chatList" />
             <option value="$PROJECT_DIR$/features/createPost" />
+            <option value="$PROJECT_DIR$/features/editPost" />
             <option value="$PROJECT_DIR$/features/login" />
             <option value="$PROJECT_DIR$/features/profile" />
             <option value="$PROJECT_DIR$/features/requestList" />
