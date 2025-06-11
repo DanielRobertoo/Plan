@@ -7,5 +7,6 @@ data class ProfileState(
     val postToCheck: post? = null,
     val posts: MutableList<post> = mutableListOf(),
     val user: user? = null,
+    val postToDelete: post? = null,
     val loading: Boolean = false
 )

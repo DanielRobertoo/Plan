@@ -32,6 +32,8 @@ import com.example.chat.ui.CreatePublicacion.CreatePublicationScreen
 import com.example.chat.ui.CreatePublicacion.CreatePublicationViewModel
 import com.example.chatlist.ui.ChatListScreen
 import com.example.chatlist.ui.ChatListViewModel
+import com.example.editpost.ui.EditPostViewModel
+import com.example.editpost.ui.EditPublicationScreen
 import com.example.login.ui.login.LoginScreen
 import com.example.login.ui.login.LoginViewModel
 import com.example.login.ui.register.RegisterScreen
@@ -54,25 +56,25 @@ fun PlanScreen(navController: NavHostController) {
             if (actual.value != "login" && actual.value != "signUp" && actual.value != "validate") {
                 NavigationBar(windowInsets = NavigationBarDefaults.windowInsets) {
                     NavigationBarItem(
-                        selected = actual.value=="list",
+                        selected = actual.value == "list",
                         onClick = { navController.navigate("list") },
                         icon = { Icon(Icons.Filled.Home, null) },
                         label = { Text(text = "") }
                     )
                     NavigationBarItem(
-                        selected = actual.value=="requestList",
+                        selected = actual.value == "requestList",
                         onClick = { navController.navigate("requestList") },
                         icon = { Icon(Icons.Filled.Email, null) },
                         label = { Text(text = "") }
                     )
                     NavigationBarItem(
-                        selected = actual.value=="chatList",
+                        selected = actual.value == "chatList",
                         onClick = { navController.navigate("chatList") },
                         icon = { Icon(Icons.AutoMirrored.Filled.Send, null) },
                         label = { Text(text = "") }
                     )
                     NavigationBarItem(
-                        selected = actual.value=="profile",
+                        selected = actual.value == "profile",
                         onClick = { navController.navigate("profile") },
                         icon = { Icon(Icons.Filled.AccountCircle, null) },
                         label = { Text(text = "") }
@@ -85,7 +87,11 @@ fun PlanScreen(navController: NavHostController) {
     ) {
 
 
-        NavHost(startDestination = "login", navController = navController, modifier = Modifier.padding(it)) {
+        NavHost(
+            startDestination = "login",
+            navController = navController,
+            modifier = Modifier.padding(it)
+        ) {
             composable(route = "list") {
                 actual.value = "list"
                 Log.d("actual", "$actual")
@@ -93,7 +99,7 @@ fun PlanScreen(navController: NavHostController) {
                     viewModel = hiltViewModel<PostListViewModel>(),
                     goAdd = { navController.navigate("add") },
                     goRequest = {},
-                    goback = {navController.navigate("login")}
+                    goback = { navController.navigate("login") }
                 )
             }
             composable(route = "add") {
@@ -106,7 +112,7 @@ fun PlanScreen(navController: NavHostController) {
             }
             composable(route = "chat/{id}",
                 arguments = listOf(
-                    navArgument("id"){
+                    navArgument("id") {
                         type = NavType.IntType
                     }
                 )
@@ -140,7 +146,7 @@ fun PlanScreen(navController: NavHostController) {
                 RegisterScreen(
                     viewModel = hiltViewModel<RegisterViewModel>(),
                     goToLogin = { navController.popBackStack() },
-                    goValidate = { email: String, password: String, userId:String ->
+                    goValidate = { email: String, password: String, userId: String ->
                         navController.navigate("validateEmail/$email/$password/$userId")
                     },
                     modifier = Modifier
@@ -156,7 +162,7 @@ fun PlanScreen(navController: NavHostController) {
                     navArgument("password") {
                         type = NavType.StringType
                     },
-                    navArgument("userId"){
+                    navArgument("userId") {
                         type = NavType.StringType
                     }
                 )
@@ -189,8 +195,8 @@ fun PlanScreen(navController: NavHostController) {
                 actual.value = "chatList"
                 ChatListScreen(
                     viewModel = hiltViewModel<ChatListViewModel>(),
-                    goChat = {
-                        id: Int -> navController.navigate("chat/${id}")
+                    goChat = { id: Int ->
+                        navController.navigate("chat/${id}")
                     }
                 )
             }
@@ -199,7 +205,23 @@ fun PlanScreen(navController: NavHostController) {
                 actual.value = "profile"
                 ProfileScreen(
                     viewModel = hiltViewModel<ProfileViewModel>(),
-                    onEditPost = {}
+                    onEditPost = {id: Int -> navController.navigate("editPost/$id")}
+                )
+            }
+            composable(
+                route = "editPost/{id}",
+                arguments = listOf(
+                    navArgument("id") {
+                        type = NavType.IntType
+                    }
+                )
+            ) {
+                val id = it.arguments?.getInt("id")
+                EditPublicationScreen(
+                    viewModel = hiltViewModel<EditPostViewModel>(),
+                    goBack = {navController.popBackStack()},
+                    modifier = Modifier,
+                    idPost = id!!
                 )
             }
 

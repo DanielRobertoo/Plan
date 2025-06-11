@@ -41,7 +41,8 @@ fun ChatScreen(viewModel: ChatViewModel, goBack: () -> Unit, modifier: Modifier,
             onDismiss = { viewModel.dismissBlock() }
         )
 
-        else -> ChatContent(
+        else ->
+            ChatContent(
             chatEvents = ChatEvents(
                 onTextChange = viewModel::onMessageTextChange,
                 onMessageSent = viewModel::onMessageTextSent

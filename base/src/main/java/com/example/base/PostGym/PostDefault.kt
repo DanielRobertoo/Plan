@@ -26,8 +26,8 @@ import com.example.base.R
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PostItemDefault(title: String, date: String, user:String, place:String,accion: (String) -> Unit) {
-    ElevatedCard(Modifier.fillMaxWidth().height(260.dp).padding(10.dp).combinedClickable(onClick = {accion(user)})) {
+fun PostItemDefault(title: String, date: String, user:String, place:String,accion: (String) -> Unit, accionLarga: () -> Unit) {
+    ElevatedCard(Modifier.fillMaxWidth().height(260.dp).padding(10.dp).combinedClickable(onClick = {accion(user)},onLongClick = {accionLarga()})) {
         Box(contentAlignment = Alignment.Center) {
             Column(Modifier.fillMaxSize()) {
                 Row {

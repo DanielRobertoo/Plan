@@ -47,6 +47,34 @@ class ProfileViewModel @Inject constructor(val preferences: UserPreferences) : V
             )
         }
     }
+    fun deletePost() {
+        viewModelScope.launch {
+            client.postgrest.from("post").delete {
+                filter {
+                    eq(
+                        "id", state.postToDelete!!.id
+                    )
+                }
+            }
+            reset()
+        }
+    }
+
+    fun setPostToDelete(id: Int) {
+        viewModelScope.launch {
+            state = state.copy(
+                postToDelete = client.postgrest.from("post").select() {
+                    filter {
+                        eq("id", id)
+                    }
+                }.decodeSingle<post>()
+            )
+        }
+    }
+
+    fun reset() {
+        state = state.copy(postToDelete = null)
+    }
 
 
 }

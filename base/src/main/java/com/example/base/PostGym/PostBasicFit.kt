@@ -66,13 +66,14 @@ fun PostItemBasicFitPreview(){
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PostItemBasicFit(title: String, date: String, user:String, place:String, accion: (String) -> Unit) {
+fun PostItemBasicFit(title: String, date: String, user:String, place:String, accionCorta: (String) -> Unit, accionLarga: () -> Unit) {
     ElevatedCard(Modifier
         .fillMaxWidth()
         .height(260.dp)
         .padding(10.dp)
         .combinedClickable(
-            onClick = { accion(user) }
+            onClick = { accionCorta(user) },
+            onLongClick = {accionLarga()}
         )) {
         Box(contentAlignment = Alignment.Center) {
             Column(Modifier.fillMaxSize()) {

@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,13 +15,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ButtonElevation
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -37,6 +33,7 @@ import com.example.base.PostGym.PostItemForus
 import com.example.base.PostGym.PostItemGofit
 import com.example.base.PostGym.PostItemGofitPreview
 import com.example.base.composables.LoadingUi
+import com.example.chat.ui.base.AlertDialogYesNo
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -87,15 +84,27 @@ fun ProfileContentPreview() {
 }
 
 @Composable
-fun ProfileScreen(viewModel: ProfileViewModel, onEditPost: (id: Int) -> Unit ) {
+fun ProfileScreen(viewModel: ProfileViewModel, onEditPost: (id: Int) -> Unit) {
     LaunchedEffect(Unit) {
         viewModel.getData()
     }
-    when{
+    when {
         viewModel.state.loading -> LoadingUi()
+        viewModel.state.postToDelete != null -> AlertDialogYesNo(
+            title = "Atención",
+            message = "¿Estas seguro de que quieres borrar esta publiación?",
+            onAccept = {
+                viewModel.deletePost()
+            },
+            onDismiss = {
+                viewModel.reset()
+            }
+        )
+
         else -> ProfileContent(
             onEdit = onEditPost,
-            state = viewModel.state
+            state = viewModel.state,
+            onSetDeletePost = { id: Int -> viewModel.setPostToDelete(id) }
         )
     }
 
@@ -108,7 +117,7 @@ data class ProfileEvents(
 )
 
 @Composable
-fun ProfileContent(state: ProfileState, onEdit:(id:Int) -> Unit) {
+fun ProfileContent(state: ProfileState, onEdit: (id: Int) -> Unit, onSetDeletePost: (Int) -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -122,16 +131,17 @@ fun ProfileContent(state: ProfileState, onEdit:(id:Int) -> Unit) {
                 contentDescription = "",
                 Modifier.size(80.dp)
             )
-            Text("${
-                if(state.user != null){
-                    state.user.user_name
-                }
-                else{
-                    ""
-                }
-            }")
+            Text(
+                "${
+                    if (state.user != null) {
+                        state.user.user_name
+                    } else {
+                        ""
+                    }
+                }"
+            )
             ElevatedButton(
-                onClick = {/*events.EditProfile(state.user!!.id)*/},
+                onClick = {/*events.EditProfile(state.user!!.id)*/ },
                 elevation = ButtonDefaults.buttonElevation(0.dp),
                 colors = ButtonColors(
                     contentColor = Color.Black,
@@ -149,23 +159,51 @@ fun ProfileContent(state: ProfileState, onEdit:(id:Int) -> Unit) {
         }
         HorizontalDivider()
         LazyColumn {
-            items(state.posts){
+            items(state.posts) {
                 Log.d("post", it.toString())
                 val id = it.id
-                if (!LocalDate.parse(it.date, DateTimeFormatter.ofPattern("dd/MM/yyyy")).isBefore(LocalDate.now())){
-                    when{
-                        it.gym.lowercase(Locale.ROOT).contains("basic-fit") -> PostItemBasicFit(user = "${state.user!!.user_name}", date = it.date, title = it.title, place = it.gym, accion = {
-                            onEdit(id)
-                        })
-                        it.gym.lowercase(Locale.ROOT).contains("forus") -> PostItemForus(user = "${state.user!!.user_name}", date = it.date, title = it.title, place = it.gym, accion = {
-                            onEdit(id)
-                        })
-                        it.gym.lowercase(Locale.ROOT).contains("go fit") -> PostItemGofit(user = "${state.user!!.user_name}", date = it.date, title = it.title, place = it.gym, accion = {
-                            onEdit(id)
-                        })
-                        else -> PostItemDefault(user = "${state.user!!.user_name}", date = it.date, title = it.title, place = it.gym, accion = {
-                            onEdit(id)
-                        })
+                if (!LocalDate.parse(it.date, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                        .isBefore(LocalDate.now())
+                ) {
+                    when {
+                        it.gym.lowercase(Locale.ROOT)
+                            .contains("basic-fit") -> PostItemBasicFit(user = "${state.user!!.user_name}",
+                            date = it.date,
+                            title = it.title,
+                            place = it.gym,
+                            accionCorta = {
+                                onEdit(id)
+                            },
+                            accionLarga = { onSetDeletePost(id) })
+
+                        it.gym.lowercase(Locale.ROOT)
+                            .contains("forus") -> PostItemForus(user = "${state.user!!.user_name}",
+                            date = it.date,
+                            title = it.title,
+                            place = it.gym,
+                            accion = {
+                                onEdit(id)
+                            },
+                            accionLarga = { onSetDeletePost(id) })
+
+                        it.gym.lowercase(Locale.ROOT)
+                            .contains("go fit") -> PostItemGofit(user = "${state.user!!.user_name}",
+                            date = it.date,
+                            title = it.title,
+                            place = it.gym,
+                            accion = {
+                                onEdit(id)
+                            },
+                            accionLarga = { onSetDeletePost(id) })
+
+                        else -> PostItemDefault(user = "${state.user!!.user_name}",
+                            date = it.date,
+                            title = it.title,
+                            place = it.gym,
+                            accion = {
+                                onEdit(id)
+                            },
+                            accionLarga = { onSetDeletePost(id) })
                     }
                 }
 
