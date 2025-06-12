@@ -1,6 +1,7 @@
 package com.example.base.composables
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -20,20 +21,12 @@ fun PasswordField(
     isError: Boolean,
     onValueChange: (String) -> Unit
 ) {
-    TextField(modifier = modifier,
+    TextField(modifier = Modifier.padding(10.dp),
         value = value,
         singleLine = true,
         isError = isError,
         onValueChange = onValueChange,
         shape = RoundedCornerShape(10.0.dp),
-        supportingText = {
-            Row {
-                Text(
-                    if (isError) errorFormat else "",
-                    Modifier.clearAndSetSemantics { value }
-                )
-            }
-        },
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent

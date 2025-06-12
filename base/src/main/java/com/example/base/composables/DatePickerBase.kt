@@ -130,7 +130,7 @@ fun DatePickerFieldToModalonChangeRegister(
         singleLine = true,
         modifier = modifier
             .clickable { showDatePicker = true },
-        shape = RoundedCornerShape(20.dp),
+        shape = RoundedCornerShape(10.dp),
         trailingIcon = {
             IconButton(onClick = { showDatePicker = true }) {
                 Icon(imageVector = Icons.Default.DateRange, contentDescription = "Seleccionar fecha")

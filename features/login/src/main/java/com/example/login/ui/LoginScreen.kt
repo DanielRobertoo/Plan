@@ -131,7 +131,7 @@ fun LoginFormContent(
             SpaceMedio()
             EmailTextField(
                 value = state.email,
-                label = "Email",
+                label = "Correo",
                 emailError = state.isEmailError,
                 emailChange = events.onEmailChange,
                 emailErrorFormat = state.emailErrorFormat
@@ -139,7 +139,7 @@ fun LoginFormContent(
             PasswordField(
                 modifier = Modifier,
                 value = state.password,
-                label = "Password",
+                label = "Contraseña",
                 isError = state.isPasswordError,
                 onValueChange = events.onPasswordChange, errorFormat = state.passwordErrorFormat
             )

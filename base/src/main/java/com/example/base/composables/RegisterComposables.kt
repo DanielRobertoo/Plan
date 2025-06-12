@@ -39,7 +39,7 @@ fun UserNameField(
         singleLine = true,
         isError = isError,
         onValueChange = onValueChange,
-        shape = RoundedCornerShape(20.0.dp),
+        shape = RoundedCornerShape(10.0.dp),
         supportingText = {
             Row {
                 Text(
@@ -66,7 +66,7 @@ fun SurnameField(
         singleLine = true,
         isError = isError,
         onValueChange = onValueChange,
-        shape = RoundedCornerShape(20.0.dp),
+        shape = RoundedCornerShape(10.0.dp),
         supportingText = {
             Row {
                 Text(
@@ -93,7 +93,7 @@ fun NameField(
         singleLine = true,
         isError = isError,
         onValueChange = onNameChange,
-        shape = RoundedCornerShape(20.0.dp),
+        shape = RoundedCornerShape(10.0.dp),
         supportingText = {
             Row {
                 Text(

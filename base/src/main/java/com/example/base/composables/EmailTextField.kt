@@ -2,6 +2,7 @@ package com.example.base.composables
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AddCircle
@@ -26,22 +27,17 @@ fun EmailTextField(
     label: String
 ) {
     OutlinedTextField(
+        modifier = Modifier.padding(10.dp),
         value = value, onValueChange = emailChange, isError = emailError,
         singleLine = true,
-        supportingText = {
-            Row {
-                Text(if (emailError) emailErrorFormat else "")
-                Spacer(Modifier.weight(1f))
-                Text("${value.length}/50")
-            }
-        }, label = { Text(label) },
+        label = { Text(label) },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Outlined.Email,
                 contentDescription = "Icono del Email"
             )
         },
-        trailingIcon = {
+        /*trailingIcon = {
             if (!emailError) Icon(
                 imageVector = Icons.Outlined.CheckCircle,
                 contentDescription = "",
@@ -52,7 +48,7 @@ fun EmailTextField(
                 tint = Color.Red,
                 modifier = Modifier.rotate(45F)
             )
-        },
+        },*/
         shape = RoundedCornerShape(10.0.dp),
         colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,
