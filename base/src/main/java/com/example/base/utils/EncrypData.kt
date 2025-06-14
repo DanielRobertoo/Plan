@@ -9,7 +9,7 @@ import javax.crypto.spec.SecretKeySpec
 object EncryptionData {
 
     private const val TRANSFORMATION = "AES/CBC/PKCS5Padding"
-    private const val SECRET_KEY = "uenaçdo-.edswSC3"
+    private const val SECRET_KEY = "uenaçdo-.edswSC"
     private const val IV = "encriptacion____"
 
     private fun getSecretKey(): SecretKey {
@@ -25,7 +25,7 @@ object EncryptionData {
         return Base64.encodeToString(encrypted, Base64.DEFAULT)
     }
 
-    fun decrypt(encrypted: String): String {
+    fun decrypt(encrypted: String?): String? {
         val cipher = Cipher.getInstance(TRANSFORMATION)
         val keySpec = getSecretKey()
         val ivSpec = IvParameterSpec(IV.toByteArray())

@@ -34,7 +34,7 @@ fun PostRequestItemDefault(request: request, onAccept: (Int,Int, Int) -> Unit, o
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .height(110.dp)
             .padding(8.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.elevatedCardElevation()

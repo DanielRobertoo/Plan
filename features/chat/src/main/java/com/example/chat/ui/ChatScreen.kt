@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.base.composables.LoadingUi
 import com.example.chat.ui.base.AlertDialogYesNo
 import com.example.chat.usecase.ChatState
 
@@ -31,6 +32,7 @@ import com.example.chat.usecase.ChatState
 @Composable
 fun ChatScreen(viewModel: ChatViewModel, goBack: () -> Unit, modifier: Modifier, idChat: Int) {
     LaunchedEffect(Unit) {
+        viewModel.getMessagesFirstTime(idChat)
         viewModel.getMessages(idChat)
     }
     when {
@@ -40,7 +42,7 @@ fun ChatScreen(viewModel: ChatViewModel, goBack: () -> Unit, modifier: Modifier,
             onAccept = { viewModel.blockUser() },
             onDismiss = { viewModel.dismissBlock() }
         )
-
+        viewModel.state.loading -> LoadingUi()
         else ->
             ChatContent(
             chatEvents = ChatEvents(

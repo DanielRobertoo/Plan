@@ -34,7 +34,6 @@ fun PostRequestItemBasicFit(request: request,onAccept: (Int, Int, Int) -> Unit, 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
             .padding(8.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.elevatedCardElevation()
@@ -45,7 +44,7 @@ fun PostRequestItemBasicFit(request: request,onAccept: (Int, Int, Int) -> Unit, 
                 contentDescription = null,
                 modifier = Modifier.size(60.dp)
             )
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(2.dp))
             Column {
                 Text(text = "Título: ${request.title}")
                 Text(text = "Fecha: ${request.date}")
@@ -77,7 +76,6 @@ fun PostRequestItemBasicFitPreview() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
             .padding(8.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.elevatedCardElevation()

@@ -9,14 +9,16 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.base.composables.LoadingUi
-import com.example.base.composables.NoDataScreen
+import com.example.base.composables.NoDataChats
 import com.example.chatlist.usecase.chatToShow
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ChatListScreen(viewModel: ChatListViewModel, goChat: (Int) -> Unit) {
     LaunchedEffect(Unit) {
+
         viewModel.getChat()
     }
     when {
@@ -26,14 +28,14 @@ fun ChatListScreen(viewModel: ChatListViewModel, goChat: (Int) -> Unit) {
         }
 
         viewModel.state.noData -> {
-            NoDataScreen()
+            NoDataChats()
             Log.d("no data", "creado")
         }
 
         viewModel.state.listChatShow.isNotEmpty() -> {
             ChatListContent(
                 listChat = viewModel.state.listChatShow,
-                modifier = Modifier.padding(),
+                modifier = Modifier.padding(10.dp),
                 accion = { id: Int -> goChat(id) },
                 viewModel = viewModel
             )

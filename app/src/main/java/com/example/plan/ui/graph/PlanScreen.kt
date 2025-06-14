@@ -186,6 +186,7 @@ fun PlanScreen(navController: NavHostController) {
             composable(
                 route = "requestList"
             ) {
+                actual.value = "requestList"
                 RequestListScreen(
                     viewModel = hiltViewModel<RequestListViewModel>()
                 )

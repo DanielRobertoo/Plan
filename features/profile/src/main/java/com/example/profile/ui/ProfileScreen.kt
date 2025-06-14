@@ -33,6 +33,7 @@ import com.example.base.PostGym.PostItemForus
 import com.example.base.PostGym.PostItemGofit
 import com.example.base.PostGym.PostItemGofitPreview
 import com.example.base.composables.LoadingUi
+import com.example.base.composables.NoDataPostProfile
 import com.example.chat.ui.base.AlertDialogYesNo
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -100,7 +101,6 @@ fun ProfileScreen(viewModel: ProfileViewModel, onEditPost: (id: Int) -> Unit) {
                 viewModel.reset()
             }
         )
-
         else -> ProfileContent(
             onEdit = onEditPost,
             state = viewModel.state,
@@ -140,73 +140,67 @@ fun ProfileContent(state: ProfileState, onEdit: (id: Int) -> Unit, onSetDeletePo
                     }
                 }"
             )
-            ElevatedButton(
-                onClick = {/*events.EditProfile(state.user!!.id)*/ },
-                elevation = ButtonDefaults.buttonElevation(0.dp),
-                colors = ButtonColors(
-                    contentColor = Color.Black,
-                    containerColor = Color.Transparent,
-                    disabledContainerColor = Color.Transparent,
-                    disabledContentColor = Color.Transparent
-
-                )
-            ) {
-                Text("Editar Perfil")
-            }
         }
         Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
             Text("Publicaciones Activas")
         }
         HorizontalDivider()
-        LazyColumn {
-            items(state.posts) {
-                Log.d("post", it.toString())
-                val id = it.id
-                if (!LocalDate.parse(it.date, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                        .isBefore(LocalDate.now())
-                ) {
-                    when {
-                        it.gym.lowercase(Locale.ROOT)
-                            .contains("basic-fit") -> PostItemBasicFit(user = "${state.user!!.user_name}",
-                            date = it.date,
-                            title = it.title,
-                            place = it.gym,
-                            accionCorta = {
-                                onEdit(id)
-                            },
-                            accionLarga = { onSetDeletePost(id) })
+        if (state.posts.isEmpty()){
+            NoDataPostProfile()
+        }
+        else {
 
-                        it.gym.lowercase(Locale.ROOT)
-                            .contains("forus") -> PostItemForus(user = "${state.user!!.user_name}",
-                            date = it.date,
-                            title = it.title,
-                            place = it.gym,
-                            accion = {
-                                onEdit(id)
-                            },
-                            accionLarga = { onSetDeletePost(id) })
 
-                        it.gym.lowercase(Locale.ROOT)
-                            .contains("go fit") -> PostItemGofit(user = "${state.user!!.user_name}",
-                            date = it.date,
-                            title = it.title,
-                            place = it.gym,
-                            accion = {
-                                onEdit(id)
-                            },
-                            accionLarga = { onSetDeletePost(id) })
+            LazyColumn {
+                items(state.posts) {
+                    Log.d("post", it.toString())
+                    val id = it.id
+                    if (!LocalDate.parse(it.date, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+                            .isBefore(LocalDate.now())
+                    ) {
+                        when {
+                            it.gym.lowercase(Locale.ROOT)
+                                .contains("basic-fit") -> PostItemBasicFit(user = "${state.user!!.user_name}",
+                                date = it.date,
+                                title = it.title,
+                                place = it.gym,
+                                accionCorta = {
+                                    onEdit(id)
+                                },
+                                accionLarga = { onSetDeletePost(id) })
 
-                        else -> PostItemDefault(user = "${state.user!!.user_name}",
-                            date = it.date,
-                            title = it.title,
-                            place = it.gym,
-                            accion = {
-                                onEdit(id)
-                            },
-                            accionLarga = { onSetDeletePost(id) })
+                            it.gym.lowercase(Locale.ROOT)
+                                .contains("forus") -> PostItemForus(user = "${state.user!!.user_name}",
+                                date = it.date,
+                                title = it.title,
+                                place = it.gym,
+                                accion = {
+                                    onEdit(id)
+                                },
+                                accionLarga = { onSetDeletePost(id) })
+
+                            it.gym.lowercase(Locale.ROOT)
+                                .contains("go fit") -> PostItemGofit(user = "${state.user!!.user_name}",
+                                date = it.date,
+                                title = it.title,
+                                place = it.gym,
+                                accion = {
+                                    onEdit(id)
+                                },
+                                accionLarga = { onSetDeletePost(id) })
+
+                            else -> PostItemDefault(user = "${state.user!!.user_name}",
+                                date = it.date,
+                                title = it.title,
+                                place = it.gym,
+                                accion = {
+                                    onEdit(id)
+                                },
+                                accionLarga = { onSetDeletePost(id) })
+                        }
                     }
-                }
 
+                }
             }
         }
     }

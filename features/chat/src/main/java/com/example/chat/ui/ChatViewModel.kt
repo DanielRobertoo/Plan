@@ -76,4 +76,25 @@ class ChatViewModel @Inject constructor(val preferences: UserPreferences): ViewM
 
         }
     }
+    fun getMessagesFirstTime(_idChat: Int) {
+        state = state.copy(idChat = _idChat, loading = true)
+        viewModelScope.launch {
+                state = state.copy(
+                    mensajes = client.postgrest.from("message").select(){
+                        filter {
+                            eq("conversation_id", _idChat)
+                        }
+                    }.decodeList<message>(),
+                    idUser = client.postgrest.from("user").select(){
+                        filter {
+                            eq("email",preferences.getEmail()!!)
+                        }
+                    }.decodeSingle<user>().id,
+                    loading = false
+                )
+
+
+
+        }
+    }
 }

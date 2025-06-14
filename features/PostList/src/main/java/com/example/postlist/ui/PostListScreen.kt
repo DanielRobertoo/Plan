@@ -23,7 +23,7 @@ import com.example.base.PostGym.PostItemDefault
 import com.example.base.PostGym.PostItemForus
 import com.example.base.PostGym.PostItemGofit
 import com.example.base.composables.LoadingUi
-import com.example.base.composables.NoDataScreen
+import com.example.base.composables.NoDataPost
 import com.example.chat.ui.base.AlertDialogYesNo
 import com.example.chat.ui.base.AlertDialogYesNoPost
 import com.example.domain.model.post
@@ -61,14 +61,16 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
                 Log.d("Loading", "creado")
             }
             viewModel.state.noData -> {
-                NoDataScreen()
+                NoDataPost()
                 Log.d("no data", "creado")
             }
             viewModel.state.postToJoin != null -> {
                 AlertDialogYesNoPost(
                     title = "Enviar Solicitud",
                     message = "",
-                    onAccept = {_post: post -> viewModel.SendRequest(_post) },
+                    onAccept = {
+                        _post: post -> viewModel.SendRequest(_post)
+                               },
                     onDismiss = { viewModel.reset() },
                     post = viewModel.state.postToJoin!!
                 )

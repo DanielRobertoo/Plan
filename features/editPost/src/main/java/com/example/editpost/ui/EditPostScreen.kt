@@ -106,7 +106,7 @@ fun EditPulicationContent(
         },
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Crear Post") },
+                title = { Text("Editar Post") },
                 navigationIcon = { IconButton(onClick = { goBack() }, content = { Icon( imageVector = Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "") }) },
             )
         }

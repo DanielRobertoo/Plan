@@ -8,5 +8,6 @@ data class ChatState(
     val messageToSend:String = "",
     val idChat: Int? = null,
     val idUser: Int? = null,
-    val onActiveBlock: Boolean = false
+    val onActiveBlock: Boolean = false,
+    val loading: Boolean = false
 )

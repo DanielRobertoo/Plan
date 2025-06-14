@@ -67,7 +67,7 @@ class PostListViewModel @Inject constructor(val preferences: UserPreferences) : 
                 id_owner = userOwner.id
             )
             client.postgrest.from("request").insert(request)
-            state = state.copy(postToJoin = post)
+            state = state.copy(postToJoin = null)
         }
 
     }
