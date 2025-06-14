@@ -24,6 +24,7 @@ import com.example.base.PostGym.PostItemForus
 import com.example.base.PostGym.PostItemGofit
 import com.example.base.composables.LoadingUi
 import com.example.base.composables.NoDataPost
+import com.example.chat.ui.base.AlertDialogOK
 import com.example.chat.ui.base.AlertDialogYesNo
 import com.example.chat.ui.base.AlertDialogYesNoPost
 import com.example.domain.model.post
@@ -64,6 +65,11 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
                 NoDataPost()
                 Log.d("no data", "creado")
             }
+            viewModel.state.requestExist -> AlertDialogOK(
+                title = "ERROR",
+                message = "Ya se ha mandado solicitud a esta publicacion",
+                onDismiss = {viewModel.reset()}
+            )
             viewModel.state.postToJoin != null -> {
                 AlertDialogYesNoPost(
                     title = "Enviar Solicitud",

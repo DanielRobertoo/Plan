@@ -66,14 +66,39 @@ class PostListViewModel @Inject constructor(val preferences: UserPreferences) : 
                 id_guest = userRequest.id,
                 id_owner = userOwner.id
             )
-            client.postgrest.from("request").insert(request)
-            state = state.copy(postToJoin = null)
+            val busqueda = client.postgrest.from("request").select().decodeList<request>()
+            Log.d("COMPARA_TITULOS", "BD: '${busqueda[0].title}' == NUEVO: '${request.title}' -> ${busqueda[0].title == request.title}")
+            Log.d("LONGITUDES", "BD: ${busqueda[0].title.length}, NUEVO: ${request.title.length}")
+            Log.d("CHARS", "BD: ${busqueda[0].title.toCharArray().joinToString()}, NUEVO: ${request.title.toCharArray().joinToString()}")
+
+
+
+            if (client.postgrest.from("request").select() {
+                    filter {
+                        and {
+                            eq("gym", request.gym)
+                            eq("date", request.date)
+                            eq("id_guest", request.id_guest)
+                            eq("id_owner", request.id_owner)
+                            eq("title", request.title)
+                        }
+
+                    }
+                }.decodeList<request>().isNotEmpty()){
+                state = state.copy(requestExist = true)
+                return@launch
+            }
+            else{
+                client.postgrest.from("request").insert(request)
+                state = state.copy(postToJoin = null)
+            }
+
         }
 
     }
 
     fun reset() {
-        state = state.copy(postToJoin = null, loading = false, cerrarSesion = false)
+        state = state.copy(postToJoin = null, loading = false, cerrarSesion = false, requestExist = false)
     }
 
 
