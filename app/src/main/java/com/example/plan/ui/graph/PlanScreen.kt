@@ -176,7 +176,7 @@ fun PlanScreen(navController: NavHostController) {
                     goLogin = {
                         navController.navigate("login")
                     },
-                    goBack = { navController.popBackStack() },
+                    goBack = { navController.navigate("signUp") },
                     email = email!!,
                     password = password!!,
                     userId = userInfo!!

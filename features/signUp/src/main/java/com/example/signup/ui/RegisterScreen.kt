@@ -92,8 +92,9 @@ fun RegisterScreenViewModel(modifier: Modifier, state: AccountRegisterState, eve
     when {
         state.isLoading -> LoadingUi()
         state.isEmptyFields -> AlertDialogOK(message = state.isEmpty ?: "Campos vacios", title = "Error", onDismiss = {events.reset()})
+        state.passwordLenghtError -> AlertDialogOK(message = "La contraseña debe tener minimo 6 caracteres", title = "Error", onDismiss = {events.reset()})
         state.success -> LaunchedEffect(state.success) { goToValidate(state.email, state.password, state.userId) }
-        state.emailExist -> AlertDialogOK(message = "Cuenta ya existente", title = "Error", onDismiss = {events.reset()})
+        state.emailExist -> AlertDialogOK(message = "Correo ya existente", title = "Error", onDismiss = {events.reset()})
         state.isEmailInvalid -> AlertDialogOK(message = "Correo Invalido", title = "Error", onDismiss = {events.reset()})
         else -> RegisterContent(modifier, state, events)
     }

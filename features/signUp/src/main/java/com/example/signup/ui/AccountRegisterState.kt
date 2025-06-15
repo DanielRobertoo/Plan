@@ -37,6 +37,8 @@ data class AccountRegisterState (
     val isUserError: Boolean = false,
     val isBirthdayError: Boolean = false,
     val isEmailInvalid: Boolean = false,
+    val passwordLenghtError: Boolean = false,
+
 
 
 

@@ -49,29 +49,52 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
     fun onBirthdayChange(s: String) {
         state = state.copy(birthday = s)
     }
-    fun ageCalculator() : String{
-        if (state.birthday == ""){
+
+    fun ageCalculator(): String {
+        if (state.birthday == "") {
             state = state.copy(isEmptyFields = true)
             return ""
         }
-        return Period.between(LocalDate.parse(state.birthday, DateTimeFormatter.ofPattern("dd/MM/yyyy")), LocalDate.now()).years.toString()
+        return Period.between(
+            LocalDate.parse(
+                state.birthday,
+                DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            ), LocalDate.now()
+        ).years.toString()
     }
 
     fun onRegisterClick() {
         viewModelScope.launch {
             try {
-                if (!validateEmail(state.email)){
+                if (!validateEmail(state.email)) {
                     state = state.copy(isEmailInvalid = true, isLoading = false)
                     return@launch
                 }
-                state = state.copy(isLoading = true)
+                if (client.postgrest.from("user").select() {
+                        filter {
+                            and {
+                                eq("email", state.email)
+                                eq("enabled", 1)
+                            }
+
+                        }
+                    }.decodeList<user>().count() != 0){
+                    state = state.copy(emailExist = true, isLoading = false)
+                    return@launch
+                }
+                if (state.password.length < 6){
+                    state = state.copy(passwordLenghtError = true, isLoading = false)
+                    return@launch
+                }
+                    state = state.copy(isLoading = true)
                 var codigo = ""
                 for (i in 0..5) {
                     codigo += Random.nextInt(10).toString()
                 }
 
                 val listaCodeVerification =
-                    client.postgrest.from("code_validation").select().decodeList<code_verification>()
+                    client.postgrest.from("code_validation").select()
+                        .decodeList<code_verification>()
 
                 val id_User = client.postgrest.from("user").select().decodeList<user>().count()
 
@@ -83,17 +106,7 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
                         return@launch
                     }
                 }
-
-                enviarCodigoPorEmail(
-                    codigo = codigo,
-                    toName = state.name,
-                    onError = {
-
-                    },
-                    toEmail = state.email,
-                    onSuccess = { insertCodeVerificationSupabase(state.email, codigo) }
-                )
-                val userToSend = user(
+                var userToSend = user(
                     age = ageCalculator(),
                     created_at = LocalDate.now().toString(),
                     name = state.name,
@@ -103,7 +116,43 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
                     enabled = 0,
                     email = state.email
                 )
-                client.postgrest.from("user").insert(userToSend)
+                if (client.postgrest.from("user").select() {
+                        filter {
+                            and {
+                                eq("email", state.email)
+                            }
+
+                        }
+                    }.decodeList<user>().count() == 0){
+
+                    client.postgrest.from("user").insert(userToSend)
+                }
+                else{
+                    var userToUpdate = client.postgrest.from("user").select() {
+                        filter {
+                            and {
+                                eq("email", state.email)
+                            }
+
+                        }
+                    }.decodeSingle<user>().id
+                    userToSend = userToSend.copy(id = userToUpdate)
+                    client.postgrest.from("user").update(userToSend){
+                        filter {
+                            eq("id",userToSend.id)
+                        }
+                    }
+                }
+                enviarCodigoPorEmail(
+                    codigo = codigo,
+                    toName = state.name,
+                    onError = {
+
+                    },
+                    toEmail = state.email,
+                    onSuccess = { insertCodeVerificationSupabase(state.email, codigo) }
+                )
+
                 state = state.copy(isLoading = false, success = true, userId = userToSend.id.toString())
             } catch (e: Exception) {
                 Log.d("SIGN UP", "${e.message}")
@@ -113,21 +162,40 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
 
     fun insertCodeVerificationSupabase(email: String, code: String) {
         viewModelScope.launch {
+            var listCheck =client.postgrest.from("code_validation").select(){
+                filter {
+                    eq("email", email)
+                }
+            }.decodeList<code_verification>()
+            if (
+                listCheck.count()==1
+            ){
+                var cv = listCheck[0].copy(
+                    code = code
+                )
+                client.postgrest.from("code_validation").update(cv){
+                    filter {
+                        eq("id", cv.id)
+                    }
+                }
+            }
+            else{
+                val listaCodeVerification =
+                    client.postgrest.from("code_validation").select().decodeList<code_verification>()
 
-            val listaCodeVerification =
-                client.postgrest.from("code_validation").select().decodeList<code_verification>()
+                val id = listaCodeVerification.count()
 
-            val id = listaCodeVerification.count()
+                client.from("code_validation").insert(
+                    code_verification(id, email, code, 0)
+                )
+            }
 
-            client.from("code_validation").insert(
-                code_verification(id, email, code, 0)
-            )
         }
 
     }
 
     fun onReset() {
-        state = state.copy(isLoading = false, emailExist = false, isEmailInvalid = false)
+        state = state.copy(isLoading = false, emailExist = false, isEmailInvalid = false,passwordLenghtError = false)
     }
 
 }

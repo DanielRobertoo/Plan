@@ -37,6 +37,9 @@ class ChatViewModel @Inject constructor(val preferences: UserPreferences): ViewM
 
     fun onMessageTextSent() {
         viewModelScope.launch {
+            if (state.messageToSend == ""){
+                return@launch
+            }
             val mensaje = message(
                 id = client.postgrest.from("message").select().decodeList<message>().count(),
                 send_at = LocalDate.now().toString(),
