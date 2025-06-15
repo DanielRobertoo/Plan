@@ -1,5 +1,6 @@
 package com.example.chat.ui.ChatView
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -60,9 +61,11 @@ class ChatViewModel @Inject constructor(val preferences: UserPreferences): ViewM
     fun getMessages(_idChat: Int) {
         state = state.copy(idChat = _idChat)
         viewModelScope.launch {
-            if (preferences.getEmail() != null){
+            if (preferences.getEmail() == null){
+                Log.d("get messages", "get")
                 return@launch
             }
+            Log.d("get messages", "get")
             while (true){
                 delay(3000)
                 state = state.copy(

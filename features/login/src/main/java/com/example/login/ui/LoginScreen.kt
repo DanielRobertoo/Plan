@@ -89,7 +89,6 @@ fun LoginScreenViewModel(
             message = "Error al iniciar sesión",
             onDismiss = {
                 events.reset()
-                goback()
             }
         )
         else -> {

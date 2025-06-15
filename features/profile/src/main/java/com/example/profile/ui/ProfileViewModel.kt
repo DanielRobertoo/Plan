@@ -57,6 +57,7 @@ class ProfileViewModel @Inject constructor(val preferences: UserPreferences) : V
                 }
             }
             reset()
+            getData()
         }
     }
 

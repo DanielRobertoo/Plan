@@ -71,7 +71,7 @@ fun RequestListContent(listChat: List<request>, modifier: Modifier, onAccept: (I
             when{
                 it.gym.lowercase(Locale.ROOT).contains("basic-fit")  -> PostRequestItemBasicFit(request = it, onAccept = onAccept, onRefuse = onRefuse)
                 it.gym.lowercase(Locale.ROOT).contains("forus") -> PostRequestItemForus(request = it, onAccept = onAccept, onRefuse = onRefuse)
-                it.gym.lowercase(Locale.ROOT).contains("GO fit") -> PostRequestItemGoFit(request = it, onAccept = onAccept, onRefuse = onRefuse)
+                it.gym.lowercase(Locale.ROOT).contains("go fit") -> PostRequestItemGoFit(request = it, onAccept = onAccept, onRefuse = onRefuse)
                 else -> PostRequestItemDefault(request = it, onAccept = onAccept, onRefuse = onRefuse)
             }
         }

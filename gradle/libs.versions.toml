@@ -20,6 +20,7 @@ uiToolingPreviewAndroid = "1.6.6"
 uiAndroid = "1.7.8"
 foundationAndroidVersion = "1.6.6"
 uiToolingPreviewAndroidVersion = "1.7.8"
+junitJupiter = "5.8.1"
 
 hilt="2.52"
 ksp= "2.0.21-1.0.27"
@@ -60,6 +61,7 @@ hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", ve
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 foundation-layout-android = { group = "androidx.compose.foundation", name = "foundation-layout-android", version.ref = "foundationLayoutAndroidVersion" }
 ui-android = { group = "androidx.compose.ui", name = "ui-android", version.ref = "uiAndroidVersion" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

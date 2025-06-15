@@ -61,7 +61,7 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
                 LoadingUi()
                 Log.d("Loading", "creado")
             }
-            viewModel.state.noData -> {
+            viewModel.state.posts.isEmpty() -> {
                 NoDataPost()
                 Log.d("no data", "creado")
             }
@@ -84,7 +84,7 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
             }
             viewModel.state.cerrarSesion -> AlertDialogYesNo(
                 title = "Cerrar Sesion",
-                message = "",
+                message = "¿Estas seguro de que quieres cerrar sesion?",
                 onAccept = {
                     viewModel.logOut()
                     goback()

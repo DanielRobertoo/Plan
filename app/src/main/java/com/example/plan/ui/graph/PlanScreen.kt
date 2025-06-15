@@ -110,20 +110,24 @@ fun PlanScreen(navController: NavHostController) {
                     modifier = Modifier
                 )
             }
-            composable(route = "chat/{id}",
+            composable(route = "chat/{id}/{name}",
                 arguments = listOf(
                     navArgument("id") {
                         type = NavType.IntType
+                    },navArgument("name") {
+                        type = NavType.StringType
                     }
                 )
             ) {
                 val id = it.arguments?.getInt("id")
+                val name = it.arguments?.getString("name")
                 actual.value = "chat"
                 ChatScreen(
                     viewModel = hiltViewModel<ChatViewModel>(),
                     goBack = { navController.popBackStack() },
                     modifier = Modifier,
-                    idChat = id!!
+                    idChat = id!!,
+                    name = name!!
                 )
             }
             composable(route = "login") {
@@ -196,8 +200,8 @@ fun PlanScreen(navController: NavHostController) {
                 actual.value = "chatList"
                 ChatListScreen(
                     viewModel = hiltViewModel<ChatListViewModel>(),
-                    goChat = { id: Int ->
-                        navController.navigate("chat/${id}")
+                    goChat = { id: Int, name:String ->
+                        navController.navigate("chat/${id}/${name}")
                     }
                 )
             }

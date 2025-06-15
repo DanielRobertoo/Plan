@@ -16,7 +16,7 @@ import com.example.chatlist.usecase.chatToShow
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ChatListScreen(viewModel: ChatListViewModel, goChat: (Int) -> Unit) {
+fun ChatListScreen(viewModel: ChatListViewModel, goChat: (Int, String) -> Unit) {
     LaunchedEffect(Unit) {
 
         viewModel.getChat()
@@ -36,7 +36,7 @@ fun ChatListScreen(viewModel: ChatListViewModel, goChat: (Int) -> Unit) {
             ChatListContent(
                 listChat = viewModel.state.listChatShow,
                 modifier = Modifier.padding(10.dp),
-                accion = { id: Int -> goChat(id) },
+                accion = { id: Int, name: String -> goChat(id,name) },
                 viewModel = viewModel
             )
         }
@@ -49,16 +49,17 @@ fun ChatListScreen(viewModel: ChatListViewModel, goChat: (Int) -> Unit) {
 fun ChatListContent(
     listChat: List<chatToShow>,
     modifier: Modifier,
-    accion: (Int) -> Unit,
+    accion: (Int,String) -> Unit,
     viewModel: ChatListViewModel
 ) {
     LazyColumn(modifier = modifier) {
         items(listChat) {
             val idChat = it.idChat
+            val name = it.username
             ChatListItem(
                 userName = it.username,
                 onClick = {
-                    accion(idChat!!)
+                    accion(idChat!!,name )
                 },
                 lastMessage = it.lastMessage,
                 time = it.time,

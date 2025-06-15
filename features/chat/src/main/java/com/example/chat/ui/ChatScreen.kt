@@ -1,6 +1,7 @@
 package com.example.chat.ui.ChatView
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,12 +15,17 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -31,8 +37,9 @@ import com.example.chat.ui.base.AlertDialogYesNo
 import com.example.chat.usecase.ChatState
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChatScreen(viewModel: ChatViewModel, goBack: () -> Unit, modifier: Modifier, idChat: Int) {
+fun ChatScreen(viewModel: ChatViewModel, goBack: () -> Unit, modifier: Modifier, idChat: Int, name: String) {
     LaunchedEffect(Unit) {
         viewModel.getMessagesFirstTime(idChat)
         viewModel.getMessages(idChat)
@@ -45,14 +52,38 @@ fun ChatScreen(viewModel: ChatViewModel, goBack: () -> Unit, modifier: Modifier,
             onDismiss = { viewModel.dismissBlock() }
         )
         viewModel.state.loading -> LoadingUi()
-        else ->
-            ChatContent(
-            chatEvents = ChatEvents(
-                onTextChange = viewModel::onMessageTextChange,
-                onMessageSent = viewModel::onMessageTextSent
-            ),
-            state = viewModel.state
-        )
+        else -> {
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = { Text(name) },
+                        navigationIcon = {
+                            IconButton(
+                                onClick = { goBack() },
+                                content = {
+                                    Icon(
+                                        imageVector = Icons.Filled.ArrowBack,
+                                        contentDescription = ""
+                                    )
+                                }
+                            )
+                        }
+                    )
+                }
+            ) {
+                Box(modifier = Modifier.padding(it).fillMaxSize(), contentAlignment = Alignment.Center){
+                    ChatContent(
+                        chatEvents = ChatEvents(
+                            onTextChange = viewModel::onMessageTextChange,
+                            onMessageSent = viewModel::onMessageTextSent
+                        ),
+                        state = viewModel.state,
+                    )
+                }
+
+            }
+
+        }
     }
 }
 
@@ -87,7 +118,9 @@ fun ChatContent(chatEvents: ChatEvents, state: ChatState) {
             TextField(
                 value = state.messageToSend,
                 onValueChange = { chatEvents.onTextChange(it) },
-                modifier = Modifier.height(50.dp).width(350.dp)
+                modifier = Modifier
+                    .height(50.dp)
+                    .width(350.dp)
             )
             Spacer(Modifier.padding(5.dp))
             FloatingActionButton(onClick = { chatEvents.onMessageSent() }) {
