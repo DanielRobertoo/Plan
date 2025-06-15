@@ -30,10 +30,11 @@ class RequestListViewModel @Inject constructor(val preferences: UserPreferences)
             }.decodeList<user>()
             val lista = client.postgrest.from("request").select(){
                 filter {
-                    eq("id_owner",idUsuario[0].id)
-                }
-                filter {
-                    eq("state", 0)
+                    and {
+                        eq("id_owner",idUsuario[0].id)
+                        eq("state", 0)
+                    }
+
                 }
             }.decodeList<request>()
             state = state.copy(requests = lista)
@@ -67,7 +68,21 @@ class RequestListViewModel @Inject constructor(val preferences: UserPreferences)
 
 
 
-    fun onRefuse(id: Int) {
+    fun onRefuse(idRequest: Int) {
+        viewModelScope.launch {
+            var requestToModify = client.postgrest.from("request").select(){
+                filter {
+                    eq("id", idRequest)
+                }
+            }.decodeSingle<request>()
+            requestToModify = requestToModify.copy(state = -1)
+            client.postgrest.from("request").upsert(requestToModify)
+            var lista = state.requests.toMutableList()
+            lista.removeAll{
+                it.id == idRequest
+            }
+            state = state.copy(requests = lista.toList())
+        }
 
     }
 

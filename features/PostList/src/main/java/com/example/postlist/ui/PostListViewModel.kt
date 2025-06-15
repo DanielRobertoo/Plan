@@ -66,10 +66,6 @@ class PostListViewModel @Inject constructor(val preferences: UserPreferences) : 
                 id_guest = userRequest.id,
                 id_owner = userOwner.id
             )
-            val busqueda = client.postgrest.from("request").select().decodeList<request>()
-            Log.d("COMPARA_TITULOS", "BD: '${busqueda[0].title}' == NUEVO: '${request.title}' -> ${busqueda[0].title == request.title}")
-            Log.d("LONGITUDES", "BD: ${busqueda[0].title.length}, NUEVO: ${request.title.length}")
-            Log.d("CHARS", "BD: ${busqueda[0].title.toCharArray().joinToString()}, NUEVO: ${request.title.toCharArray().joinToString()}")
 
 
 

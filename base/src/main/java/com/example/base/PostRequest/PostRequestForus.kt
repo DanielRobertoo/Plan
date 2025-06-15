@@ -60,7 +60,7 @@ fun PostRequestItemForus(request: request, onAccept: (Int, Int, Int) -> Unit, on
                     Icon(imageVector = Icons.Filled.Check, contentDescription = "")
                 }
                 FloatingActionButton(
-                    onClick = {},
+                    onClick = {onRefuse(request.id)},
                     elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 0.dp),
                     containerColor = Color.Transparent
                 ) {

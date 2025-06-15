@@ -88,13 +88,11 @@ class ChatListViewModel @Inject constructor(val preferences: UserPreferences) : 
     fun getChat() {
         viewModelScope.launch {
             email = preferences.getEmail()
-            client.postgrest.from("user").select().decodeList<user>().forEach {
-                if (it.email == email) {
-                    idUser = it.id
-                    Log.d("idUser", idUser.toString())
-                    return@forEach
+            idUser = client.postgrest.from("user").select(){
+                filter {
+                    eq("email", email!!)
                 }
-            }
+            }.decodeSingle<user>().id
             state = state.copy(
                 chats = client.postgrest.from("chat").select() {
                     filter {

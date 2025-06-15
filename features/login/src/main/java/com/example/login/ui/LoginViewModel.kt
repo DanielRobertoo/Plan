@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import io.ktor.util.reflect.loadServices
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -24,18 +25,18 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor( private val userPrefs:UserPreferences) : ViewModel() {
     var state by mutableStateOf(AccountLoginState())
 
-    var goList: () -> Unit = {}
 
     fun checkAndAsign(accion: () -> Unit){
-        state = state.copy(isLoading = true)
-        goList = accion
-        viewModelScope.launch {
 
+        viewModelScope.launch {
+            state = state.copy(isLoading = true)
+            delay(500)
             if (userPrefs.getPassword() != null && userPrefs.getEmail() != null){
                 accion()
             }
+            state = state.copy(isLoading = false)
         }
-        state = state.copy(isLoading = false)
+
 
     }
 
@@ -47,8 +48,13 @@ class LoginViewModel @Inject constructor( private val userPrefs:UserPreferences)
         state = state.copy(password = password)
     }
 
+    fun reset(){
+        state = state.copy(isErrorAccount = false)
+    }
+
     fun onLoginClick(goList: () -> Unit) {
         viewModelScope.launch {
+            var succes: Boolean = true
             Log.d("LOGIN", "${state.email} ${state.password}")
             try {
                 state = state.copy(isLoading = true)
@@ -56,14 +62,18 @@ class LoginViewModel @Inject constructor( private val userPrefs:UserPreferences)
                     email = state.email
                     password = state.password
                 }
-                userPrefs.saveUserSession(state.email, state.password)
-                goList()
+
                 Log.d("LOGIN", "${state}")
             } catch (e: Exception) {
                 state = state.copy(isErrorAccount = true, isLoading = false)
                 Log.d("LOGIN", "${e.message}")
+                succes = false
             }
 
+            if (succes){
+                userPrefs.saveUserSession(state.email, state.password)
+                goList()
+            }
         }
     }
 }

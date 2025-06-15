@@ -92,9 +92,6 @@ class ChatViewModel @Inject constructor(val preferences: UserPreferences): ViewM
                     }.decodeSingle<user>().id,
                     loading = false
                 )
-
-
-
         }
     }
 }

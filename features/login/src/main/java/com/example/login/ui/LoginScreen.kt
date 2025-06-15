@@ -43,7 +43,8 @@ data class LoginEvents(
     val onEmailChange: (String) -> Unit = {},
     val onPasswordChange: (String) -> Unit = {},
     val onClickLogin: () -> Unit = {},
-    val onSignupClick: () -> Unit = {}
+    val onSignupClick: () -> Unit = {},
+    val reset: () -> Unit = {}
 )
 
 
@@ -66,7 +67,9 @@ fun LoginScreen(
         onEmailChange = viewModel::onEmailChange,
         onPasswordChange = viewModel::onPasswordChange,
         onClickLogin = { viewModel.onLoginClick(goToListAccount)},
-        onSignupClick = { goToRegister() })
+        onSignupClick = { goToRegister() },
+        reset = viewModel::reset
+    )
     LoginScreenViewModel(modifier, viewModel.state, eventos, goToListAccount, goback)
 }
 
@@ -85,7 +88,7 @@ fun LoginScreenViewModel(
             title = "Error",
             message = "Error al iniciar sesión",
             onDismiss = {
-                state.isErrorAccount = false
+                events.reset()
                 goback()
             }
         )
