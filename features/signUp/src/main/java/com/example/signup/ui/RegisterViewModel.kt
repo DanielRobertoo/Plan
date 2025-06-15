@@ -86,6 +86,17 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
                     state = state.copy(passwordLenghtError = true, isLoading = false)
                     return@launch
                 }
+                if (client.postgrest.from("user").select() {
+                        filter {
+                            and {
+                                eq("user_name", state.username)
+                            }
+
+                        }
+                    }.decodeList<user>().count() != 0){
+                    state = state.copy(usernameExist = true)
+                    return@launch
+                }
                     state = state.copy(isLoading = true)
                 var codigo = ""
                 for (i in 0..5) {
@@ -147,7 +158,7 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
                     codigo = codigo,
                     toName = state.name,
                     onError = {
-
+                        state = state.copy(emailNotExist = true)
                     },
                     toEmail = state.email,
                     onSuccess = { insertCodeVerificationSupabase(state.email, codigo) }
@@ -184,7 +195,7 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
                     client.postgrest.from("code_validation").select().decodeList<code_verification>()
 
                 val id = listaCodeVerification.count()
-
+                Log.d("count code_validation_id", id.toString())
                 client.from("code_validation").insert(
                     code_verification(id, email, code, 0)
                 )
@@ -195,7 +206,7 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
     }
 
     fun onReset() {
-        state = state.copy(isLoading = false, emailExist = false, isEmailInvalid = false,passwordLenghtError = false)
+        state = state.copy(isLoading = false, emailExist = false, isEmailInvalid = false,passwordLenghtError = false, usernameExist = false, emailNotExist = false)
     }
 
 }

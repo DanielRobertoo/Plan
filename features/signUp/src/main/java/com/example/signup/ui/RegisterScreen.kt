@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.example.base.composables.ButtonRegister
 import com.example.base.composables.EmailTextField
 import com.example.base.composables.LoadingUi
+import com.example.base.composables.LoadingUi2
 import com.example.base.composables.NameField
 import com.example.base.composables.PasswordField
 import com.example.base.composables.SpaceBajo
@@ -90,9 +91,11 @@ fun RegisterScreen(modifier: Modifier, viewModel: RegisterViewModel, goToLogin: 
 @Composable
 fun RegisterScreenViewModel(modifier: Modifier, state: AccountRegisterState, events: RegisterEvents, goToLogin: ()->Unit, goToValidate: (String, String, String) -> Unit){
     when {
-        state.isLoading -> LoadingUi()
+        state.isLoading -> LoadingUi2()
         state.isEmptyFields -> AlertDialogOK(message = state.isEmpty ?: "Campos vacios", title = "Error", onDismiss = {events.reset()})
         state.passwordLenghtError -> AlertDialogOK(message = "La contraseña debe tener minimo 6 caracteres", title = "Error", onDismiss = {events.reset()})
+        state.usernameExist -> AlertDialogOK(message = "Nombre de usuario ya existe", title = "Error", onDismiss = {events.reset()})
+        state.emailNotExist -> AlertDialogOK(message = "Correo no existente", title = "Error", onDismiss = {events.reset()})
         state.success -> LaunchedEffect(state.success) { goToValidate(state.email, state.password, state.userId) }
         state.emailExist -> AlertDialogOK(message = "Correo ya existente", title = "Error", onDismiss = {events.reset()})
         state.isEmailInvalid -> AlertDialogOK(message = "Correo Invalido", title = "Error", onDismiss = {events.reset()})

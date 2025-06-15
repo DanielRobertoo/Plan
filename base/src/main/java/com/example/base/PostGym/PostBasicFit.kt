@@ -34,7 +34,7 @@ fun PostItemBasicFitPreview(){
     ElevatedCard(
         Modifier
             .fillMaxWidth()
-            .height(260.dp)
+            .height(300.dp)
             .padding(10.dp)) {
         Box(contentAlignment = Alignment.Center){
             Column(Modifier.fillMaxSize()) {

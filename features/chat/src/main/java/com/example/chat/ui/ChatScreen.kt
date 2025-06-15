@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -84,7 +86,8 @@ fun ChatContent(chatEvents: ChatEvents, state: ChatState) {
         Row {
             TextField(
                 value = state.messageToSend,
-                onValueChange = { chatEvents.onTextChange(it) }
+                onValueChange = { chatEvents.onTextChange(it) },
+                modifier = Modifier.height(50.dp).width(350.dp)
             )
             Spacer(Modifier.padding(5.dp))
             FloatingActionButton(onClick = { chatEvents.onMessageSent() }) {

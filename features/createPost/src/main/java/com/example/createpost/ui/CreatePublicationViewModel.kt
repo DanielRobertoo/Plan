@@ -91,7 +91,14 @@ class CreatePublicationViewModel @Inject constructor(val preferences: UserPrefer
 
     fun onCreatePost(accion: () -> Unit){
         viewModelScope.launch {
-            val id:Int = client.postgrest.from("post").select().decodeList<post>().count()
+            val lista = client.postgrest.from("post").select().decodeList<post>()
+            var id: Int = -1
+            if (lista.count() != 0){
+                id = lista[lista.count() - 1].id + 1
+            }
+            else{
+                id = lista.count()
+            }
             if (checkFields()){
                 state = state.copy(errorFields = true)
                 return@launch

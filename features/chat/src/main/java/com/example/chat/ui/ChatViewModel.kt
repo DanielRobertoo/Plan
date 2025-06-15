@@ -60,6 +60,9 @@ class ChatViewModel @Inject constructor(val preferences: UserPreferences): ViewM
     fun getMessages(_idChat: Int) {
         state = state.copy(idChat = _idChat)
         viewModelScope.launch {
+            if (preferences.getEmail() != null){
+                return@launch
+            }
             while (true){
                 delay(3000)
                 state = state.copy(
