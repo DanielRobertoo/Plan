@@ -75,6 +75,7 @@ fun NoConectionScreen() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("No tienes conexion a internet")
+        Text("No tienes conexion a internet\nConectate a internet\nPara poder usar la aplicacion")
+
     }
 }

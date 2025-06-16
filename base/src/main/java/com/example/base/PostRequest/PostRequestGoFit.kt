@@ -34,7 +34,7 @@ fun PostRequestItemGoFit(request: request, onAccept: (Int, Int, Int) -> Unit, on
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .height(110.dp)
             .padding(8.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.elevatedCardElevation()

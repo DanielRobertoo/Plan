@@ -53,7 +53,7 @@ fun PlanScreen(navController: NavHostController) {
     var actual = remember { mutableStateOf("login") }
     Scaffold(
         bottomBar = {
-            if (actual.value != "login" && actual.value != "signUp" && actual.value != "validate") {
+            if (actual.value != "login" && actual.value != "signUp" && actual.value != "validate" && actual.value != "chat") {
                 NavigationBar(windowInsets = NavigationBarDefaults.windowInsets) {
                     NavigationBarItem(
                         selected = actual.value == "list",
@@ -149,7 +149,7 @@ fun PlanScreen(navController: NavHostController) {
                 actual.value = "signUp"
                 RegisterScreen(
                     viewModel = hiltViewModel<RegisterViewModel>(),
-                    goToLogin = { navController.popBackStack() },
+                    goToLogin = { navController.navigate("login") },
                     goValidate = { email: String, password: String, userId: String ->
                         navController.navigate("validateEmail/$email/$password/$userId")
                     },

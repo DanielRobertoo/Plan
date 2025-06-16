@@ -99,6 +99,7 @@ fun RegisterScreenViewModel(modifier: Modifier, state: AccountRegisterState, eve
         state.success -> LaunchedEffect(state.success) { goToValidate(state.email, state.password, state.userId) }
         state.emailExist -> AlertDialogOK(message = "Correo ya existente", title = "Error", onDismiss = {events.reset()})
         state.isEmailInvalid -> AlertDialogOK(message = "Correo Invalido", title = "Error", onDismiss = {events.reset()})
+        state.isBirthdayError -> AlertDialogOK(message = "Fecha seleccionada invalida, no puede ser posterior a la actual o vacia", title = "Error", onDismiss = {events.reset()})
         else -> RegisterContent(modifier, state, events)
     }
 }

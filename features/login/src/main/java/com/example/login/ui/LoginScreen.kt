@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
@@ -31,6 +32,7 @@ import com.example.base.composables.LoadingUi
 import com.example.base.composables.NoConectionScreen
 import com.example.base.composables.PasswordField
 import com.example.base.composables.SpaceMedio
+import com.example.base.utils.isConnected
 import com.example.chat.ui.base.AlertDialogOK
 import kotlinx.coroutines.delay
 
@@ -82,6 +84,7 @@ fun LoginScreenViewModel(
     goback: () -> Unit
 ) {
     when {
+        isConnected(LocalContext.current) == false -> NoConectionScreen()
         state.isLoading -> LoadingUi()
         state.isOffline -> NoConectionScreen()
         state.isErrorAccount -> AlertDialogOK(

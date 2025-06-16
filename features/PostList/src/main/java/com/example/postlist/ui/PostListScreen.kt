@@ -61,6 +61,17 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
                 LoadingUi()
                 Log.d("Loading", "creado")
             }
+            viewModel.state.cerrarSesion -> {
+                AlertDialogYesNo(
+                    title = "Cerrar Sesion",
+                    message = "¿Estás seguro de que quieres cerrar sesion?",
+                    onAccept = {
+                        viewModel.logOut()
+                        goback()
+                    },
+                    onDismiss = {viewModel.reset()}
+                )
+            }
             viewModel.state.posts.isEmpty() -> {
                 NoDataPost()
                 Log.d("no data", "creado")
@@ -69,6 +80,14 @@ fun PostListScreen(viewModel: PostListViewModel, goRequest: (post) -> Unit, goAd
                 title = "ERROR",
                 message = "Ya se ha mandado solicitud a esta publicacion",
                 onDismiss = {viewModel.reset()}
+            )
+            viewModel.state.postDeleted -> AlertDialogOK(
+                title = "ERROR",
+                message = "No se ha podido acceder a la publicacion, es probable que el creador la haya eliminado",
+                onDismiss = {
+                    viewModel.reset()
+                    viewModel.getPosts()
+                }
             )
             viewModel.state.postToJoin != null -> {
                 AlertDialogYesNoPost(

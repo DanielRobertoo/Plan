@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.datastore.preferences.core.preferencesOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.base.datasore.UserPreferences
@@ -26,12 +25,12 @@ class PostListViewModel @Inject constructor(val preferences: UserPreferences) : 
 
     fun getPosts() {
         viewModelScope.launch {
-            val name = client.postgrest.from("user").select(){
+            val name = client.postgrest.from("user").select() {
                 filter {
                     eq("email", preferences.getEmail()!!)
                 }
             }.decodeSingle<user>().user_name
-            state = state.copy(posts = client.postgrest.from("post").select(){
+            state = state.copy(posts = client.postgrest.from("post").select() {
                 filter {
                     neq("post_creator_username", name)
                 }
@@ -44,13 +43,13 @@ class PostListViewModel @Inject constructor(val preferences: UserPreferences) : 
     fun SendRequest(post: post) {
         viewModelScope.launch {
             val countId = client.postgrest.from("request").select().decodeList<request>().count()
-            val userRequest = client.postgrest.from("user").select(){
+            val userRequest = client.postgrest.from("user").select() {
                 filter {
                     eq("email", preferences.getEmail()!!)
                 }
             }.decodeSingle<user>()
 
-            val userOwner = client.postgrest.from("user").select(){
+            val userOwner = client.postgrest.from("user").select() {
                 filter {
                     eq("user_name", post.post_creator_username)
                 }
@@ -62,7 +61,7 @@ class PostListViewModel @Inject constructor(val preferences: UserPreferences) : 
                 state = 0,
                 date = post.date,
                 title = post.title,
-                username_request = post.post_creator_username,
+                username_request = userRequest.user_name,
                 id_guest = userRequest.id,
                 id_owner = userOwner.id
             )
@@ -80,11 +79,10 @@ class PostListViewModel @Inject constructor(val preferences: UserPreferences) : 
                         }
 
                     }
-                }.decodeList<request>().isNotEmpty()){
+                }.decodeList<request>().isNotEmpty()) {
                 state = state.copy(requestExist = true)
                 return@launch
-            }
-            else{
+            } else {
                 client.postgrest.from("request").insert(request)
                 state = state.copy(postToJoin = null)
             }
@@ -94,18 +92,30 @@ class PostListViewModel @Inject constructor(val preferences: UserPreferences) : 
     }
 
     fun reset() {
-        state = state.copy(postToJoin = null, loading = false, cerrarSesion = false, requestExist = false)
-    }
+        state = state.copy(
+            postToJoin = null,
+            loading = false,
+            cerrarSesion = false,
+            requestExist = false,
+            postDeleted = false
+        )
 
+    }
 
 
     fun askRequest(id: String) {
         viewModelScope.launch {
-            client.postgrest.from("post").select().decodeList<post>().forEach {
-                if (it.id.toString() == id) {
-                    state = state.copy(postToJoin = it)
+            val lista = client.postgrest.from("post").select() {
+                filter {
+                    eq("id", id)
                 }
+            }.decodeList<post>()
+            if (lista.isEmpty()) {
+                state = state.copy(postDeleted = true)
+                return@launch
             }
+            state = state.copy(postToJoin = lista[0])
+
 
         }
 
@@ -122,4 +132,4 @@ class PostListViewModel @Inject constructor(val preferences: UserPreferences) : 
     }
 
 
-   }
+}

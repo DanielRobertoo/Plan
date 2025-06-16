@@ -58,7 +58,7 @@ fun PostItemDefault(title: String, date: String, user:String, place:String,accio
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun PostItemDefaultPreview() {
-    ElevatedCard(Modifier.fillMaxWidth().height(260.dp).padding(10.dp)) {
+    ElevatedCard(Modifier.fillMaxWidth().height(300.dp).padding(10.dp)) {
         Box(contentAlignment = Alignment.Center) {
             Column(Modifier.fillMaxSize()) {
                 Row {

@@ -54,7 +54,7 @@ class ChatListViewModel @Inject constructor(val preferences: UserPreferences) : 
                     }
                 }.decodeList<message>()
                 if (listaMensajes.count() == 0){
-                    mensaje = "* aun no hay mensajes en el chat *"
+                    mensaje = "*NUEVO CHAT, ENVIA EL PRIMER MENSAJE*"
                     time = ""
                 }
                 else {

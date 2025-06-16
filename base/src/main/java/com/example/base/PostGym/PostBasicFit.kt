@@ -69,7 +69,7 @@ fun PostItemBasicFitPreview(){
 fun PostItemBasicFit(title: String, date: String, user:String, place:String, accionCorta: (String) -> Unit, accionLarga: () -> Unit) {
     ElevatedCard(Modifier
         .fillMaxWidth()
-        .height(260.dp)
+        .height(300.dp)
         .padding(10.dp)
         .combinedClickable(
             onClick = { accionCorta(user) },

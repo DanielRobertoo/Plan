@@ -1,7 +1,9 @@
 package com.example.chat.ui.base
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,7 +40,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun DatePickerFieldToModalonChange(modifier: Modifier = Modifier, label: String, string:String, Error: Boolean, accion: (String) -> Unit) {
     var showDatePicker by remember { mutableStateOf(false) }
@@ -47,30 +49,31 @@ fun DatePickerFieldToModalonChange(modifier: Modifier = Modifier, label: String,
         convertMillisToDate(it)
     } ?: ""
 
-    OutlinedTextField(
-        value = selectedDate,
-        onValueChange = {
-            accion(
-                datePickerState.selectedDateMillis?.let {
-                    convertMillisToDate(it)
-                } ?: ""
-            )
-            showDatePicker = false
-        },
-        label = { Text("$string") },
-        readOnly = true,
-        trailingIcon = {
-            IconButton(onClick = { showDatePicker = !showDatePicker }) {
-                Icon(
-                    imageVector = Icons.Default.DateRange,
-                    contentDescription = "Select date"
+        OutlinedTextField(
+            value = selectedDate,
+            onValueChange = {
+                accion(
+                    datePickerState.selectedDateMillis?.let {
+                        convertMillisToDate(it)
+                    } ?: ""
                 )
-            }
-        },
-        isError = Error,
+                showDatePicker = false
+            },
+            label = { Text("$string") },
+            readOnly = true,
+            trailingIcon = {
+                IconButton(onClick = { showDatePicker = !showDatePicker }) {
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = "Select date"
+                    )
+                }
+            },
+            isError = Error,
+            modifier = Modifier.width(300.dp)
+        )
 
-        modifier =  Modifier.width(300.dp)
-    )
+
     if (showDatePicker) {
         Popup(
             onDismissRequest = { showDatePicker = false },
@@ -91,8 +94,14 @@ fun DatePickerFieldToModalonChange(modifier: Modifier = Modifier, label: String,
                     Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxWidth()){
                         FloatingActionButton(
                             onClick = {
-                                showDatePicker = false
-                                accion(selectedDate)
+                                val millis = datePickerState.selectedDateMillis
+                                if (millis != null) {
+                                    showDatePicker = false
+                                    accion(convertMillisToDate(millis))
+                                } else {
+                                    showDatePicker = false
+                                    // Evita pasar fecha vacía si no se seleccionó nada
+                                }
                             }
                         ) {
                             Text("Aceptar")
@@ -175,9 +184,15 @@ fun DatePickerFieldToModalonChangeRegister(
                     ) {
                         FloatingActionButton(
                             onClick = {
-                                val finalDate = selectedDate
-                                showDatePicker = false
-                                onValueChange(finalDate)
+                                val millis = datePickerState.selectedDateMillis
+                                if (millis != null) {
+                                    showDatePicker = false
+                                    onValueChange(convertMillisToDate(millis))
+                                } else {
+                                    showDatePicker = false
+                                    // Evita pasar fecha vacía si no se seleccionó nada
+                                }
+
                             }
                         ) {
                             Text("Aceptar")

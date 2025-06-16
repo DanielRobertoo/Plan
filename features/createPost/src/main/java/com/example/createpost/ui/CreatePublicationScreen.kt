@@ -60,7 +60,7 @@ fun CreatePublicationScreen(
         )
         viewModel.state.errorFields -> AlertDialogOK(
             title = "ERROR",
-            message = "Campos inválidos",
+            message = "Campos inválidos, debes rellenar todos los campos obligatoriamente excepto descripcion",
             onDismiss = { viewModel.resetError() })
 
         else -> CreatePulicationContent(viewModel.state, events = CreationPublicationEvents(

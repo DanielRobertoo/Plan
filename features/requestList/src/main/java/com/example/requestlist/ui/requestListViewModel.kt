@@ -1,5 +1,6 @@
 package com.example.requestlist.ui
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,6 +14,7 @@ import com.example.domain.model.user
 import com.example.requestlist.usecase.requestListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.jan.supabase.postgrest.postgrest
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
@@ -38,6 +40,33 @@ class RequestListViewModel @Inject constructor(val preferences: UserPreferences)
                 }
             }.decodeList<request>()
             state = state.copy(requests = lista)
+        }
+    }
+    fun getRequestUpdate(){
+        viewModelScope.launch {
+            if (preferences.getEmail() == null){
+                Log.d("get request", "get")
+                return@launch
+            }
+            while(true){
+                delay(3000)
+                val idUsuario = client.postgrest.from("user").select(){
+                    filter {
+                        eq("email", preferences.getEmail()!!)
+                    }
+                }.decodeList<user>()
+                val lista = client.postgrest.from("request").select(){
+                    filter {
+                        and {
+                            eq("id_owner",idUsuario[0].id)
+                            eq("state", 0)
+                        }
+
+                    }
+                }.decodeList<request>()
+                state = state.copy(requests = lista)
+            }
+
         }
     }
     fun onAccept(idRequest: Int, idOwner: Int, idGuest: Int) {

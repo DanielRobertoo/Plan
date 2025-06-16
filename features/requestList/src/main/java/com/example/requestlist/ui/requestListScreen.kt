@@ -35,6 +35,7 @@ import java.util.Locale
 fun RequestListScreen(viewModel: RequestListViewModel){
     LaunchedEffect(Unit) {
         viewModel.getRequest()
+        viewModel.getRequestUpdate()
     }
 
     Scaffold(

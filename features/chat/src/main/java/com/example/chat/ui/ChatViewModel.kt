@@ -67,7 +67,7 @@ class ChatViewModel @Inject constructor(val preferences: UserPreferences): ViewM
             }
             Log.d("get messages", "get")
             while (true){
-                delay(3000)
+                delay(2000)
                 state = state.copy(
                     mensajes = client.postgrest.from("message").select(){
                         filter {

@@ -86,10 +86,11 @@ class CreatePublicationViewModel @Inject constructor(val preferences: UserPrefer
     }
 
     fun checkFields() : Boolean{
-        return state.title == "" && state.gym == ""
+        return state.title == "" || state.gym == "" || state.date == "" || state.momentDay == ""
     }
 
     fun onCreatePost(accion: () -> Unit){
+
         viewModelScope.launch {
             val lista = client.postgrest.from("post").select().decodeList<post>()
             var id: Int = -1

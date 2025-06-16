@@ -9,5 +9,6 @@ data class PostListState(
     val postToJoin: post? = null,
     val sorted: Boolean = false,
     val cerrarSesion: Boolean = false,
-    val requestExist: Boolean = false
+    val requestExist: Boolean = false,
+    val postDeleted: Boolean = false,
     )

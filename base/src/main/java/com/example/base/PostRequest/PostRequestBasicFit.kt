@@ -34,6 +34,7 @@ fun PostRequestItemBasicFit(request: request,onAccept: (Int, Int, Int) -> Unit, 
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .height(110.dp)
             .padding(8.dp),
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.elevatedCardElevation()

@@ -120,7 +120,7 @@ fun ChatContent(chatEvents: ChatEvents, state: ChatState) {
                 onValueChange = { chatEvents.onTextChange(it) },
                 modifier = Modifier
                     .height(50.dp)
-                    .width(350.dp)
+                    .width(270.dp)
             )
             Spacer(Modifier.padding(5.dp))
             FloatingActionButton(onClick = { chatEvents.onMessageSent() }) {

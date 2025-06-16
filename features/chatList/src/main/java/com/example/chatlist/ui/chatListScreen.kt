@@ -27,7 +27,7 @@ fun ChatListScreen(viewModel: ChatListViewModel, goChat: (Int, String) -> Unit) 
             Log.d("Loading", "creado")
         }
 
-        viewModel.state.noData -> {
+        viewModel.state.chats.isEmpty() -> {
             NoDataChats()
             Log.d("no data", "creado")
         }
